@@ -4,18 +4,42 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function HomeScreen() {
+function HomePage() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home!</Text>
+            <Text>HomePage!</Text>
         </View>
     );
 }
 
-function SettingsScreen() {
+function HotSpot() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Settings!</Text>
+            <Text>HotSpot!</Text>
+        </View>
+    );
+}
+
+function Publish() {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text>Publish!</Text>
+        </View>
+    );
+}
+
+function Convenience() {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text>Convenience!</Text>
+        </View>
+    );
+}
+
+function My() {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text>My!</Text>
         </View>
     );
 }
@@ -31,12 +55,16 @@ export default function App() {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
-                        if (route.name === 'Home') {
-                            iconName = focused
-                                ? 'ios-information-circle'
-                                : 'ios-information-circle-outline';
-                        } else if (route.name === 'Settings') {
-                            iconName = focused ? 'ios-list-box' : 'ios-list';
+                        if (route.name === '首页') {
+                            iconName = 'md-home';
+                        } else if (route.name === '热点') {
+                            iconName = 'md-rocket';
+                        } else if (route.name == '发布') {
+                            iconName = 'md-create';
+                        } else if (route.name == '便民') {
+                            iconName = 'md-sunny';
+                        } else if (route.name == '我的') {
+                            iconName = 'md-person';
                         }
 
                         // You can return any component that you like here!
@@ -48,8 +76,11 @@ export default function App() {
                     inactiveTintColor: 'gray',
                 }}
             >
-                <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Settings" component={SettingsScreen} />
+                <Tab.Screen name="首页" component={HomePage} />
+                <Tab.Screen name="热点" component={HotSpot} />
+                <Tab.Screen name="发布" component={Publish} />
+                <Tab.Screen name="便民" component={Convenience} />
+                <Tab.Screen name="我的" component={My} />
             </Tab.Navigator>
         </NavigationContainer>
     );
