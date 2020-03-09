@@ -2,50 +2,65 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import HomePage from "./app/pages/HomePage";
+import HotSpot from "./app/pages/HotSpot";
+import Publish from "./app/pages/Publish";
+import Convenience from "./app/pages/Convenience";
+import My from "./app/pages/My";
 
-function HomePage() {
+const HomePageStack = createStackNavigator();
+
+function HomePageStackScreen() {
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>HomePage!</Text>
-        </View>
+      <HomePageStack.Navigator>
+          <HomePageStack.Screen name='首页' component={HomePage}/>
+      </HomePageStack.Navigator>
     );
 }
 
-function HotSpot() {
+const HotSpotStack = createStackNavigator();
+
+function HotSpotStackScreen() {
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>HotSpot!</Text>
-        </View>
+      <HotSpotStack.Navigator>
+          <HotSpotStack.Screen name='热点' component={HotSpot}/>
+      </HotSpotStack.Navigator>
     );
 }
 
-function Publish() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Publish!</Text>
-        </View>
+const PublishStack = createStackNavigator();
+
+function PublishStackScreen() {
+    return(
+      <PublishStack.Navigator>
+          <PublishStack.Screen name='发布' component={Publish}/>
+      </PublishStack.Navigator>
     );
 }
 
-function Convenience() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Convenience!</Text>
-        </View>
+const ConvenienceStack = createStackNavigator();
+
+function ConvenienceStackScreen() {
+    return(
+        <ConvenienceStack.Navigator>
+            <ConvenienceStack.Screen name='便民' component={Convenience}/>
+        </ConvenienceStack.Navigator>
     );
 }
 
-function My() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>My!</Text>
-        </View>
+const MyStack = createStackNavigator();
+
+function MyStackScreen() {
+    return(
+        <MyStack.Navigator>
+            <MyStack.Screen name='我的' component={My}/>
+        </MyStack.Navigator>
     );
 }
 
 const Tab = createBottomTabNavigator();
-
 
 export default function App() {
     return (
@@ -55,6 +70,7 @@ export default function App() {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
+                        // 配置tabbaricon
                         if (route.name === '首页') {
                             iconName = 'md-home';
                         } else if (route.name === '热点') {
@@ -71,16 +87,17 @@ export default function App() {
                         return <Ionicons name={iconName} size={size} color={color} />;
                     },
                 })}
+
                 tabBarOptions={{
                     activeTintColor: 'tomato',
                     inactiveTintColor: 'gray',
                 }}
             >
-                <Tab.Screen name="首页" component={HomePage} />
-                <Tab.Screen name="热点" component={HotSpot} />
-                <Tab.Screen name="发布" component={Publish} />
-                <Tab.Screen name="便民" component={Convenience} />
-                <Tab.Screen name="我的" component={My} />
+                <Tab.Screen name="首页" component={HomePageStackScreen} />
+                <Tab.Screen name="热点" component={HotSpotStackScreen} />
+                <Tab.Screen name="发布" component={PublishStackScreen} />
+                <Tab.Screen name="便民" component={ConvenienceStackScreen} />
+                <Tab.Screen name="我的" component={MyStackScreen} />
             </Tab.Navigator>
         </NavigationContainer>
     );
