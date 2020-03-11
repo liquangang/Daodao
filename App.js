@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack'
@@ -14,7 +13,7 @@ const HomePageStack = createStackNavigator();
 
 function HomePageStackScreen() {
     return (
-      <HomePageStack.Navigator>
+      <HomePageStack.Navigator headerMode='none'>
           <HomePageStack.Screen name='首页' component={HomePage}/>
       </HomePageStack.Navigator>
     );
@@ -76,7 +75,7 @@ export default function App() {
                         } else if (route.name === '热点') {
                             iconName = 'md-rocket';
                         } else if (route.name == '发布') {
-                            iconName = 'md-create';
+                            iconName = 'ios-create';
                         } else if (route.name == '便民') {
                             iconName = 'md-sunny';
                         } else if (route.name == '我的') {
