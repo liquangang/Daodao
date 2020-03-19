@@ -62,6 +62,7 @@ export default class HomePage extends Component {
                 {/*分割线*/}
                 <View style={styles.segmentation}></View>
 
+                {/*分类列表*/}
                 <TitleListView></TitleListView>
 
                 {/*新闻列表*/}

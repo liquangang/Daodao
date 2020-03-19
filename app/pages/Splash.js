@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Text, View } from "react-native";
+import BannerView from "../component/BannerView"
 
-export default class Convenience extends Component {
+export default class Splash extends Component {
     render() {
         return(
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>这里是个网页！！！</Text>
+                <BannerView></BannerView>
             </View>
         );
     };
