@@ -30,14 +30,14 @@ export default class HotSpot extends Component {
             case '2':
             {
                 return (
-                    <NewsView></NewsView>
+                    <BannerView></BannerView>
                 );
             }
                 break;
             case '3':
             {
                 return (
-                    <BannerView></BannerView>
+                    <NewsView></NewsView>
                 );
             }
                 break;

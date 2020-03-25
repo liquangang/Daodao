@@ -1,7 +1,12 @@
 import React, {Component} from "react";
-import {View, StyleSheet, Image, Text, Dimensions, FlatList } from "react-native";
+import {View, StyleSheet, Image, Text, Dimensions, FlatList, TouchableOpacity } from "react-native";
 
 export default class NewsView extends Component {
+
+    onClickAvatar = () => {
+        // navigation.navigate('personalInfo');
+        this.props.onClickAvatar();
+    };
 
     render() {
         return (
@@ -9,7 +14,10 @@ export default class NewsView extends Component {
 
                 {/*动态上部部分*/}
                 <View style={styles.topInfoContainer}>
-                    <Image source={require('../../source/avatar.jpg')} style={styles.avatar}/>
+                    {/*头像*/}
+                    <TouchableOpacity onPress={this.onClickAvatar}>
+                        <Image source={require('../../source/avatar.jpg')} style={styles.avatar}/>
+                    </TouchableOpacity>
                     <View style={styles.topSubInfoContainer}>
                         <Text style={styles.nickName}>叮当机器女猫</Text>
                         <View style={styles.topSubInfoBottomContainer}>

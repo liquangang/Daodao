@@ -8,13 +8,19 @@ import HotSpot from "./app/pages/HotSpot";
 import Publish from "./app/pages/Publish";
 import Convenience from "./app/pages/Convenience";
 import My from "./app/pages/My";
+import PersonnalInfo from "./app/pages/PersonnalInfo";
+import Login from "./app/pages/Login"
+import Message from "./app/pages/Message"
 
 const HomePageStack = createStackNavigator();
 
 function HomePageStackScreen() {
     return (
-      <HomePageStack.Navigator headerMode='none'>
-          <HomePageStack.Screen name='首页' component={HomePage}/>
+      <HomePageStack.Navigator>
+          <HomePageStack.Screen name='HomePage' component={HomePage}/>
+          <HomePageStack.Screen name='PersonnalInfo' component={PersonnalInfo}/>
+          <HomePageStack.Screen name='Login' component={Login}/>
+          <HomePageStack.Screen name='Message' component={Message}/>
       </HomePageStack.Navigator>
     );
 }
@@ -24,7 +30,7 @@ const HotSpotStack = createStackNavigator();
 function HotSpotStackScreen() {
     return (
       <HotSpotStack.Navigator>
-          <HotSpotStack.Screen name='热点' component={HotSpot}/>
+          <HotSpotStack.Screen name='HotSpot' component={HotSpot}/>
       </HotSpotStack.Navigator>
     );
 }
@@ -34,7 +40,7 @@ const PublishStack = createStackNavigator();
 function PublishStackScreen() {
     return(
       <PublishStack.Navigator>
-          <PublishStack.Screen name='发布' component={Publish}/>
+          <PublishStack.Screen name='Publish' component={Publish}/>
       </PublishStack.Navigator>
     );
 }
@@ -44,7 +50,7 @@ const ConvenienceStack = createStackNavigator();
 function ConvenienceStackScreen() {
     return(
         <ConvenienceStack.Navigator>
-            <ConvenienceStack.Screen name='便民' component={Convenience}/>
+            <ConvenienceStack.Screen name='Convenience' component={Convenience}/>
         </ConvenienceStack.Navigator>
     );
 }
@@ -54,7 +60,7 @@ const MyStack = createStackNavigator();
 function MyStackScreen() {
     return(
         <MyStack.Navigator>
-            <MyStack.Screen name='我的' component={My}/>
+            <MyStack.Screen name='My' component={My}/>
         </MyStack.Navigator>
     );
 }

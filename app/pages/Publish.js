@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import {Text, View, StyleSheet, TextInput, Image, Dimensions} from "react-native";
+import React, {Component} from "react";
+import {Text, View, StyleSheet, TextInput, Image, Dimensions, ScrollView} from "react-native";
 
 export default class Publish extends Component {
     render() {
-        return(
-            <View style={styles.container}>
+        return (
+            <ScrollView style={styles.scorllviewContainer}>
                 <TextInput
-                    placeholder = {'输入你想说的话。。。'}
-                    placeholderTextColor = {'#BBBBBB'}
-                    underlineColorAndroid = {'transparent'}
-                    style = {styles.textInput}
+                    placeholder={'输入你想说的话。。。'}
+                    placeholderTextColor={'#BBBBBB'}
+                    underlineColorAndroid={'transparent'}
+                    style={styles.textInput}
                     multiline={true}
                 />
 
@@ -42,8 +42,8 @@ export default class Publish extends Component {
                 <View style={styles.subContainer1}>
                     <Image source={require('../source/confimPublish.jpg')} style={styles.confirmPublish}/>
                 </View>
+            </ScrollView>
 
-            </View>
         );
     };
 }
@@ -51,9 +51,7 @@ export default class Publish extends Component {
 const {width, height, scale} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    container: {
-
-    },
+    scorllviewContainer: {},
     textInput: {
         marginTop: 10,
         marginLeft: 10,
@@ -101,10 +99,11 @@ const styles = StyleSheet.create({
         marginTop: 30,
         height: 50,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: 40,
     },
     confirmPublish: {
         width: 300,
-        height: 40
+        height: 40,
     }
 });

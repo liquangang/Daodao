@@ -13,40 +13,9 @@ export default class HomePage extends Component {
         this.state = {};
     }
 
-    titleListItemView({ item }) {
-
-            switch (item.key) {
-                case '1':
-                {
-                    return (
-                        <BannerView></BannerView>
-                    );
-                }
-
-                    break;
-                case '2':
-                {
-                    return (
-                        <NewsView></NewsView>
-                    );
-                }
-                    break;
-                case '3':
-                {
-                    return (
-                        <NewsView></NewsView>
-                    );
-                }
-                    break;
-                default :
-                {
-                    return (
-                        <NewsView></NewsView>
-                    );
-                }
-                    break;
-            }
-    }
+    onClickAvatar = () => {
+        this.props.navigation.navigate('Message');
+    };
 
     render() {
 
@@ -68,12 +37,48 @@ export default class HomePage extends Component {
                 {/*新闻列表*/}
                 <FlatList
                     data={[{key: '1'}, {key: '2'}, {key: '3'}]}
-                    renderItem={this.titleListItemView}
+                    renderItem={(item)=>this.newsListItemView(item)}
                     style={styles.newsList}
                 />
             </View>
         );
     };
+
+    newsListItemView = ({ item }) => {
+
+        switch (item.key) {
+            case '1':
+            {
+                return (
+                    <BannerView></BannerView>
+                );
+            }
+
+                break;
+            case '2':
+            {
+                return (
+                    <NewsView onClickAvatar = {()=>this.onClickAvatar()}></NewsView>
+                );
+            }
+                break;
+            case '3':
+            {
+                return (
+                    <NewsView onClickAvatar = {()=>this.onClickAvatar()}></NewsView>
+                );
+            }
+                break;
+            default :
+            {
+                return (
+                    <NewsView></NewsView>
+                );
+            }
+                break;
+        }
+    }
+
 }
 
 const {width, height, scale} = Dimensions.get('window');
@@ -84,7 +89,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     searchContainer: {
-        marginTop: 40,
         flexDirection: 'row',
         alignItems: 'center'
     },
