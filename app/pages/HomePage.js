@@ -14,7 +14,7 @@ export default class HomePage extends Component {
     }
 
     onClickAvatar = () => {
-        this.props.navigation.navigate('Message');
+        this.props.navigation.navigate('Chat');
     };
 
     render() {
@@ -86,7 +86,6 @@ const {width, height, scale} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
     },
     searchContainer: {
         flexDirection: 'row',
