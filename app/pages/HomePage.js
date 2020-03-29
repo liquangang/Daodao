@@ -14,7 +14,7 @@ export default class HomePage extends Component {
     }
 
     onClickAvatar = () => {
-        this.props.navigation.navigate('PersonInfo');
+        this.props.navigation.navigate('NewsDetail');
     };
 
     render() {

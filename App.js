@@ -12,6 +12,7 @@ import PersonInfo from "./app/pages/PersonInfo";
 import Login from "./app/pages/Login"
 import Message from "./app/pages/Message"
 import Chat from "./app/pages/Chat"
+import NewsDetail from "./app/pages/NewsDetail"
 
 const HomePageStack = createStackNavigator();
 
@@ -23,6 +24,7 @@ function HomePageStackScreen() {
           <HomePageStack.Screen name='Login' component={Login}/>
           <HomePageStack.Screen name='Message' component={Message}/>
           <HomePageStack.Screen name='Chat' component={Chat}/>
+          <HomePageStack.Screen name='NewsDetail' component={NewsDetail}/>
       </HomePageStack.Navigator>
     );
 }
