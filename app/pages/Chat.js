@@ -2,13 +2,21 @@ import React, { Component } from "react";
 import {Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, TextInput, FlatList} from "react-native";
 
 export default class Chat extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            a: 1,
+        };
+    }
+
     render() {
         return(
             <View style={styles.container}>
                 <View style={styles.chat}>
                     <FlatList
                         data={[{key: '1'}, {key: '2'}]}
-                        renderItem={(item)=>this.chatItemView(item)}
+                        renderItem={this.chatItemView}
                         style={styles.chatList}
                     ></FlatList>
                 </View>
@@ -38,45 +46,53 @@ export default class Chat extends Component {
         );
     };
 
-    chatItemView = ({ item }) => {
+    chatItemView = ({item}) => {
         switch (item.key) {
             case '1':
             {
-                return(<View style={styles.chatItemView1}>
-                    <TouchableOpacity>
-                        <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
-                    </TouchableOpacity>
-                    <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
-                    <View style={styles.leftMes}>
-                        <Text style={styles.mes1}>这里是消息这里是消息这里是消息这里是消息这里是消息这
-                            里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
-                            消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
-                            息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
-                    </View>
-
-                </View>);
-
-
+                return(this.leftChatItemView({item}));
             }
                 break;
             case '2':
             {
-                return(<View style={styles.chatItemView2}>
-                    <View style={styles.rightMes}>
-                        <Text style={styles.mes2}>这里是消息这里是消息这里是消息这里是消息这里是消息这
-                            里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
-                            消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
-                            息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
-                    </View>
-                    <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
-                    <TouchableOpacity>
-                        <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
-                    </TouchableOpacity>
-                </View>);
+                return(this.rightChatItemView({item}));
 
             }
                 break;
         }
+    }
+
+    leftChatItemView = ({ item }) => {
+        return(
+            <View style={styles.chatItemView1}>
+                <TouchableOpacity>
+                    <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                </TouchableOpacity>
+                <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                <View style={styles.leftMes}>
+                    <Text style={styles.mes1}>{item.key} {this.state.a}这里是消息这里是消息这里是消息这里是消息这里是消息这
+                        里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
+                        消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
+                        息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
+                </View>
+
+            </View>
+        );
+    }
+
+    rightChatItemView = ({ item }) =>  {
+        return(<View style={styles.chatItemView2}>
+            <View style={styles.rightMes}>
+                <Text style={styles.mes2}>这里是消息这里是消息这里是消息这里是消息这里是消息这
+                    里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
+                    消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
+                    息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
+            </View>
+            <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+            <TouchableOpacity>
+                <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+            </TouchableOpacity>
+        </View>);
     }
 }
 
@@ -132,7 +148,7 @@ const styles = StyleSheet.create({
     rightMes: {
         marginTop: 10,
         width: width - 200,
-        backgroundColor: '#FF4500',
+        backgroundColor: '#FF906F',
         borderRadius: 10,
     },
     mes1: {

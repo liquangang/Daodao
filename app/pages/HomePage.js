@@ -14,7 +14,7 @@ export default class HomePage extends Component {
     }
 
     onClickAvatar = () => {
-        this.props.navigation.navigate('Chat');
+        this.props.navigation.navigate('PersonInfo');
     };
 
     render() {

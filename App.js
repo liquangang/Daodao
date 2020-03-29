@@ -8,7 +8,7 @@ import HotSpot from "./app/pages/HotSpot";
 import Publish from "./app/pages/Publish";
 import Convenience from "./app/pages/Convenience";
 import My from "./app/pages/My";
-import PersonnalInfo from "./app/pages/PersonnalInfo";
+import PersonInfo from "./app/pages/PersonInfo";
 import Login from "./app/pages/Login"
 import Message from "./app/pages/Message"
 import Chat from "./app/pages/Chat"
@@ -19,7 +19,7 @@ function HomePageStackScreen() {
     return (
       <HomePageStack.Navigator>
           <HomePageStack.Screen name='HomePage' component={HomePage}/>
-          <HomePageStack.Screen name='PersonnalInfo' component={PersonnalInfo}/>
+          <HomePageStack.Screen name='PersonInfo' component={PersonInfo}/>
           <HomePageStack.Screen name='Login' component={Login}/>
           <HomePageStack.Screen name='Message' component={Message}/>
           <HomePageStack.Screen name='Chat' component={Chat}/>
