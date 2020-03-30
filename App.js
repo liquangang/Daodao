@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Global from './app/util/Global';
 import HomePage from "./app/pages/HomePage";
 import HotSpot from "./app/pages/HotSpot";
 import Publish from "./app/pages/Publish";

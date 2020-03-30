@@ -5,17 +5,29 @@ import SearchView from "../component/SearchView";
 import TitleListView from "../component/TitleListView";
 import BannerView from "../component/BannerView"
 import NewsView from "../component/news/NewsView"
+import httpApi from "../tools/Api"
 
 export default class HomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            data: {},
+        };
     }
 
     onClickAvatar = () => {
-        this.props.navigation.navigate('NewsDetail');
+        // this.props.navigation.navigate('NewsDetail');
+        this.fetchData();
     };
+
+    async fetchData() {
+        let params = {};
+        let res = httpApi.getNewsInfo(params);
+
+        //请求回复的一些操作，这里根据你们的业务员需求和接口自定义
+        console.log("~~~~~~~~~~~~~~", res);
+    }
 
     render() {
 
@@ -92,7 +104,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     searchView: {
-        flex: width - 30,
+        flex: gScreen.screen_width - 30,
     },
     messageView: {
         flex: 30,
