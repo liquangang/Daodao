@@ -33,7 +33,7 @@ export default class My extends Component {
                 <View style={styles.itemContainer}>
                     <View style={styles.topLine}></View>
                     <View style={styles.itemInfoContainer}>
-                        <Image source={require('../source/myIcon.jpg')} style={styles.itemIcon}/>
+                        <Image source={require('../source/attention1.jpg')} style={styles.itemIcon}/>
                         <Text style={styles.itemText}>{item}</Text>
                         <Image source={require('../source/rightArrow.jpg')} style={styles.itemArrow}/>
                     </View>

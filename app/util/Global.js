@@ -22,7 +22,8 @@ global.gDevice = {
 }
 
 global.gColor = {
-    orangeColor: '#FF906F',
-    lineColor: '#F2F2F2',
+    orangeTextColor: '#FF906F',
+    grayLineColor: '#F2F2F2',
+    grayTextColor: '#A9A9A9',
 }
 

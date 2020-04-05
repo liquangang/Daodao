@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import {Text, View, StyleSheet, ScrollView, Image, FlatList, Dimensions} from "react-native";
 import httpApi from "../tools/Api";
-import LoadingView from "../component/LoadingView";
+
+
 
 // 个人详情页，注意与my页区分
 export default class PersonInfo extends Component {
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     },
     container2: {
         flexDirection: 'row',
-        backgroundColor: gColor.orangeColor,
+        backgroundColor: gColor.orangeTextColor,
         alignItems: 'center',
     },
     img1: {
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     },
     line2: {
         height: 1,
-        backgroundColor: gColor.lineColor,
+        backgroundColor: gColor.grayLineColor,
     },
     bottomTopContainer: {
         marginTop: 5,
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         height: 1,
-        backgroundColor: gColor.lineColor
+        backgroundColor: gColor.grayLineColor
     },
     bottomBottomContainer: {
         height: 40,

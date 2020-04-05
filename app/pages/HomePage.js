@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions, FlatList, Text } from "react-native";
+import { View, StyleSheet, Dimensions, FlatList, Text, TouchableOpacity } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchView from "../component/SearchView";
 import TitleListView from "../component/TitleListView";
@@ -56,6 +56,11 @@ export default class HomePage extends Component {
         }
     }
 
+    // 跳转消息页
+    onClickMesBtn = () => {
+        this.props.navigation.navigate('Message');
+    }
+
     // ------------------------------ 网络请求 -------------------------------------------
 
     // 请求新闻分类列表
@@ -107,7 +112,9 @@ export default class HomePage extends Component {
                 {/*搜索*/}
                 <View style={styles.searchContainer}>
                     <View style={styles.searchView}><SearchView/></View>
-                    <Ionicons name='md-mail' size={35} style={styles.messageView}/>
+                    <TouchableOpacity onPress={this.onClickMesBtn}>
+                        <Ionicons name='md-mail' size={35} style={styles.messageView}/>
+                    </TouchableOpacity>
                 </View>
 
                 {/*分割线*/}
@@ -142,38 +149,6 @@ export default class HomePage extends Component {
                 data={item.item}
             ></NewsView>
         );
-
-        // switch (item.key) {
-        //     case '1':
-        //     {
-        //         return (
-        //             <BannerView></BannerView>
-        //         );
-        //     }
-        //
-        //         break;
-        //     case '2':
-        //     {
-        //         return (
-        //             <NewsView onClickAvatar = {this.onClickAvatar}></NewsView>
-        //         );
-        //     }
-        //         break;
-        //     case '3':
-        //     {
-        //         return (
-        //             <NewsView onClickAvatar = {this.onClickAvatar}></NewsView>
-        //         );
-        //     }
-        //         break;
-        //     default :
-        //     {
-        //         return (
-        //             <NewsView></NewsView>
-        //         );
-        //     }
-        //         break;
-        // }
     };
 
 }
@@ -200,7 +175,7 @@ const styles = StyleSheet.create({
     segmentation: {
         marginTop: 3,
         height: 1,
-        backgroundColor: gColor.lineColor
+        backgroundColor: gColor.grayLineColor
     },
     newsList: {
 

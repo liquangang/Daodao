@@ -110,10 +110,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     attention: {
-        flex: 60,
-        height: 30,
+        flex: 50,
+        height: 25,
         marginLeft: 5,
-        marginRight: 5,
+        marginRight: 10,
     },
     nickName: {
         marginTop: 5,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     segmentation: {
         margin: 5,
         height: 1,
-        backgroundColor: gColor.lineColor
+        backgroundColor: gColor.grayLineColor
     },
     bottomBottomContainer: {
         height: 40,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     bottomSegmentation: {
         height: 10,
-        backgroundColor: gColor.lineColor
+        backgroundColor: gColor.grayLineColor
     },
     itemIcon: {
         marginTop: 2,

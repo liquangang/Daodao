@@ -54,6 +54,22 @@ const httpApi={
         }
         //请求成功
         return res;
+    },
+
+    // 获取消信息页数据
+    async getMesData(params) {
+        const url = 'http://dd.shenruxiang.com/api/v1/notice_list';
+        const [err, res] = await to(http.post(url, params));
+        if (err) {
+            //请求失败
+            return Object.assign(err, {
+                status: "406",
+                description: err.errMsg
+            }, true);
+        }
+        //请求成功
+        return res;
     }
+
 }
 export default httpApi;

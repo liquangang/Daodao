@@ -10,6 +10,8 @@ export default class Chat extends Component {
         };
     }
 
+
+
     render() {
         return(
             <View style={styles.container}>
@@ -26,19 +28,19 @@ export default class Chat extends Component {
                     </TextInput>
                     <View style={styles.input2}>
                         <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/myIcon.jpg')} style={styles.inputIcon}/>
+                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/myIcon.jpg')} style={styles.inputIcon}/>
+                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/myIcon.jpg')} style={styles.inputIcon}/>
+                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/myIcon.jpg')} style={styles.inputIcon}/>
+                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/myIcon.jpg')} style={styles.inputIcon}/>
+                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
                         </TouchableOpacity>
                     </View>
                 </View>
