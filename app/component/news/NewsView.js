@@ -10,9 +10,9 @@ export default class NewsView extends Component {
         };
     }
 
-    onClickAvatar = () => {
+    onClickAvatar = (userId) => {
         // navigation.navigate('personalInfo');
-        this.props.onClickAvatar();
+        this.props.onClickAvatar(userId);
     };
 
     render() {
@@ -22,7 +22,7 @@ export default class NewsView extends Component {
                 {/*动态上部部分*/}
                 <View style={styles.topInfoContainer}>
                     {/*头像*/}
-                    <TouchableOpacity onPress={()=>this.onClickAvatar()}>
+                    <TouchableOpacity onPress={()=>this.onClickAvatar(this.state.data.user.id)}>
                         <Image source={require('../../source/avatar.jpg')}
                                // source={{uri: this.state.data.user.avatar}}
                                style={styles.avatar}/>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     segmentation: {
         margin: 5,
         height: 1,
-        backgroundColor: '#D3D3D3'
+        backgroundColor: gColor.lineColor
     },
     bottomBottomContainer: {
         height: 40,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     bottomSegmentation: {
         height: 10,
-        backgroundColor: '#DCDCDC'
+        backgroundColor: gColor.lineColor
     },
     itemIcon: {
         marginTop: 2,

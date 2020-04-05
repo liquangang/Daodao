@@ -6,6 +6,7 @@ import TitleListView from "../component/TitleListView";
 import BannerView from "../component/BannerView"
 import NewsView from "../component/news/NewsView"
 import httpApi from "../tools/Api"
+import LoadingView from "../component/LoadingView";
 
 export default class HomePage extends Component {
 
@@ -22,15 +23,21 @@ export default class HomePage extends Component {
 
     }
 
-    componentDidMount() {
-        this.fetchNewsTypeListData();
+    async componentDidMount() {
+        await this.fetchNewsTypeListData();
+
+        // 默认请求第一个新闻列表
+        this.showNewsList(this.state.newsTypeList[0]);
     }
 
     // ------------------------- 主题逻辑 ------------------------------
 
     // 点击头像
-    onClickAvatar = () => {
-        this.props.navigation.navigate('PersonInfo');
+    onClickAvatar = (userId) => {
+        let params = {
+            userId: userId,
+        };
+        this.props.navigation.navigate('PersonInfo', params);
     };
 
     // 点击某个新闻分类标题
@@ -52,7 +59,7 @@ export default class HomePage extends Component {
     // ------------------------------ 网络请求 -------------------------------------------
 
     // 请求新闻分类列表
-    async fetchNewsTypeListData() {
+    fetchNewsTypeListData = async () => {
         let params = {};
         let res = await httpApi.getNewsTypeList(params);
 
@@ -64,13 +71,10 @@ export default class HomePage extends Component {
         } else {
             alert("网络异常！请检查网络！");
         }
-
-        // 默认请求第一个新闻列表
-        this.showNewsList(this.state.newsTypeList[0]);
     }
 
     // 下载具体新闻分类数据
-    async fetchNewsListData(newsId) {
+    fetchNewsListData = async (newsId) => {
         let params = {
             post_cate_id: newsId,
         };
@@ -94,7 +98,7 @@ export default class HomePage extends Component {
     render() {
 
         if (!this.state.loaded) {
-            return this.renderLoadingView();
+            return <LoadingView/>;
         }
 
         return(
@@ -172,14 +176,6 @@ export default class HomePage extends Component {
         // }
     };
 
-    renderLoadingView() {
-        return (
-            <View style={styles.loadingView}>
-                <Text>Loading data...</Text>
-            </View>
-        );
-    }
-
 }
 
 const {width, height, scale} = Dimensions.get('window');
@@ -204,16 +200,9 @@ const styles = StyleSheet.create({
     segmentation: {
         marginTop: 3,
         height: 1,
-        backgroundColor: '#D3D3D3'
+        backgroundColor: gColor.lineColor
     },
     newsList: {
 
-    },
-    loadingView: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#F5FCFF"
     },
 });

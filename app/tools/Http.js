@@ -33,6 +33,7 @@ const http = {
     },
     post(url, params) {
         return new Promise(function (resolve, reject) {
+            console.log('params:', url, params);   //网络请求数据
             fetch(url, {
                 method: 'POST',
                 headers: header,

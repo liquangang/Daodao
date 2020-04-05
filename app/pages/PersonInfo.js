@@ -1,20 +1,52 @@
 import React, { Component } from "react";
 import {Text, View, StyleSheet, ScrollView, Image, FlatList, Dimensions} from "react-native";
+import httpApi from "../tools/Api";
+import LoadingView from "../component/LoadingView";
 
 // 个人详情页，注意与my页区分
 export default class PersonInfo extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            personalData: [],
+            load: false
+        };
+    }
+
     componentDidMount() {
-        this.fetchNewsTypeListData();
+        let params = this.props.route.params;
+        this.fetchPersonalData(params.userId);
+    }
+
+    // 请求个人数据
+    fetchPersonalData = async (userId) => {
+        let params = {
+            user_id: userId,
+        };
+        let res = await httpApi.getPersonalData(params);
+
+        if (res.status == 0) {
+            this.setState({
+                personalData: res.data,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
     }
 
     render() {
+        if (this.state.load == false) {
+            return <LoadingView></LoadingView>
+        }
         return(
             <View style={styles.superContainer}>
                 <FlatList
                     style={styles.container}
-                    data={[{key: '1'}, {key: '2'}, {key: '3'}]}
-                    renderItem={this.itemView}
+                    data={this.state.personalData.post_list.data}
+                    renderItem={this.newsItemView}
+                    ListHeaderComponent={this.topView}
                 />
                 <View style={styles.container6}>
                     <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
@@ -25,91 +57,64 @@ export default class PersonInfo extends Component {
         );
     };
 
-    itemView = ({ item }) => {
-        switch (item.key) {
-            case '1':
-            {
-                return(this.infoItemView(item));
-            }
-                break;
-            case '2':
-            {
-                return(this.detailItemView(item));
-            }
-                break;
-            default:
-            {
-                return(this.newsItemView(item));
-            }
-                break;
-        }
-    };
-
-    infoItemView = ({ item }) => {
+    topView = () => {
         return(
-            <View style={styles.itemContainer1}>
-                {/*有头像的部分*/}
-                <View style={styles.container2}>
-                    <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
-                    <View style={styles.container3}>
-                        <Text style={styles.text1}>会飞的鱼</Text>
-                        <Text style={styles.text2}>签名：我是一条会飞的鱼</Text>
-                        <Text style={styles.text3}>粉丝：12345    关注：12345</Text>
+            <View>
+                <View style={styles.itemContainer1}>
+                    {/*有头像的部分*/}
+                    <View style={styles.container2}>
+                        <Image source={require('../source/avatar.jpg')}
+                               // source={{uri: this.state.data.user_info.avatar}}
+                               style={styles.img1}/>
+                        <View style={styles.container3}>
+                            <Text style={styles.text1}>{this.state.personalData.user_info.nick_name}</Text>
+                            <Text style={styles.text2}>签名：{this.state.personalData.user_info.desc}</Text>
+                            <Text style={styles.text3}>粉丝：{this.state.personalData.user_info.fan_num}    关注：{this.state.personalData.user_info.follow_num}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.container4}>
+                        <Text style={styles.text4}>资料</Text>
+                        <Text style={styles.text4}>相册</Text>
                     </View>
                 </View>
-                <View style={styles.container4}>
-                    <Text style={styles.text4}>资料</Text>
-                    <Text style={styles.text4}>相册</Text>
+                <View style={styles.container5}>
+                    <Text style={styles.text5}>性别：{this.state.personalData.user_info.sex}</Text>
+                    <Text style={styles.text5}>星座：摩羯座</Text>
+                    <Text style={styles.text5}>感情状况：单身</Text>
+                    <Text style={styles.text5}>出生日期：2000-01-01</Text>
+                    <Text style={styles.text5}>职业：互联网-电子工程</Text>
+                    <Text style={styles.text5}>注册地点：{this.state.personalData.user_info.province}-{this.state.personalData.user_info.city}</Text>
                 </View>
             </View>
         );
-    };
-
-    detailItemView = ({ item }) => {
-        return(
-            <View style={styles.container5}>
-                <Text style={styles.text5}>性别：女</Text>
-                <Text style={styles.text5}>星座：摩羯座</Text>
-                <Text style={styles.text5}>感情状况：单身</Text>
-                <Text style={styles.text5}>出生日期：2000-01-01</Text>
-                <Text style={styles.text5}>职业：互联网-电子工程</Text>
-                <Text style={styles.text5}>注册地点：北京市昌平区</Text>
-            </View>
-        );
-    };
+    }
 
     newsItemView = ({ item }) => {
+        console.log("item: ", item);
         return(
             <View style={styles.itemContainer2}>
-                <Text style={styles.text5}>09-18</Text>
+                <Text style={styles.text5}>{item.created_at}</Text>
                 <View style={styles.line2}></View>
-                <Text style={styles.text6}>动态内容动态内容动态内容动态内容动态内容动态内容动态
-                    内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动
-                    动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容
-                    动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容
-                    动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容
-                    态内容动态内容动态内容动态内容动态内容动态内容</Text>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
+                <Text style={styles.text6}>{item.post_content}</Text>
+                <Image source={require('../source/banner.jpg')} style={styles.newsImg}/>
                 <View style={styles.bottomContainer}>
                     <View style={styles.bottomTopContainer}>
                         <Image source={require('../source/location.jpg')} style={styles.itemIcon}/>
-                        <Text>北京市长安街</Text>
+                        <Text>{item.post_position}</Text>
                     </View>
                     <View style={styles.segmentation}></View>
                     <View style={styles.bottomBottomContainer}>
                         <View style={styles.bottomBottomSubContainer}>
                             <Image source={require('../source/share.jpg')} style={styles.itemIcon}/>
-                            <Text>111</Text>
+                            <Text>{item.share_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
                             <Image source={require('../source/mes.jpg')} style={styles.itemIcon}/>
-                            <Text>222</Text>
+                            <Text>{item.comment_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
                             <Image source={require('../source/blackPraise.jpg')} style={styles.itemIcon}/>
-                            <Text>333</Text>
+                            <Text>{item.praise_num}</Text>
                         </View>
                     </View>
                 </View>
@@ -131,7 +136,7 @@ const styles = StyleSheet.create({
     },
     container2: {
         flexDirection: 'row',
-        backgroundColor: '#FF906F',
+        backgroundColor: gColor.orangeColor,
         alignItems: 'center',
     },
     img1: {
@@ -182,7 +187,7 @@ const styles = StyleSheet.create({
     },
     line2: {
         height: 1,
-        backgroundColor: "#D3D3D3",
+        backgroundColor: gColor.lineColor,
     },
     bottomTopContainer: {
         marginTop: 5,
@@ -196,7 +201,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         height: 1,
-        backgroundColor: '#D3D3D3'
+        backgroundColor: gColor.lineColor
     },
     bottomBottomContainer: {
         height: 40,
@@ -221,15 +226,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     img2: {
-        height: 35,
-        width: width/2 - 40,
+        height: 30,
+        width: width/2 - 100,
     },
     container6: {
         marginTop: 10,
         backgroundColor: 'white',
-        height: 50,
+        height: 40,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-    }
+    },
+    newsImg: {
+        marginTop: 2,
+        marginBottom: 2,
+        marginLeft: 2,
+        marginRight: 2,
+        height: width/4,
+        width: width/4,
+    },
 });
