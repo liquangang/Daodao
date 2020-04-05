@@ -70,7 +70,7 @@ export default class NewsDetail extends Component {
                     <Text style={styles.userInfoText1}>运动无极限</Text>
                     <Text style={styles.userInfoText}>1分钟前 来自 iPhone X</Text>
                 </View>
-                <Image source={require('../source/attention1.jpg')} style={styles.userInfoImg}/>
+                <Image source={require('../source/attention.jpg')} style={styles.userInfoImg}/>
             </View>
         );
     };
@@ -113,7 +113,7 @@ export default class NewsDetail extends Component {
                     <View style={styles.commentContainer1}>
                         <View style={styles.commentContainer2}>
                             <Text style={styles.commentText}> 北京市长安街</Text>
-                            <Image source={require('../source/praise1.jpg')} style={styles.commentImg}/>
+                            <Image source={require('../source/blackPraise.jpg')} style={styles.commentImg}/>
                             <Text style={styles.commentText2}>111111111111111111</Text>
                         </View>
                         <Text style={styles.commentText1}> 北京市长安街北京市长安街北京
@@ -135,7 +135,7 @@ export default class NewsDetail extends Component {
                 <View style={styles.commentContainer1}>
                     <View style={styles.commentContainer2}>
                         <Text style={styles.commentText}> 北京市长安街</Text>
-                        <Image source={require('../source/praise1.jpg')} style={styles.commentImg}/>
+                        <Image source={require('../source/blackPraise.jpg')} style={styles.commentImg}/>
                         <Text style={styles.commentText2}>111111111111111111</Text>
                     </View>
                     <Text style={styles.commentText1}> 北京市长安街北京市长安街北京

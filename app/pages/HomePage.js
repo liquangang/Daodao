@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions, FlatList } from "react-native";
+import { View, StyleSheet, Dimensions, FlatList, Text } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchView from "../component/SearchView";
 import TitleListView from "../component/TitleListView";
@@ -9,27 +9,93 @@ import httpApi from "../tools/Api"
 
 export default class HomePage extends Component {
 
+
+    // --------------------------- 生命周期 --------------------------------------
     constructor(props) {
         super(props);
         this.state = {
-            data: {},
+            newsTypeList: [],
+            newsList: [],
+            currentShowNewsList: [],
+            loaded: false
         };
+
     }
 
+    componentDidMount() {
+        this.fetchNewsTypeListData();
+    }
+
+    // ------------------------- 主题逻辑 ------------------------------
+
+    // 点击头像
     onClickAvatar = () => {
-        // this.props.navigation.navigate('NewsDetail');
-        this.fetchData();
+        this.props.navigation.navigate('PersonInfo');
     };
 
-    async fetchData() {
-        let params = {};
-        let res = httpApi.getNewsInfo(params);
-
-        //请求回复的一些操作，这里根据你们的业务员需求和接口自定义
-        console.log("~~~~~~~~~~~~~~", res);
+    // 点击某个新闻分类标题
+    onClickNewsType = (item) => {
+        this.showNewsList(item);
     }
 
+    // 展示新闻列表
+    showNewsList = (item) => {
+        if (this.state.newsList != null && this.state.newsList[item.id] != null) {
+            this.setState({
+                currentShowNewsList: this.state.newsList[item.id],
+            });
+        } else {
+            this.fetchNewsListData(item.id);
+        }
+    }
+
+    // ------------------------------ 网络请求 -------------------------------------------
+
+    // 请求新闻分类列表
+    async fetchNewsTypeListData() {
+        let params = {};
+        let res = await httpApi.getNewsTypeList(params);
+
+        if (res.status == 0) {
+            this.setState({
+                newsTypeList: res.data,
+                loaded: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+
+        // 默认请求第一个新闻列表
+        this.showNewsList(this.state.newsTypeList[0]);
+    }
+
+    // 下载具体新闻分类数据
+    async fetchNewsListData(newsId) {
+        let params = {
+            post_cate_id: newsId,
+        };
+        let res = await httpApi.getNewsList(params);
+
+        if (res.status == 0) {
+
+            let newNewsList = this.state.newsList;
+            newNewsList[newsId] = res.data.catePostList.data;
+
+            this.setState({
+                newsList: newNewsList,
+                currentShowNewsList: res.data.catePostList.data,
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+    // -------------------------- view 层 ------------------------------------
     render() {
+
+        if (!this.state.loaded) {
+            return this.renderLoadingView();
+        }
 
         return(
             <View style={styles.container}>
@@ -44,51 +110,74 @@ export default class HomePage extends Component {
                 <View style={styles.segmentation}></View>
 
                 {/*分类列表*/}
-                <TitleListView></TitleListView>
+                <TitleListView
+                    onClickNewsType = {this.onClickNewsType}
+                    data={this.state.newsTypeList}
+                ></TitleListView>
+
+                {/*分割线*/}
+                <View style={styles.segmentation}></View>
+
 
                 {/*新闻列表*/}
                 <FlatList
-                    data={[{key: '1'}, {key: '2'}, {key: '3'}]}
-                    renderItem={(item)=>this.newsListItemView(item)}
+                    data={this.state.currentShowNewsList}
+                    renderItem={this.newsListItemView}
                     style={styles.newsList}
                 />
+
             </View>
         );
     };
 
-    newsListItemView = ({ item }) => {
+    newsListItemView = (item) => {
 
-        switch (item.key) {
-            case '1':
-            {
-                return (
-                    <BannerView></BannerView>
-                );
-            }
+        return (
+            <NewsView
+                onClickAvatar = {this.onClickAvatar}
+                data={item.item}
+            ></NewsView>
+        );
 
-                break;
-            case '2':
-            {
-                return (
-                    <NewsView onClickAvatar = {()=>this.onClickAvatar()}></NewsView>
-                );
-            }
-                break;
-            case '3':
-            {
-                return (
-                    <NewsView onClickAvatar = {()=>this.onClickAvatar()}></NewsView>
-                );
-            }
-                break;
-            default :
-            {
-                return (
-                    <NewsView></NewsView>
-                );
-            }
-                break;
-        }
+        // switch (item.key) {
+        //     case '1':
+        //     {
+        //         return (
+        //             <BannerView></BannerView>
+        //         );
+        //     }
+        //
+        //         break;
+        //     case '2':
+        //     {
+        //         return (
+        //             <NewsView onClickAvatar = {this.onClickAvatar}></NewsView>
+        //         );
+        //     }
+        //         break;
+        //     case '3':
+        //     {
+        //         return (
+        //             <NewsView onClickAvatar = {this.onClickAvatar}></NewsView>
+        //         );
+        //     }
+        //         break;
+        //     default :
+        //     {
+        //         return (
+        //             <NewsView></NewsView>
+        //         );
+        //     }
+        //         break;
+        // }
+    };
+
+    renderLoadingView() {
+        return (
+            <View style={styles.loadingView}>
+                <Text>Loading data...</Text>
+            </View>
+        );
     }
 
 }
@@ -98,6 +187,7 @@ const {width, height, scale} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
     searchContainer: {
         flexDirection: 'row',
@@ -118,5 +208,12 @@ const styles = StyleSheet.create({
     },
     newsList: {
 
-    }
+    },
+    loadingView: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#F5FCFF"
+    },
 });

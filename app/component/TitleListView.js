@@ -1,21 +1,25 @@
 import React, { Component } from "react";
-import {FlatList, StyleSheet, Text, View} from "react-native";
+import {FlatList, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 
 export default class TitleListView extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            titleListData: []
+            data: this.props.data
         };
     }
+
+    onClickText = (item) => {
+        this.props.onClickNewsType(item);
+    };
 
     render() {
         return(
             <View style={styles.container}>
                 <FlatList
-                    data={[{key: '最新'}, {key: '关注'}, {key: '房产'}]}
-                    renderItem={this.titleListItemView}
+                    data={this.state.data}
+                    renderItem={this.titleListItemView.bind(this)}
                     style={styles.flatList}
                     horizontal={true}
                 />
@@ -24,10 +28,12 @@ export default class TitleListView extends Component {
         );
     }
 
-    titleListItemView({ item }) {
+    titleListItemView = ({ item }) => {
         return (
           <View style={styles.item}>
-              <Text style={styles.itemText}>{item.key}</Text>
+              <TouchableOpacity onPress={()=>this.onClickText(item)}>
+                  <Text style={styles.itemText}>{item.name}</Text>
+              </TouchableOpacity>
           </View>
         );
     }

@@ -10,7 +10,7 @@ function to(promise){
 }
 
 const httpApi={
-    // login请求
+    // 请求示例
     async getNewsInfo(params) {
         const url = 'http://dd.shenruxiang.com/api/v1/cate_post_list';
         const [err, res] = await to(http.post(url, params));
@@ -24,18 +24,35 @@ const httpApi={
         //请求成功
         return res;
     },
-    //logout 请求
-    async logout(params) {
-        const url = '/userManage/logout';
-        const [err, res] = await to(http.get(url, params));
+
+    // 获取新闻分类列表
+    async getNewsTypeList(params) {
+        const url = 'http://dd.shenruxiang.com/api/v1/post_cate_list';
+        const [err, res] = await to(http.post(url, params));
         if (err) {
+            //请求失败
             return Object.assign(err, {
                 status: "406",
                 description: err.errMsg
             }, true);
         }
+        //请求成功
         return res;
     },
-    //其他业务请求.....
+
+    // 获取某个具体新闻分类下的新闻列表
+    async getNewsList(params) {
+        const url = 'http://dd.shenruxiang.com/api/v1/cate_post_list';
+        const [err, res] = await to(http.post(url, params));
+        if (err) {
+            //请求失败
+            return Object.assign(err, {
+                status: "406",
+                description: err.errMsg
+            }, true);
+        }
+        //请求成功
+        return res;
+    }
 }
 export default httpApi;

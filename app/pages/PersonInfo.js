@@ -3,6 +3,11 @@ import {Text, View, StyleSheet, ScrollView, Image, FlatList, Dimensions} from "r
 
 // 个人详情页，注意与my页区分
 export default class PersonInfo extends Component {
+
+    componentDidMount() {
+        this.fetchNewsTypeListData();
+    }
+
     render() {
         return(
             <View style={styles.superContainer}>
@@ -13,7 +18,7 @@ export default class PersonInfo extends Component {
                 />
                 <View style={styles.container6}>
                     <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
-                    <Image source={require('../source/attention1.jpg')} style={styles.img2}/>
+                    <Image source={require('../source/attention.jpg')} style={styles.img2}/>
                 </View>
             </View>
 
@@ -103,7 +108,7 @@ export default class PersonInfo extends Component {
                             <Text>222</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/praise.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../source/blackPraise.jpg')} style={styles.itemIcon}/>
                             <Text>333</Text>
                         </View>
                     </View>
@@ -216,13 +221,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     img2: {
-        height: 40,
+        height: 35,
         width: width/2 - 40,
     },
     container6: {
         marginTop: 10,
         backgroundColor: 'white',
-        height: 60,
+        height: 50,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
