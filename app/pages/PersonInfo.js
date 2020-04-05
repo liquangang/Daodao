@@ -1,23 +1,41 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, ScrollView, Image, FlatList, Dimensions} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions, SectionList} from "react-native";
 import httpApi from "../tools/Api";
-
+import LoadingView from "../component/LoadingView";
 
 
 // 个人详情页，注意与my页区分
+// 需要传入userid
 export default class PersonInfo extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             personalData: [],
-            load: false
+            albumData: [],
+            load: false,
+            showType: 1, // 展示数据类型，1：资料部分，2：相册
         };
     }
 
     componentDidMount() {
-        let params = this.props.route.params;
-        this.fetchPersonalData(params.userId);
+        this.showNewsList();
+    }
+
+    showNewsList = () => {
+        this.setState({
+            load: false,
+            showType: 1,
+        });
+        this.fetchPersonalData(this.props.route.params.userId);
+    }
+
+    showalbum = () => {
+        this.setState({
+            load: false,
+            showType: 2,
+        });
+        this.fetchAlbumData(this.props.route.params.userId);
     }
 
     // 请求个人数据
@@ -28,8 +46,33 @@ export default class PersonInfo extends Component {
         let res = await httpApi.getPersonalData(params);
 
         if (res.status == 0) {
+
             this.setState({
                 personalData: res.data,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+    // 请求相册数据
+    fetchAlbumData = async (userId) => {
+        let params = {
+            user_id: userId,
+        };
+        let res = await httpApi.getAlbumData(params);
+
+        if (res.status == 0) {
+            let newAlbumArr = [];
+            for (var key in res.data) {
+                var value = res.data[key];
+                let subAlbumArr = value;
+                let dataArr = [{data:subAlbumArr}];
+                newAlbumArr.push({title:key, data:dataArr});
+            }
+            this.setState({
+                albumData: newAlbumArr,
                 load: true
             });
         } else {
@@ -41,22 +84,52 @@ export default class PersonInfo extends Component {
         if (this.state.load == false) {
             return <LoadingView></LoadingView>
         }
+
         return(
             <View style={styles.superContainer}>
-                <FlatList
-                    style={styles.container}
-                    data={this.state.personalData.post_list.data}
-                    renderItem={this.newsItemView}
-                    ListHeaderComponent={this.topView}
-                />
-                <View style={styles.container6}>
-                    <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
-                    <Image source={require('../source/attention.jpg')} style={styles.img2}/>
-                </View>
+                {this.state.showType == 1 ? (
+                    <FlatList
+                        style={styles.container}
+                        data={this.state.personalData.post_list.data}
+                        renderItem={this.newsItemView}
+                        ListHeaderComponent={this.topView}
+                    />
+
+                ) : (
+                    <SectionList
+                        style={styles.sectionList1}
+                        ListHeaderComponent={this.topView}
+                        sections={this.state.albumData}
+                        renderItem={this.albumItemView}
+                        renderSectionHeader={this.albumHeaderItemView}
+                        renderSectionFooter={()=><View style={styles.line3}></View>}
+                    ></SectionList>
+                )
+                }
+
+                {
+                    this.state.showType == 1 ? (
+                        <View style={styles.container6}>
+                            <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
+                            <Image source={require('../source/attention.jpg')} style={styles.img2}/>
+                        </View>
+
+                    ) : (<View></View>)
+                }
             </View>
 
         );
     };
+
+    footerLoadView = () => {
+        if (this.state.load) {
+            return(
+                <LoadingView></LoadingView>
+            );
+        } else {
+            return(<View></View>);
+        }
+    }
 
     topView = () => {
         return(
@@ -74,24 +147,32 @@ export default class PersonInfo extends Component {
                         </View>
                     </View>
                     <View style={styles.container4}>
-                        <Text style={styles.text4}>资料</Text>
-                        <Text style={styles.text4}>相册</Text>
+                        <TouchableOpacity onPress={this.showNewsList}>
+                            <Text style={styles.text4}>资料</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.showalbum}>
+                            <Text style={styles.text4}>相册</Text>
+                        </TouchableOpacity>
                     </View>
+                    <View style={styles.line5}></View>
                 </View>
-                <View style={styles.container5}>
-                    <Text style={styles.text5}>性别：{this.state.personalData.user_info.sex}</Text>
-                    <Text style={styles.text5}>星座：摩羯座</Text>
-                    <Text style={styles.text5}>感情状况：单身</Text>
-                    <Text style={styles.text5}>出生日期：2000-01-01</Text>
-                    <Text style={styles.text5}>职业：互联网-电子工程</Text>
-                    <Text style={styles.text5}>注册地点：{this.state.personalData.user_info.province}-{this.state.personalData.user_info.city}</Text>
-                </View>
+
+                {
+                    this.state.showType == 1 ? (<View style={styles.container5}>
+                        <Text style={styles.text5}>性别：{this.state.personalData.user_info.sex}</Text>
+                        <Text style={styles.text5}>星座：摩羯座</Text>
+                        <Text style={styles.text5}>感情状况：单身</Text>
+                        <Text style={styles.text5}>出生日期：2000-01-01</Text>
+                        <Text style={styles.text5}>职业：互联网-电子工程</Text>
+                        <Text style={styles.text5}>注册地点：{this.state.personalData.user_info.province}-{this.state.personalData.user_info.city}</Text>
+                    </View>) : (<View></View>)
+                }
+
             </View>
         );
     }
 
     newsItemView = ({ item }) => {
-        console.log("item: ", item);
         return(
             <View style={styles.itemContainer2}>
                 <Text style={styles.text5}>{item.created_at}</Text>
@@ -122,6 +203,37 @@ export default class PersonInfo extends Component {
             </View>
         );
     };
+
+    albumItemView = ({item}) => {
+        return (
+            <View style={styles.view1}>
+                <FlatList
+                    data={item.data}
+                    renderItem={this.imgItemView}
+                    numColumns={3}
+                >
+                </FlatList>
+            </View>
+
+        );
+    }
+
+    imgItemView = ({item}) => {
+        return(
+            <View>
+                {/*<Image source={{uri: item.src}} style={styles.itemIcon}/>*/}
+                <Image source={require('../source/banner.jpg')} style={styles.newsImg}/>
+            </View>
+        );
+    }
+
+    albumHeaderItemView = ({section}) => {
+        return(
+            <View>
+                <Text style={styles.text8}>{section.title}</Text>
+            </View>
+        );
+    }
 }
 
 const {width, height, scale} = Dimensions.get('window');
@@ -231,7 +343,7 @@ const styles = StyleSheet.create({
         width: width/2 - 100,
     },
     container6: {
-        marginTop: 10,
+        padding: 10,
         backgroundColor: 'white',
         height: 40,
         flexDirection: 'row',
@@ -246,4 +358,30 @@ const styles = StyleSheet.create({
         height: width/4,
         width: width/4,
     },
+    line3: {
+        height: 10,
+        backgroundColor: '#F2F2F2'
+    },
+    line5: {
+        height: 0.5,
+        backgroundColor: '#F2F2F2',
+    },
+    sectionList1: {
+        backgroundColor: '#FFFEFF',
+    },
+    text8: {
+        color: '#333333',
+        fontSize: 11.5,
+        marginTop: 10,
+        marginLeft: 11,
+    },
+    view1: {
+        flex: 1,
+    },
+    newsImg: {
+        width: (gScreen.screen_width - 44) / 3,
+        height: (gScreen.screen_width - 44) / 3,
+        margin: 5,
+        borderRadius: 5,
+    }
 });

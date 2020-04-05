@@ -36,6 +36,7 @@ function HotSpotStackScreen() {
     return (
       <HotSpotStack.Navigator>
           <HotSpotStack.Screen name='HotSpot' component={HotSpot}/>
+          <HotSpotStack.Screen name='PersonInfo' component={PersonInfo}/>
       </HotSpotStack.Navigator>
     );
 }

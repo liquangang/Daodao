@@ -45,14 +45,12 @@ export default class Message extends Component {
             return <LoadingView></LoadingView>
         }
         return (
-            <View style={styles.container}>
                 <FlatList
                     data={this.state.mesData}
                     renderItem={this.msgListItemView}
                     style={styles.msgListContainer}
                     ListHeaderComponent={this.headerItemView}
                 />
-            </View>
         );
     };
 

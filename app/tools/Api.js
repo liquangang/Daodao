@@ -69,6 +69,21 @@ const httpApi={
         }
         //请求成功
         return res;
+    },
+
+    // 获取相册数据
+    async getAlbumData(params) {
+        const url = 'http://dd.shenruxiang.com/api/v1/user_photo_list';
+        const [err, res] = await to(http.post(url, params));
+        if (err) {
+            //请求失败
+            return Object.assign(err, {
+                status: "406",
+                description: err.errMsg
+            }, true);
+        }
+        //请求成功
+        return res;
     }
 
 }

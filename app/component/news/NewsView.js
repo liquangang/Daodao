@@ -47,7 +47,7 @@ export default class NewsView extends Component {
                     data={[{key: '最新'}, {key: '关注'}, {key: '房产'}, {key: '房产'}, {key: '房产'}, {key: '房产'}]}
                     renderItem={this.imgItemView}
                     style={styles.newsImgList}
-                    numColumns ={3}
+                    numColumns={3}
                 />
 
                 {/*动态底部部分*/}

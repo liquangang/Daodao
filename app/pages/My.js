@@ -1,57 +1,90 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, Image, ImageBackground, SectionList, Dimensions } from "react-native";
+import {Text, View, StyleSheet, Image, ImageBackground, FlatList, Dimensions } from "react-native";
+import httpApi from "../tools/Api";
+import LoadingView from "../component/LoadingView";
 
 export default class My extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            optionData: [
+                {title: '我的动态', img: require('../source/dongtai.jpg')},
+                {title: '我的相册', img: require('../source/xiangce.jpg')},
+                {title: '实名认证', img: require('../source/shiming.jpg')},
+                {title: '广告投放', img: require('../source/guanggao.jpg')},
+                {title: '帮助中心', img: require('../source/bangzhu.jpg')},
+                {title: '投诉反馈', img: require('../source/tousu.jpg')},
+                {title: '在线客服', img: require('../source/zaixian.jpg')},
+                {title: '关于我们', img: require('../source/guanyu.jpg')},
+                {title: '检查更新', img: require('../source/jiancha.jpg')},
+                {title: '退出登录', img: require('../source/tuichu.jpg')},
+            ],
+            personalData: [],
+            load: false,
+        };
+    }
+
+    componentDidMount() {
+        this.fetchPersonalData();
+    }
+
+    // 请求个人数据
+    fetchPersonalData = async () => {
+        let params = {};
+        let res = await httpApi.getPersonalData(params);
+
+        if (res.status == 0) {
+            this.setState({
+                personalData: res.data,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
     render() {
+        if (this.state.load == false) {
+            return <LoadingView></LoadingView>
+        }
         return(
-            <View style={styles.container}>
-                <ImageBackground source={require('../source/myBack.jpg')} style={styles.topContainer}>
-                    <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
-                    <View style={styles.personalInfoContainer}>
-                        <Text style={styles.nickName}>庞各庄一中校长</Text>
-                        <Text style={styles.commonText}>ID：123</Text>
-                        <Text style={styles.commonText}>粉丝：123   关注：123</Text>
-                    </View>
-                    <Image source={require('../source/updateNickName.jpg')} style={styles.updateNickName}/>
-                </ImageBackground>
-                <SectionList
-                    sections={[
-                        {title: 'D', data: ['我的动态 ', '我的相册 ', '实名认证 ', '广告投放 ', '帮助中心 ', '投诉反馈 ', '在线客服 ']},
-                        {title: 'J', data: ['关于我们', '检查更新', '退出登录']},
-                    ]}
+                <FlatList
+                    style={styles.list}
                     renderItem={this.myItemView}
-                    renderSectionHeader={({section}) => <Text style={styles.sectionHeader}></Text>}
-                    keyExtractor={(item, index) => index}
+                    data={this.state.optionData}
+                    ListHeaderComponent={this.topView}
                 />
-            </View>
         );
     };
 
-    myItemView({ item }) {
-        if (item.length >= 5) {
-            return (
-                <View style={styles.itemContainer}>
-                    <View style={styles.topLine}></View>
-                    <View style={styles.itemInfoContainer}>
-                        <Image source={require('../source/attention1.jpg')} style={styles.itemIcon}/>
-                        <Text style={styles.itemText}>{item}</Text>
-                        <Image source={require('../source/rightArrow.jpg')} style={styles.itemArrow}/>
-                    </View>
-                    <View style={styles.bottomLine}></View>
+    topView = () => {
+        return(
+            <ImageBackground style={styles.topContainer}>
+                <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                <View style={styles.personalInfoContainer}>
+                    <Text style={styles.nickName}>{this.state.personalData.user_info.nick_name}</Text>
+                    <Text style={styles.commonText}>ID：{this.state.personalData.user_info.id}</Text>
+                    <Text style={styles.commonText}>粉丝：{this.state.personalData.user_info.fan_num}
+                    关注：{this.state.personalData.user_info.follow_num}</Text>
                 </View>
-            );
-        } else {
-            return (
-                <View style={styles.itemContainer}>
-                    <View style={styles.topLine}></View>
-                    <View style={styles.itemInfoContainer}>
-                        <Text style={styles.itemText}>{item}</Text>
-                        <Image source={require('../source/rightArrow.jpg')} style={styles.itemArrow}/>
-                    </View>
+                <Image source={require('../source/updateNickName.jpg')} style={styles.updateNickName}/>
+            </ImageBackground>
+        );
+    }
 
+    myItemView({ item }) {
+        return (
+            <View style={styles.itemContainer}>
+                <View style={styles.itemInfoContainer}>
+                    <Image source={item.img}
+                           style={styles.itemIcon}/>
+                    <Text style={styles.itemText}>{item.title}</Text>
+                    <Image source={require('../source/rightArrow.jpg')} style={styles.itemArrow}/>
                 </View>
-            );
-        }
+                <View style={styles.bottomLine}></View>
+            </View>
+        );
     }
 }
 
@@ -59,32 +92,33 @@ const {width, height, scale} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-
+        backgroundColor: 'white'
     },
     topContainer: {
         height: 150,
         flexDirection: 'row',
+        backgroundColor: gColor.orangeTextColor,
     },
     avatar: {
-        height: 50,
-        width: 50,
-        marginTop: 15,
-        marginLeft: 15,
-        marginRight: 5,
-        borderRadius: 25,
+        height: 60,
+        width: 60,
+        margin: 10,
+        borderRadius: 30,
     },
     personalInfoContainer: {
         marginTop: 15,
     },
     nickName: {
         fontSize: 18,
+        color: 'white'
     },
     commonText: {
-
+        color: 'white'
     },
     updateNickName: {
-        marginTop: 15,
-        height: 30,
+        margin: 10,
+        height: 25,
+        width: 25,
     },
     sectionHeader: {
         paddingTop: 2,
@@ -103,14 +137,10 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
     },
-    topLine: {
-        height: 1,
-        backgroundColor: '#C0C0C0'
-    },
     bottomLine: {
         marginTop: 13,
         height: 1,
-        backgroundColor: '#C0C0C0'
+        backgroundColor: gColor.grayLineColor
     },
     itemInfoContainer: {
         flexDirection: 'row',
@@ -121,9 +151,11 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     itemArrow: {
-        flex: 30,
-        height: 30,
-        width: 30,
-        marginTop: 5
+        height: 25,
+        width: 25,
+        marginTop: 10,
+    },
+    list: {
+        backgroundColor: 'white'
     }
 });

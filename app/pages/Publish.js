@@ -7,20 +7,20 @@ export default class Publish extends Component {
             <ScrollView style={styles.scorllviewContainer}>
                 <TextInput
                     placeholder={'输入你想说的话。。。'}
-                    placeholderTextColor={'#BBBBBB'}
+                    placeholderTextColor={gColor.grayTextColor}
                     underlineColorAndroid={'transparent'}
                     style={styles.textInput}
                     multiline={true}
                 />
 
                 {/*选择照片按钮*/}
-                <Image source={require('../source/selectImg.jpg')} style={styles.selectImg}/>
+                <Image source={require('../source/camera.jpg')} style={styles.selectImg}/>
 
                 <View style={styles.line1}></View>
 
                 {/*选择分类*/}
                 <View style={styles.subContainer}>
-                    <Image source={require('../source/location.jpg')} style={styles.itemIcon}/>
+                    <Image source={require('../source/type.jpg')} style={styles.itemIcon}/>
                     <Text style={styles.itemText}>选择分类</Text>
                     <Text style={styles.itemText1}>默认发布到最新板块</Text>
                     <Image source={require('../source/rightArrow.jpg')} style={styles.itemArrow}/>
@@ -30,7 +30,7 @@ export default class Publish extends Component {
 
                 {/*选择定位*/}
                 <View style={styles.subContainer}>
-                    <Image source={require('../source/location.jpg')} style={styles.itemIcon}/>
+                    <Image source={require('../source/location1.jpg')} style={styles.itemIcon}/>
                     <Text style={styles.itemText}>选择定位</Text>
                     <Text style={styles.itemText1}>确认定位已开启</Text>
                     <Image source={require('../source/rightArrow.jpg')} style={styles.itemArrow}/>
@@ -40,7 +40,7 @@ export default class Publish extends Component {
 
                 {/*确认发布*/}
                 <View style={styles.subContainer1}>
-                    <Image source={require('../source/confimPublish.jpg')} style={styles.confirmPublish}/>
+                    <Text style={styles.text7}>确认发布</Text>
                 </View>
             </ScrollView>
 
@@ -51,29 +51,30 @@ export default class Publish extends Component {
 const {width, height, scale} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    scorllviewContainer: {},
+    scorllviewContainer: {
+        backgroundColor: 'white',
+    },
     textInput: {
         marginTop: 10,
         marginLeft: 10,
         marginRight: 10,
         height: 300,
         fontSize: 17,
-        borderWidth: 1,
         paddingLeft: 5,
-        borderColor: 'gray',
+        borderColor: gColor.grayTextColor,
+        borderWidth: 1,
+        backgroundColor: gColor.grayLineColor
     },
     selectImg: {
-        marginTop: 10,
-        marginLeft: 10,
+        margin: 10,
         height: 100,
         width: 100,
     },
     line1: {
-        marginTop: 10,
         marginLeft: 10,
         marginRight: 10,
         height: 1,
-        backgroundColor: '#C0C0C0'
+        backgroundColor: gColor.grayLineColor
     },
     subContainer: {
         height: 50,
@@ -93,17 +94,27 @@ const styles = StyleSheet.create({
     itemText1: {
         flex: 200,
         marginLeft: 20,
-        color: '#C0C0C0'
+        color: gColor.grayTextColor
     },
     subContainer1: {
         marginTop: 30,
         height: 50,
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         marginBottom: 40,
     },
     confirmPublish: {
         width: 300,
         height: 40,
+    },
+    text7: {
+        color: 'white',
+        fontSize: 18,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 50,
+        paddingRight: 50,
+        backgroundColor: gColor.orangeTextColor,
     }
 });
