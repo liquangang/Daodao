@@ -46,6 +46,24 @@ export default class HomePage extends Component {
         this.showNewsList(item);
     }
 
+    // 点击广告
+    onClickAd = (item) => {
+        if (item.href != null && item.href.length > 0) {
+            let params = {
+                url: item.href,
+            };
+            this.props.navigation.navigate('WebPage', params);
+        }
+    }
+
+    // 点击帖子
+    onClickNews = (newsId) => {
+        let params = {
+            newsId: newsId,
+        };
+        this.props.navigation.navigate('NewsDetail', params);
+    }
+
     // 展示新闻列表
     showNewsList = (item) => {
         if (this.state.newsList != null && this.state.newsList[item.id] != null) {
@@ -89,16 +107,16 @@ export default class HomePage extends Component {
     }
 
     // 下载具体新闻分类数据
-    fetchNewsListData = async (newsId) => {
+    fetchNewsListData = async (newsTypeId) => {
         let params = {
-            post_cate_id: newsId,
+            post_cate_id: newsTypeId,
         };
         let res = await httpApi.getNewsList(params);
 
         if (res.status == 0) {
 
             let newNewsList = this.state.newsList;
-            newNewsList[newsId] = res.data.catePostList.data
+            newNewsList[newsTypeId] = res.data.data;
 
             this.setState({
                 newsList: newNewsList,
@@ -136,8 +154,7 @@ export default class HomePage extends Component {
                     tabBarTextStyle={styles.text9}
                     onChangeTab={this.onChangeTabs}
                 >
-                    {this.state.newsTypeList.map((value,index, array)=>{
-                        console.log("value", value);
+                    {this.state.newsTypeList.map((value, index, array)=>{
                         return(<FlatList
                             tabLabel={value.name}
                             data={this.state.newsList[value.id]}
@@ -154,25 +171,22 @@ export default class HomePage extends Component {
     };
 
 
-
-    newsItemView = (item) => {
-
-        console.log("info", item.item);
-        return(
-            <View>
-                <Image source={require('../source/信息.png')} style={styles.img3}/>
-            </View>
-        );
-    }
-
     newsListItemView = (item) => {
+        if (item.item.is_adv) {
+            return(<BannerView
+                onClickAd = {this.onClickAd}
+                data={item.item.data}
+            ></BannerView>);
+        } else {
+            return (
+                <NewsView
+                    onClickAvatar = {this.onClickAvatar}
+                    onClickNews={this.onClickNews}
+                    data={item.item.data}
+                ></NewsView>
+            );
+        }
 
-        return (
-            <NewsView
-                onClickAvatar = {this.onClickAvatar}
-                data={item.item}
-            ></NewsView>
-        );
     };
 
 }

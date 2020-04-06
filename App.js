@@ -14,6 +14,7 @@ import Login from "./app/pages/Login"
 import Message from "./app/pages/Message"
 import Chat from "./app/pages/Chat"
 import NewsDetail from "./app/pages/NewsDetail"
+import WebPage from "./app/pages/WebPage";
 
 const HomePageStack = createStackNavigator();
 
@@ -26,6 +27,7 @@ function HomePageStackScreen() {
           <HomePageStack.Screen name='Message' component={Message}/>
           <HomePageStack.Screen name='Chat' component={Chat}/>
           <HomePageStack.Screen name='NewsDetail' component={NewsDetail}/>
+          <HomePageStack.Screen name='WebPage' component={WebPage}/>
       </HomePageStack.Navigator>
     );
 }
@@ -37,6 +39,11 @@ function HotSpotStackScreen() {
       <HotSpotStack.Navigator>
           <HotSpotStack.Screen name='HotSpot' component={HotSpot}/>
           <HotSpotStack.Screen name='PersonInfo' component={PersonInfo}/>
+          <HotSpotStack.Screen name='Login' component={Login}/>
+          <HotSpotStack.Screen name='Message' component={Message}/>
+          <HotSpotStack.Screen name='Chat' component={Chat}/>
+          <HotSpotStack.Screen name='NewsDetail' component={NewsDetail}/>
+          <HotSpotStack.Screen name='WebPage' component={WebPage}/>
       </HotSpotStack.Navigator>
     );
 }

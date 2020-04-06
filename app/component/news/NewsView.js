@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, StyleSheet, Image, Text, Dimensions, FlatList, TouchableOpacity } from "react-native";
+import {View, StyleSheet, Image, Text, Dimensions, FlatList, TouchableOpacity, ImageBackground } from "react-native";
 
 export default class NewsView extends Component {
 
@@ -11,20 +11,25 @@ export default class NewsView extends Component {
     }
 
     onClickAvatar = (userId) => {
-        // navigation.navigate('personalInfo');
         this.props.onClickAvatar(userId);
     };
+
+    onClickNewsView = (newsId) => {
+        this.props.onClickNews(newsId);
+    }
 
     render() {
         return (
             <View style={styles.container}>
+                <View style={styles.bottomSegmentation}></View>
 
                 {/*动态上部部分*/}
                 <View style={styles.topInfoContainer}>
                     {/*头像*/}
                     <TouchableOpacity onPress={()=>this.onClickAvatar(this.state.data.user.id)}>
+                        {/*<Image source={{uri: this.state.data.user.avatar}}*/}
+                               {/*style={styles.avatar}/>*/}
                         <Image source={require('../../source/avatar.jpg')}
-                               // source={{uri: this.state.data.user.avatar}}
                                style={styles.avatar}/>
                     </TouchableOpacity>
                     <View style={styles.topSubInfoContainer}>
@@ -39,16 +44,19 @@ export default class NewsView extends Component {
 
                 <View style={styles.segmentation}></View>
 
-                {/*动态文案部分*/}
-                <Text style={styles.newsContent}>{this.state.data.post_content}</Text>
+                <TouchableOpacity onPress={()=>this.onClickNewsView(this.state.data.post_cate_id)}>
+                    {/*动态文案部分*/}
+                    <Text style={styles.newsContent}>{this.state.data.post_content}</Text>
 
-                {/*动态图片部分*/}
-                <FlatList
-                    data={[{key: '最新'}, {key: '关注'}, {key: '房产'}, {key: '房产'}, {key: '房产'}, {key: '房产'}]}
-                    renderItem={this.imgItemView}
-                    style={styles.newsImgList}
-                    numColumns={3}
-                />
+                    {/*动态图片部分*/}
+                    <FlatList
+                        data={this.state.data.source}
+                        renderItem={this.imgItemView}
+                        style={styles.newsImgList}
+                        numColumns={3}
+                    />
+                </TouchableOpacity>
+
 
                 {/*动态底部部分*/}
                 <View style={styles.bottomContainer}>
@@ -71,7 +79,6 @@ export default class NewsView extends Component {
                             <Text>{this.state.data.praise_num}</Text>
                         </View>
                     </View>
-                    <View style={styles.bottomSegmentation}></View>
                 </View>
 
             </View>
@@ -81,7 +88,9 @@ export default class NewsView extends Component {
     imgItemView({ item }) {
         return (
             <View style={styles.item}>
-                <Image source={require('../../source/banner.jpg')} style={styles.newsImg}/>
+                <ImageBackground source={require('../../source/banner.jpg')} style={styles.newsImg}>
+                    <Image source={{uri: item.src}} style={styles.newsImg}/>
+                </ImageBackground>
             </View>
         );
     }

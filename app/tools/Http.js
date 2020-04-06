@@ -32,12 +32,18 @@ const http = {
         });
     },
     post(url, params) {
+        let paramsStr = '';
+        for (var key in params) {
+            let subParam = key.toString() + '=' + params[key] + '&';
+            paramsStr+=subParam;
+        }
+
         return new Promise(function (resolve, reject) {
-            console.log('params:', url, params);   //网络请求数据
+            console.log('params:', url, paramsStr);   //网络请求数据
             fetch(url, {
                 method: 'POST',
                 headers: header,
-                body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
+                body: paramsStr   //body参数，通常需要转换成字符串后服务器才能解析
             }).then((response) => response.json())
                 .then((responseData) => {
                     console.log('res:', url, responseData);   //网络请求成功返回的数据

@@ -17,7 +17,15 @@ export default class HotSpot extends Component {
     }
 
     componentDidMount() {
-        this.fetchNewsListData()
+        this.fetchNewsListData(1)
+    }
+
+    // 点击帖子
+    onClickNews = (newsId) => {
+        let params = {
+            newsId: newsId,
+        };
+        this.props.navigation.navigate('NewsDetail', params);
     }
 
     // 点击头像
@@ -28,8 +36,18 @@ export default class HotSpot extends Component {
         this.props.navigation.navigate('PersonInfo', params);
     };
 
+    // 点击广告
+    onClickAd = (item) => {
+        if (item.href != null && item.href.length > 0) {
+            let params = {
+                url: item.href,
+            };
+            this.props.navigation.navigate('WebPage', params);
+        }
+    }
+
     // 下载具体新闻分类数据
-    fetchNewsListData = async () => {
+    fetchNewsListData = async (newsId) => {
         let params = {
             post_cate_id: 2,
         };
@@ -38,7 +56,7 @@ export default class HotSpot extends Component {
         if (res.status == 0) {
 
             this.setState({
-                newsList: res.data.catePostList.data,
+                newsList: res.data.data,
                 load: true
             });
         } else {
@@ -65,13 +83,21 @@ export default class HotSpot extends Component {
     };
 
     newsListItemView = (item) => {
+        if (item.item.is_adv) {
+            return(<BannerView
+                onClickAd = {this.onClickAd}
+                data={item.item.data}
+            ></BannerView>);
+        } else {
+            return (
+                <NewsView
+                    onClickAvatar = {this.onClickAvatar}
+                    data={item.item.data}
+                    onClickNews={this.onClickNews}
+                ></NewsView>
+            );
+        }
 
-        return (
-            <NewsView
-                onClickAvatar = {this.onClickAvatar}
-                data={item.item}
-            ></NewsView>
-        );
     };
 
 }

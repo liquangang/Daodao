@@ -97,6 +97,7 @@ export default class PersonInfo extends Component {
                 ) : (
                     <SectionList
                         style={styles.sectionList1}
+                        stickySectionHeadersEnabled={false}
                         ListHeaderComponent={this.topView}
                         sections={this.state.albumData}
                         renderItem={this.albumItemView}

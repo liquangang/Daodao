@@ -1,16 +1,91 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, FlatList, TextInput, TouchableOpacity, Image, Dimensions} from "react-native";
+import {Text, View, StyleSheet, FlatList, TextInput, TouchableOpacity,
+    Image, Dimensions, SectionList} from "react-native";
+import httpApi from "../tools/Api";
+import BannerView from "../component/BannerView"
+import LoadingView from "../component/LoadingView";
 
 export default class NewsDetail extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            newsDetailData: [],
+            commentList: [],
+            load: false,
+        };
+
+    }
+
+    componentDidMount() {
+        let newsId = this.props.route.params.newsId;
+         this.fetchNewsData(newsId);
+         this.fetchNewsCommentListData(newsId);
+    }
+
+    // 点击广告
+    onClickAd = (item) => {
+        if (item.href != null && item.href.length > 0) {
+            let params = {
+                url: item.href,
+            };
+            this.props.navigation.navigate('WebPage', params);
+        }
+    }
+
+    // 请求帖子详情
+    fetchNewsData = async (newsId) => {
+        let params = {
+            post_id: 7
+        };
+        let res = await httpApi.getNewsData(params);
+
+        if (res.status == 0) {
+
+            this.setState({
+                newsDetailData: res.data,
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+    // 请求帖子评论列表数据
+    fetchNewsCommentListData = async (newsId) => {
+        let params = {
+            post_id: 4
+        };
+        let res = await httpApi.getNewsCommentListData(params);
+
+        if (res.status == 0) {
+            let newCommentList = [];
+            for (let i = 0; i < res.data.data.length; i++) {
+                newCommentList.push({title:res.data.data[i], data:res.data.data[i].reply_list});
+            }
+            this.setState({
+                commentList: newCommentList,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
     render() {
+        if (!this.state.load) {
+            return <LoadingView/>;
+        }
         return(
             <View style={styles.container}>
                 <View style={styles.topContainer}>
-                    <FlatList
-                        data={[{key: '1'}, {key: '2'}, {key: '3'}, {key: '4'}, {key: '5'}, {key: '6'}]}
-                        renderItem={this.newsItemView}
-                        style={styles.newsInfoList}
-                    ></FlatList>
+                    <SectionList
+                        ListHeaderComponent={this.headerView}
+                        sections={this.state.commentList}
+                        renderItem={this.subCommentItemView}
+                        renderSectionHeader={this.commentItemView}
+                        stickySectionHeadersEnabled={false}
+                        keyExtractor={(item, index) => item + index}
+                    ></SectionList>
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -25,126 +100,105 @@ export default class NewsDetail extends Component {
         );
     };
 
-    newsItemView = ({ item }) => {
-        switch (item.key) {
-            case '1':
-            {
-                return(this.userInfoItemView(item));
-            }
-                break;
-            case '2':
-            {
-                return(this.newsInfoItemView(item));
-            }
-                break;
-            case '3':
-            {
-                return(this.adItemView(item));
-            }
-                break;
-            case '4':
-            {
-                return(this.commentItemView(item));
-            }
-                break;
-            case '5':
-            {
-                return(this.subCommentItemView(item));
-            }
-                break;
-            case '6':
-            {
-                return(this.adItemView(item));
-            }
-                break;
-        }
-    };
+    headerView = () => {
+        return(
+            <View style={styles.view2}>
+                {this.userInfoItemView()}
+                {this.newsInfoItemView()}
+                <View style={styles.commentLine}></View>
+                <BannerView
+                    onClickAd = {this.onClickAd}
+                    data={this.state.newsDetailData.adDetail.data}
+                ></BannerView>
+                <View style={styles.bottomSegmentation}></View>
+            </View>
+        );
+    }
 
-    userInfoItemView = ({ item }) => {
+    userInfoItemView = () => {
         return(
             <View style={styles.userInfoContainer}>
                 <TouchableOpacity>
                     <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                    {/*<Image source={{uri: this.state.newsDetailData.newsDetail.user.avatar}}*/}
+                           {/*style={styles.avatar}/>*/}
                 </TouchableOpacity>
                 <View style={styles.userInfoContainer1}>
-                    <Text style={styles.userInfoText1}>运动无极限</Text>
-                    <Text style={styles.userInfoText}>1分钟前 来自 iPhone X</Text>
+                    <Text style={styles.userInfoText1}>{this.state.newsDetailData.newsDetail.user.nick_name}</Text>
+                    <Text style={styles.userInfoText}>{this.state.newsDetailData.newsDetail.user.created_at} 来自
+                        {this.state.newsDetailData.newsDetail.user.phone_model}</Text>
                 </View>
                 <Image source={require('../source/attention.jpg')} style={styles.userInfoImg}/>
             </View>
         );
     };
 
-    adItemView = ({ item }) => {
-        return(
-            <View style={styles.adContainer}>
-                <Image source={require('../source/ad.jpg')} style={styles.adImg}/>
-            </View>
-        );
-    }
-
-    newsInfoItemView = ({ item }) => {
+    newsInfoItemView = () => {
         return(
             <View style={styles.newsInfoContainer}>
                 <View style={styles.newsInfoLine}></View>
-                <Text style={styles.newsInfoText}>动态内容动态内容动态内容动态内容动态内容动态内容动态
-                    内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动
-                    动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容
-                    动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容
-                    动态内容动态内容动态内容动态内容动态内容动态内容动态内容动态内容
-                    态内容动态内容动态内容动态内容动态内容动态内容</Text>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
+                <Text style={styles.newsInfoText}>{this.state.newsDetailData.newsDetail.user.post_content}</Text>
+
+                {/*动态图片部分*/}
+                <FlatList
+                    data={this.state.newsDetailData.newsDetail.source}
+                    renderItem={this.imgItemView}
+                    style={styles.newsImgList}
+                    numColumns={3}
+                />
                 <View style={styles.newsInfoContainer1}>
                     <Image source={require('../source/location.jpg')} style={styles.itemIcon}/>
-                    <Text> 北京市长安街</Text>
+                    <Text> {this.state.newsDetailData.newsDetail.post_position}</Text>
                 </View>
             </View>
         );
     };
 
-    commentItemView = ({ item }) => {
+    imgItemView({ item }) {
+        return (
+            <View style={styles.item}>
+                {/*<Image source={{uri: item.src}} style={styles.newsImg}/>*/}
+                <Image source={require('../source/banner.jpg')} style={styles.img2}/>
+            </View>
+        );
+    }
+
+    commentItemView = ({ section: { title, data } }) => {
+        let commentData = title;
         return(
             <View>
-                <View style={styles.commentLine}></View>
                 <View style={styles.commentContainer}>
                     <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
                     <View style={styles.commentContainer1}>
                         <View style={styles.commentContainer2}>
-                            <Text style={styles.commentText}> 北京市长安街</Text>
+                            <Text style={styles.commentText}>{commentData.user.nick_name}</Text>
                             <Image source={require('../source/blackPraise.jpg')} style={styles.commentImg}/>
-                            <Text style={styles.commentText2}>111111111111111111</Text>
+                            <Text style={styles.commentText2}>{commentData.praise_num}</Text>
                         </View>
-                        <Text style={styles.commentText1}> 北京市长安街北京市长安街北京
-                            北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街
-                            北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街
-                            市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街</Text>
-                        <Text style={styles.commentText3}>1天前</Text>
+                        <Text style={styles.commentText1}>{commentData.content}</Text>
+                        <Text style={styles.commentText3}>{commentData.created_at}</Text>
                     </View>
                 </View>
+                <View style={styles.commentLine}></View>
             </View>
         );
     };
 
     subCommentItemView = ({ item }) => {
         return( <View>
-            <View style={styles.commentLine}></View>
             <View style={styles.subCommentContainer}>
                 <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
                 <View style={styles.commentContainer1}>
                     <View style={styles.commentContainer2}>
-                        <Text style={styles.commentText}> 北京市长安街</Text>
+                        <Text style={styles.commentText}> {item.user.nick_name}</Text>
                         <Image source={require('../source/blackPraise.jpg')} style={styles.commentImg}/>
-                        <Text style={styles.commentText2}>111111111111111111</Text>
+                        <Text style={styles.commentText2}>{item.praise_num}</Text>
                     </View>
-                    <Text style={styles.commentText1}> 北京市长安街北京市长安街北京
-                        北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街
-                        北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街
-                        市长安街北京市长安街北京市长安街北京市长安街北京市长安街北京市长安街</Text>
-                    <Text style={styles.commentText3}>1天前</Text>
+                    <Text style={styles.commentText1}>{item.user.nick_name} @ {item.to_user.nick_name}：{item.content}</Text>
+                    <Text style={styles.commentText3}>{item.created_at}</Text>
                 </View>
             </View>
+            <View style={styles.commentLine}></View>
         </View>);
     }
 }
@@ -237,23 +291,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     commentLine: {
-        height: 1,
-        backgroundColor: "#C0C0C0",
+        margin: 5,
+        height: 0.5,
+        backgroundColor: "#D8D8D8",
     },
     commentContainer: {
+        padding: 5,
         flexDirection: "row",
     },
     commentContainer1: {
+        marginLeft: 5,
         flex: width - 100,
         justifyContent: 'center',
     },
     commentText: {
         flex: width - 150,
-        margin: 5,
     },
     commentText1: {
         margin: 5,
         flex: width - 150,
+        color: '#333333'
     },
     commentContainer2: {
         flexDirection: 'row',
@@ -270,7 +327,25 @@ const styles = StyleSheet.create({
         color: "#C0C0C0",
     },
     subCommentContainer: {
+        padding: 5,
         flexDirection: "row",
-        marginLeft: 30,
-    }
+        marginLeft: 44,
+    },
+    view2: {
+        flex: 1,
+    },
+    line4: {
+        height: 0.5,
+        backgroundColor: '#D8D8D8'
+    },
+    img1: {
+        height: 40,
+        width: 40,
+        margin: 5,
+        borderRadius: 20,
+    },
+    bottomSegmentation: {
+        height: 10,
+        backgroundColor: gColor.grayLineColor
+    },
 });

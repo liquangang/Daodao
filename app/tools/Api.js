@@ -28,7 +28,7 @@ const httpApi={
 
     // 获取某个具体新闻分类下的新闻列表
     async getNewsList(params) {
-        const url = 'http://dd.shenruxiang.com/api/v1/cate_post_list';
+        const url = 'http://dd.shenruxiang.com/api/v1/post_list';
         const [err, res] = await to(http.post(url, params));
         if (err) {
             //请求失败
@@ -84,7 +84,37 @@ const httpApi={
         }
         //请求成功
         return res;
-    }
+    },
+
+    // 获取帖子详情数据
+    async getNewsData(params) {
+        const url = 'http://dd.shenruxiang.com/api/v1/post_detail';
+        const [err, res] = await to(http.post(url, params));
+        if (err) {
+            //请求失败
+            return Object.assign(err, {
+                status: "406",
+                description: err.errMsg
+            }, true);
+        }
+        //请求成功
+        return res;
+    },
+
+    // 获取帖子评论列表
+    async getNewsCommentListData(params) {
+        const url = 'http://dd.shenruxiang.com/api/v1/post_comment_list';
+        const [err, res] = await to(http.post(url, params));
+        if (err) {
+            //请求失败
+            return Object.assign(err, {
+                status: "406",
+                description: err.errMsg
+            }, true);
+        }
+        //请求成功
+        return res;
+    },
 
 }
 export default httpApi;
