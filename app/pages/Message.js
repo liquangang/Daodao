@@ -45,12 +45,19 @@ export default class Message extends Component {
             return <LoadingView></LoadingView>
         }
         return (
+            <View>
+                {/*{this.headerItemView()}*/}
+                {/*<FlatList>*/}
+
+                {/*</FlatList>*/}
                 <FlatList
                     data={this.state.mesData}
                     renderItem={this.msgListItemView}
                     style={styles.msgListContainer}
                     ListHeaderComponent={this.headerItemView}
                 />
+            </View>
+
         );
     };
 
@@ -87,6 +94,8 @@ export default class Message extends Component {
             </View>
         );
     }
+
+
 
 
     msgListItemView = ({ item }) => {

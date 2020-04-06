@@ -6,12 +6,16 @@ export default class TitleListView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: this.props.data
+            data: this.props.data,
+            selectId: 2
         };
     }
 
     onClickText = (item) => {
         this.props.onClickNewsType(item);
+        this.setState({
+            selectId: item.id
+        });
     };
 
     render() {
@@ -32,7 +36,12 @@ export default class TitleListView extends Component {
         return (
           <View style={styles.item}>
               <TouchableOpacity onPress={()=>this.onClickText(item)}>
-                  <Text style={styles.itemText}>{item.name}</Text>
+                  {this.state.selectId == item.id ?
+                      (
+                          <Text style={styles.itemText2}>{item.name}</Text>
+                  ) : (
+                      <Text style={styles.itemText}>{item.name}</Text>
+                      )}
               </TouchableOpacity>
           </View>
         );
@@ -43,6 +52,7 @@ export default class TitleListView extends Component {
 const styles = StyleSheet.create({
     container: {
         height: 40,
+        backgroundColor: '#FB5442',
     },
     flatList: {
     },
@@ -53,6 +63,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontSize: 18
+        fontSize: 14,
+        color: 'white'
+    },
+    itemText2: {
+        fontSize: 18,
+        color: '#F0F8FF'
     }
 });

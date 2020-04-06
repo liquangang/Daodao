@@ -94,7 +94,6 @@ export default class PersonInfo extends Component {
                         renderItem={this.newsItemView}
                         ListHeaderComponent={this.topView}
                     />
-
                 ) : (
                     <SectionList
                         style={styles.sectionList1}

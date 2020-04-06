@@ -7,7 +7,7 @@ export default class SearchView extends Component {
         return(
             <View style={styles.searchView}>
                 <Ionicons name='ios-search' size={25}/>
-                <TextInput underlineColorAndroid="transparent" placeholder="搜索你想要的内容"
+                <TextInput underlineColorAndroid="transparent" placeholder="搜索你想要的内容" placeholderColor={'#999999'}
                            style={styles.searchTextInput}>
                 </TextInput>
             </View>
@@ -17,15 +17,14 @@ export default class SearchView extends Component {
 
 const styles = StyleSheet.create({
     searchView: {
-        marginLeft: 15,
-        height: 40,
+        marginTop: 7,
+        marginLeft: 12,
+        height: 33,
         backgroundColor: "#fff",
         paddingLeft: 15,
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 20,
-        borderWidth: 1,
-        borderColor: 'black'
     },
     searchTextInput: {
         marginLeft: 10,

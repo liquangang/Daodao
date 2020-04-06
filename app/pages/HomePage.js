@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions, FlatList, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Dimensions, FlatList, Image, TouchableOpacity, Text, ScrollView } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchView from "../component/SearchView";
 import TitleListView from "../component/TitleListView";
@@ -7,6 +7,7 @@ import BannerView from "../component/BannerView"
 import NewsView from "../component/news/NewsView"
 import httpApi from "../tools/Api"
 import LoadingView from "../component/LoadingView";
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 
 export default class HomePage extends Component {
 
@@ -17,8 +18,8 @@ export default class HomePage extends Component {
         this.state = {
             newsTypeList: [],
             newsList: [],
-            currentShowNewsList: [],
-            loaded: false
+            loaded: false,
+            showIndex: 0
         };
 
     }
@@ -48,17 +49,26 @@ export default class HomePage extends Component {
     // 展示新闻列表
     showNewsList = (item) => {
         if (this.state.newsList != null && this.state.newsList[item.id] != null) {
-            this.setState({
-                currentShowNewsList: this.state.newsList[item.id],
-            });
+
         } else {
             this.fetchNewsListData(item.id);
         }
+
+        this.setState({
+            showIndex: this.state.newsTypeList.findIndex(()=>item==item),
+        });
+
     }
 
     // 跳转消息页
     onClickMesBtn = () => {
         this.props.navigation.navigate('Message');
+    }
+
+    // 点击tap
+    onChangeTabs = (obj) => {
+        let item = this.state.newsTypeList[obj.i];
+        this.onClickNewsType(item);
     }
 
     // ------------------------------ 网络请求 -------------------------------------------
@@ -88,11 +98,10 @@ export default class HomePage extends Component {
         if (res.status == 0) {
 
             let newNewsList = this.state.newsList;
-            newNewsList[newsId] = res.data.catePostList.data;
+            newNewsList[newsId] = res.data.catePostList.data
 
             this.setState({
                 newsList: newNewsList,
-                currentShowNewsList: res.data.catePostList.data,
             });
         } else {
             alert("网络异常！请检查网络！");
@@ -113,33 +122,48 @@ export default class HomePage extends Component {
                 <View style={styles.searchContainer}>
                     <View style={styles.searchView}><SearchView/></View>
                     <TouchableOpacity onPress={this.onClickMesBtn}>
-                        <Ionicons name='md-mail' size={35} style={styles.messageView}/>
+                        <Image source={require('../source/信息.png')} style={styles.img3}/>
                     </TouchableOpacity>
                 </View>
 
-                {/*分割线*/}
-                <View style={styles.segmentation}></View>
-
-                {/*分类列表*/}
-                <TitleListView
-                    onClickNewsType = {this.onClickNewsType}
-                    data={this.state.newsTypeList}
-                ></TitleListView>
-
-                {/*分割线*/}
-                <View style={styles.segmentation}></View>
-
 
                 {/*新闻列表*/}
-                <FlatList
-                    data={this.state.currentShowNewsList}
-                    renderItem={this.newsListItemView}
-                    style={styles.newsList}
-                />
+                <ScrollableTabView
+                    initialPage={this.state.showIndex}
+                    renderTabBar={() => <ScrollableTabBar style={styles.tabbar1} />}
+                    tabBarActiveTextColor='white'
+                    tabBarUnderlineStyle={styles.lineStyle}
+                    tabBarTextStyle={styles.text9}
+                    onChangeTab={this.onChangeTabs}
+                >
+                    {this.state.newsTypeList.map((value,index, array)=>{
+                        console.log("value", value);
+                        return(<FlatList
+                            tabLabel={value.name}
+                            data={this.state.newsList[value.id]}
+                            renderItem={this.newsListItemView}
+                            style={styles.newsList}
+                            key={index}
+                        />);
+                    })}
+
+                </ScrollableTabView>
 
             </View>
         );
     };
+
+
+
+    newsItemView = (item) => {
+
+        console.log("info", item.item);
+        return(
+            <View>
+                <Image source={require('../source/信息.png')} style={styles.img3}/>
+            </View>
+        );
+    }
 
     newsListItemView = (item) => {
 
@@ -162,15 +186,11 @@ const styles = StyleSheet.create({
     },
     searchContainer: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#FB5442'
     },
     searchView: {
-        flex: gScreen.screen_width - 30,
-    },
-    messageView: {
-        flex: 30,
-        marginRight: 10,
-        marginLeft: 10
+        flex: gScreen.screen_width - 20,
     },
     segmentation: {
         marginTop: 3,
@@ -180,4 +200,22 @@ const styles = StyleSheet.create({
     newsList: {
 
     },
+    img3: {
+        width: 35,
+        height: 35,
+        marginTop: 8,
+        marginLeft: 8,
+        marginRight: 10,
+    },
+    lineStyle: {
+        height: 2,
+        backgroundColor: 'white',
+    },
+    tabbar1: {
+        backgroundColor: '#FB5442',
+    },
+    text9: {
+        color: 'white',
+        fontSize: 16
+    }
 });
