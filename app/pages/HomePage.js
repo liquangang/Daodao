@@ -215,8 +215,8 @@ const styles = StyleSheet.create({
 
     },
     img3: {
-        width: 35,
-        height: 35,
+        width: 30,
+        height: 30,
         marginTop: 8,
         marginLeft: 8,
         marginRight: 10,

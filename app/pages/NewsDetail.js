@@ -93,7 +93,7 @@ export default class NewsDetail extends Component {
                                style={styles.input}>
                     </TextInput>
                     <TouchableOpacity>
-                        <Image source={require('../source/share1.jpg')} style={styles.shareIcon}/>
+                        <Image source={require('../source/详情分享.png')} style={styles.shareIcon}/>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -128,7 +128,7 @@ export default class NewsDetail extends Component {
                     <Text style={styles.userInfoText}>{this.state.newsDetailData.newsDetail.user.created_at} 来自
                         {this.state.newsDetailData.newsDetail.user.phone_model}</Text>
                 </View>
-                <Image source={require('../source/attention.jpg')} style={styles.userInfoImg}/>
+                <Text style={styles.text10}>+ 关注</Text>
             </View>
         );
     };
@@ -232,11 +232,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     shareIcon: {
-        flex: 60,
+        flex: 40,
         marginLeft: 10,
         color: 'white',
-        width: 60,
-        height: 40,
+        width: 20,
+        height: 20,
     },
     avatar: {
         flex: 60,
@@ -348,4 +348,12 @@ const styles = StyleSheet.create({
         height: 10,
         backgroundColor: gColor.grayLineColor
     },
+    text10: {
+        backgroundColor: '#FB5442',
+        color: 'white',
+        padding: 8,
+        height: 30,
+        width: 60,
+        margin: 5,
+    }
 });

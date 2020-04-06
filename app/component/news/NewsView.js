@@ -39,7 +39,7 @@ export default class NewsView extends Component {
                             <Text style={styles.phoneModel}>来自：{this.state.data.phone_model}</Text>
                         </View>
                     </View>
-                    <Image source={require('../../source/attention.jpg')} style={styles.attention}/>
+                    <Text style={styles.text10}>+ 关注</Text>
                 </View>
 
                 <View style={styles.segmentation}></View>
@@ -61,21 +61,21 @@ export default class NewsView extends Component {
                 {/*动态底部部分*/}
                 <View style={styles.bottomContainer}>
                     <View style={styles.bottomTopContainer}>
-                        <Image source={require('../../source/location.jpg')} style={styles.itemIcon}/>
+                        <Image source={require('../../source/首页定位.png')} style={styles.itemIcon}/>
                         <Text>{this.state.data.post_position}</Text>
                     </View>
                     <View style={styles.segmentation}></View>
                     <View style={styles.bottomBottomContainer}>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/share.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../../source/首页分享.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.share_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/mes.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../../source/首页评论.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.comment_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/blackPraise.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../../source/首页点赞.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.praise_num}</Text>
                         </View>
                     </View>
@@ -192,5 +192,13 @@ const styles = StyleSheet.create({
     bottomBottomSubContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    text10: {
+        backgroundColor: '#FB5442',
+        color: 'white',
+        padding: 8,
+        height: 30,
+        width: 60,
+        margin: 5,
     }
 });

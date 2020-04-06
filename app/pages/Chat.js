@@ -26,23 +26,23 @@ export default class Chat extends Component {
                     <TextInput underlineColorAndroid="transparent" placeholder="这里输入消息"
                                style={styles.searchTextInput}>
                     </TextInput>
-                    <View style={styles.input2}>
-                        <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{alert(1)}}>
-                            <Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>
-                        </TouchableOpacity>
-                    </View>
+                    {/*<View style={styles.input2}>*/}
+                        {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
+                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*</TouchableOpacity>*/}
+                        {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
+                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*</TouchableOpacity>*/}
+                        {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
+                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*</TouchableOpacity>*/}
+                        {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
+                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*</TouchableOpacity>*/}
+                        {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
+                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*</TouchableOpacity>*/}
+                    {/*</View>*/}
                 </View>
             </View>
         );
@@ -70,7 +70,7 @@ export default class Chat extends Component {
                 <TouchableOpacity>
                     <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
                 </TouchableOpacity>
-                <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                {/*<Image source={require('../source/avatar.jpg')} style={styles.avatar}/>*/}
                 <View style={styles.leftMes}>
                     <Text style={styles.mes1}>{item.key} {this.state.a}这里是消息这里是消息这里是消息这里是消息这里是消息这
                         里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
@@ -90,7 +90,7 @@ export default class Chat extends Component {
                     消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
                     息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
             </View>
-            <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+            {/*<Image source={require('../source/avatar.jpg')} style={styles.avatar}/>*/}
             <TouchableOpacity>
                 <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
             </TouchableOpacity>
@@ -105,16 +105,18 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     chat: {
-        flex: height - 105,
+        flex: height - 70
     },
     input: {
-        flex: 105,
-
+        flex: 70,
     },
     searchTextInput: {
-        height: 40,
-        margin: 5,
-        backgroundColor: '#fff'
+        padding: 5,
+        height: 35,
+        margin: 10,
+        backgroundColor: '#fff',
+
+        borderRadius: 4,
     },
     input2: {
         height: 30,
@@ -150,14 +152,17 @@ const styles = StyleSheet.create({
     rightMes: {
         marginTop: 10,
         width: width - 200,
-        backgroundColor: '#FF906F',
+        backgroundColor: '#FB5442',
         borderRadius: 10,
     },
     mes1: {
-        padding: 5,
+        padding: 10,
+        fontSize: 14,
+        color: '#333333',
     },
     mes2: {
-        padding: 5,
+        padding: 10,
         color: 'white',
+        fontSize: 14,
     }
 });

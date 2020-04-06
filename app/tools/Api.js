@@ -58,7 +58,7 @@ const httpApi={
 
     // 获取消信息页数据
     async getMesData(params) {
-        const url = 'http://dd.shenruxiang.com/api/v1/notice_list';
+        const url = 'http://dd.shenruxiang.com/api/v1/user_message_list';
         const [err, res] = await to(http.post(url, params));
         if (err) {
             //请求失败
