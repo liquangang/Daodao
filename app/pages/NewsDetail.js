@@ -4,6 +4,9 @@ import {Text, View, StyleSheet, FlatList, TextInput, TouchableOpacity,
 import httpApi from "../tools/Api";
 import BannerView from "../component/BannerView"
 import LoadingView from "../component/LoadingView";
+import {gViewStyles} from "../style/ViewStyles";
+import MyNavigationBar from '../component/MyNavigationBar'
+import MyStatusBar from "../component/MyStatusBar";
 
 export default class NewsDetail extends Component {
 
@@ -77,8 +80,14 @@ export default class NewsDetail extends Component {
         }
         return(
             <View style={styles.container}>
+                <MyStatusBar/>
+                <MyNavigationBar
+                    title={'帖子详情'}
+                    onClickBack={()=>{this.props.navigation.goBack();}}
+                ></MyNavigationBar>
                 <View style={styles.topContainer}>
                     <SectionList
+                        showsVerticalScrollIndicator = {false}
                         ListHeaderComponent={this.headerView}
                         sections={this.state.commentList}
                         renderItem={this.subCommentItemView}
@@ -119,7 +128,7 @@ export default class NewsDetail extends Component {
         return(
             <View style={styles.userInfoContainer}>
                 <TouchableOpacity>
-                    <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                    <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
                     {/*<Image source={{uri: this.state.newsDetailData.newsDetail.user.avatar}}*/}
                            {/*style={styles.avatar}/>*/}
                 </TouchableOpacity>
@@ -147,8 +156,8 @@ export default class NewsDetail extends Component {
                     numColumns={3}
                 />
                 <View style={styles.newsInfoContainer1}>
-                    <Image source={require('../source/location.jpg')} style={styles.itemIcon}/>
-                    <Text> {this.state.newsDetailData.newsDetail.post_position}</Text>
+                    <Image source={require('../source/首页定位.png')} style={styles.itemIcon}/>
+                    <Text>{this.state.newsDetailData.newsDetail.post_position}</Text>
                 </View>
             </View>
         );
@@ -168,11 +177,11 @@ export default class NewsDetail extends Component {
         return(
             <View>
                 <View style={styles.commentContainer}>
-                    <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
+                    <Image source={require('../source/未登陆.png')} style={styles.img1}/>
                     <View style={styles.commentContainer1}>
                         <View style={styles.commentContainer2}>
                             <Text style={styles.commentText}>{commentData.user.nick_name}</Text>
-                            <Image source={require('../source/blackPraise.jpg')} style={styles.commentImg}/>
+                            <Image source={require('../source/首页点赞.png')} style={styles.commentImg}/>
                             <Text style={styles.commentText2}>{commentData.praise_num}</Text>
                         </View>
                         <Text style={styles.commentText1}>{commentData.content}</Text>
@@ -187,11 +196,11 @@ export default class NewsDetail extends Component {
     subCommentItemView = ({ item }) => {
         return( <View>
             <View style={styles.subCommentContainer}>
-                <Image source={require('../source/avatar.jpg')} style={styles.img1}/>
+                <Image source={require('../source/未登陆.png')} style={styles.img1}/>
                 <View style={styles.commentContainer1}>
                     <View style={styles.commentContainer2}>
                         <Text style={styles.commentText}> {item.user.nick_name}</Text>
-                        <Image source={require('../source/blackPraise.jpg')} style={styles.commentImg}/>
+                        <Image source={require('../source/首页点赞.png')} style={styles.commentImg}/>
                         <Text style={styles.commentText2}>{item.praise_num}</Text>
                     </View>
                     <Text style={styles.commentText1}>{item.user.nick_name} @ {item.to_user.nick_name}：{item.content}</Text>

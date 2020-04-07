@@ -21,6 +21,7 @@ export default class BannerView extends Component {
                 <Swiper
                     style={styles.swiper}
                     horizontal={true}
+                    activeDotColor={'#FB5442'}
                     paginationStyle={{bottom: 12}}
                     showsButtons={false}
                     autoplayTimeout={2}
@@ -52,6 +53,7 @@ export default class BannerView extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white'
     },
     swiper: {
         height: 144,

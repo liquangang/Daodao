@@ -1,49 +1,60 @@
 import React, {Component} from "react";
 import {Text, View, StyleSheet, TextInput, Image, Dimensions, ScrollView} from "react-native";
+import MyNavigationBar from '../component/MyNavigationBar'
+import MyStatusBar from "../component/MyStatusBar";
+import {gViewStyles} from "../style/ViewStyles";
 
 export default class Publish extends Component {
     render() {
         return (
-            <ScrollView style={styles.scorllviewContainer}>
-                <TextInput
-                    placeholder={'输入你想说的话。。。'}
-                    placeholderTextColor={gColor.grayTextColor}
-                    underlineColorAndroid={'transparent'}
-                    style={styles.textInput}
-                    multiline={true}
-                />
+            <View style={gViewStyles.rootViewContainer}>
+                <MyStatusBar/>
+                <MyNavigationBar
+                    title={'动态发布'}
+                    hiddenBack={true}
+                ></MyNavigationBar>
+                <ScrollView style={styles.scorllviewContainer}>
+                    <TextInput
+                        placeholder={'输入你想说的话。。。'}
+                        placeholderTextColor={gColor.grayTextColor}
+                        underlineColorAndroid={'transparent'}
+                        style={styles.textInput}
+                        multiline={true}
+                    />
 
-                {/*选择照片按钮*/}
-                <Image source={require('../source/camera.jpg')} style={styles.selectImg}/>
+                    {/*选择照片按钮*/}
+                    <Image source={require('../source/camera.jpg')} style={styles.selectImg}/>
 
-                <View style={styles.line1}></View>
+                    <View style={styles.line1}></View>
 
-                {/*选择分类*/}
-                <View style={styles.subContainer}>
-                    <Image source={require('../source/分类.png')} style={styles.itemIcon}/>
-                    <Text style={styles.itemText}>选择分类</Text>
-                    <Text style={styles.itemText1}>默认发布到最新板块</Text>
-                    <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
-                </View>
+                    {/*选择分类*/}
+                    <View style={styles.subContainer}>
+                        <Image source={require('../source/分类.png')} style={styles.itemIcon}/>
+                        <Text style={styles.itemText}>选择分类</Text>
+                        <Text style={styles.itemText1}>默认发布到最新板块</Text>
+                        <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
+                    </View>
 
-                <View style={styles.line1}></View>
+                    <View style={styles.line1}></View>
 
-                {/*选择定位*/}
-                <View style={styles.subContainer}>
-                    <Image source={require('../source/定位.png')} style={styles.itemIcon}/>
-                    <Text style={styles.itemText}>选择定位</Text>
-                    <Text style={styles.itemText1}>确认定位已开启</Text>
-                    <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
-                </View>
+                    {/*选择定位*/}
+                    <View style={styles.subContainer}>
+                        <Image source={require('../source/定位.png')} style={styles.itemIcon}/>
+                        <Text style={styles.itemText}>选择定位</Text>
+                        <Text style={styles.itemText1}>确认定位已开启</Text>
+                        <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
+                    </View>
 
-                <View style={styles.line1}></View>
+                    <View style={styles.line1}></View>
 
-                {/*确认发布*/}
-                <View style={styles.subContainer1}>
-                    <Text style={styles.text7}>确认发布</Text>
-                </View>
-            </ScrollView>
-
+                    {/*确认发布*/}
+                    <View style={styles.subContainer1}>
+                        <View style={styles.backView}>
+                            <Text style={styles.text7}>确认发布</Text>
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
         );
     };
 }
@@ -59,7 +70,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         height: 300,
-        fontSize: 17,
+        fontSize: 14,
         paddingLeft: 5,
         borderColor: gColor.grayTextColor,
         borderWidth: 1,
@@ -67,8 +78,8 @@ const styles = StyleSheet.create({
     },
     selectImg: {
         margin: 10,
-        height: 100,
-        width: 100,
+        height: 70,
+        width: 70,
     },
     line1: {
         marginLeft: 10,
@@ -98,23 +109,26 @@ const styles = StyleSheet.create({
     },
     subContainer1: {
         marginTop: 30,
-        height: 50,
-        flexDirection: 'row',
-        justifyContent: 'center',
+        height: 40,
         alignItems: 'center',
+        justifyContent: 'center',
+        width: gScreen.screen_width,
         marginBottom: 40,
     },
     confirmPublish: {
         width: 300,
         height: 40,
     },
+    backView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 200,
+        height: 40,
+        borderRadius: 5,
+        backgroundColor: gColor.orangeBackColor,
+    },
     text7: {
         color: 'white',
-        fontSize: 18,
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 50,
-        paddingRight: 50,
-        backgroundColor: gColor.orangeTextColor,
+        fontSize: 14,
     }
 });

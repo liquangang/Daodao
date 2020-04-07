@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions, FlatList, Image, TouchableOpacity, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Dimensions, FlatList, Image, TouchableOpacity, Text, ScrollView, StatusBar } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchView from "../component/SearchView";
 import TitleListView from "../component/TitleListView";
@@ -8,9 +8,10 @@ import NewsView from "../component/news/NewsView"
 import httpApi from "../tools/Api"
 import LoadingView from "../component/LoadingView";
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
+import {gViewStyles} from "../style/ViewStyles";
+import MyStatusBar from "../component/MyStatusBar";
 
 export default class HomePage extends Component {
-
 
     // --------------------------- 生命周期 --------------------------------------
     constructor(props) {
@@ -29,6 +30,14 @@ export default class HomePage extends Component {
 
         // 默认请求第一个新闻列表
         this.showNewsList(this.state.newsTypeList[0]);
+    }
+
+    componentWillUnmount() {
+        this.props.navigation.setOptions({ tabBarVisible: false })
+    }
+
+    componentWillUpdate() {
+        this.props.navigation.setOptions({ tabBarVisible: true })
     }
 
     // ------------------------- 主题逻辑 ------------------------------
@@ -89,6 +98,14 @@ export default class HomePage extends Component {
         this.onClickNewsType(item);
     }
 
+    // 搜索
+    onSearch = (text) => {
+        let params = {
+            search: text
+        };
+        this.props.navigation.navigate('Search', params);
+    }
+
     // ------------------------------ 网络请求 -------------------------------------------
 
     // 请求新闻分类列表
@@ -134,11 +151,16 @@ export default class HomePage extends Component {
         }
 
         return(
-            <View style={styles.container}>
+            <View style={gViewStyles.viewContainer1}>
+                <MyStatusBar/>
 
                 {/*搜索*/}
                 <View style={styles.searchContainer}>
-                    <View style={styles.searchView}><SearchView/></View>
+                    <View style={styles.searchView}>
+                        <SearchView
+                            onSearch={this.onSearch}
+                        />
+                    </View>
                     <TouchableOpacity onPress={this.onClickMesBtn}>
                         <Image source={require('../source/信息.png')} style={styles.img3}/>
                     </TouchableOpacity>

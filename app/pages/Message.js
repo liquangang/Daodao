@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import {Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, Dimensions} from "react-native";
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
+import MyNavigationBar from '../component/MyNavigationBar'
+import MyStatusBar from "../component/MyStatusBar";
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 
 export default class Message extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            mesData: [],
-            load: false
+            mesData: [{0:[]}, {1:[]}, {2:[]}, {3:[]}],
+            load: false,
+            showIndex: 0
         };
     }
 
@@ -41,13 +45,30 @@ export default class Message extends Component {
         this.props.navigation.navigate('Chat', params);
     }
 
-    // 点击头像
-    onClickAvatar = (userId) => {
-        // let params = {
-        //     userId: userId,
-        // };
-        // this.props.navigation.navigate('PersonInfo', params);
-    };
+    onClickType = (index) => {
+        switch (index) {
+            case 0:
+            {
+                // 请求关注列表
+            }
+            break;
+            case 1:
+            {
+                // 请求评论列表
+            }
+            break;
+            case 2:
+            {
+                // 请求点赞列表
+            }
+                break;
+            case 3:
+            {
+                // 请求通知列表
+            }
+                break;
+        }
+    }
 
     render() {
         if (this.state.load == false) {
@@ -55,12 +76,31 @@ export default class Message extends Component {
         }
         return (
             <View style={styles.container}>
-                <FlatList
-                    data={this.state.mesData}
-                    renderItem={this.msgListItemView}
-                    style={styles.msgListContainer}
-                    ListHeaderComponent={this.headerItemView}
-                />
+                <MyStatusBar/>
+                <MyNavigationBar
+                    title={'消息'}
+                    onClickBack={()=>{this.props.navigation.goBack();}}
+                ></MyNavigationBar>
+                {/*<FlatList*/}
+                    {/*data={this.state.mesData}*/}
+                    {/*renderItem={this.msgListItemView}*/}
+                    {/*style={styles.msgListContainer}*/}
+                    {/*ListHeaderComponent={this.headerItemView}*/}
+                {/*/>*/}
+
+                <ScrollableTabView
+                    initialPage={this.state.showIndex}
+                >
+                    {this.state.newsTypeList.map((value, index, array)=>{
+                        return(<FlatList
+                            data={this.state.mesData[value.id]}
+                            renderItem={this.newsListItemView}
+                            style={styles.newsList}
+                            key={index}
+                        />);
+                    })}
+
+                </ScrollableTabView>
             </View>
 
         );
@@ -109,8 +149,8 @@ export default class Message extends Component {
                 <TouchableOpacity onPress={()=>this.onClickItem(item)}>
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
-                        <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
-                            <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                        <TouchableOpacity>
+                            <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
                         </TouchableOpacity>
                         <View style={styles.msgSubContainer}>
                             <View style={styles.mesSubContainer}>
@@ -150,8 +190,8 @@ const styles = StyleSheet.create({
         height: 60,
     },
     msgIcon: {
-        width: 44,
-        height: 44,
+        width: 42,
+        height: 42,
     },
     msgIconContainer: {
         alignItems: 'center',

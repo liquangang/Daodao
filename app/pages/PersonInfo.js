@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions, SectionList} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions, SectionList, SafeAreaView} from "react-native";
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
-
+import {gViewStyles} from "../style/ViewStyles";
+import MyNavigationBar from '../component/MyNavigationBar'
+import MyStatusBar from "../component/MyStatusBar";
 
 // 个人详情页，注意与my页区分
 // 需要传入userid
@@ -86,8 +88,14 @@ export default class PersonInfo extends Component {
         }
 
         return(
-            <View style={styles.superContainer}>
+            <View style={gViewStyles.viewContainer1}>
+                <MyStatusBar/>
+                <MyNavigationBar
+                    title={'个人信息'}
+                    onClickBack={()=>{this.props.navigation.goBack();}}
+                ></MyNavigationBar>
                 {this.state.showType == 1 ? (
+                    // 资料部分
                     <FlatList
                         style={styles.container}
                         data={this.state.personalData.post_list.data}
@@ -95,6 +103,7 @@ export default class PersonInfo extends Component {
                         ListHeaderComponent={this.topView}
                     />
                 ) : (
+                    // 相册
                     <SectionList
                         style={styles.sectionList1}
                         stickySectionHeadersEnabled={false}
@@ -133,11 +142,11 @@ export default class PersonInfo extends Component {
 
     topView = () => {
         return(
-            <View>
+            <View style={gViewStyles.viewContainer2}>
                 <View style={styles.itemContainer1}>
                     {/*有头像的部分*/}
                     <View style={styles.container2}>
-                        <Image source={require('../source/avatar.jpg')}
+                        <Image source={require('../source/未登陆.png')}
                                // source={{uri: this.state.data.user_info.avatar}}
                                style={styles.img1}/>
                         <View style={styles.container3}>
@@ -181,21 +190,21 @@ export default class PersonInfo extends Component {
                 <Image source={require('../source/banner.jpg')} style={styles.newsImg}/>
                 <View style={styles.bottomContainer}>
                     <View style={styles.bottomTopContainer}>
-                        <Image source={require('../source/location.jpg')} style={styles.itemIcon}/>
+                        <Image source={require('../source/首页定位.png')} style={styles.itemIcon}/>
                         <Text>{item.post_position}</Text>
                     </View>
                     <View style={styles.segmentation}></View>
                     <View style={styles.bottomBottomContainer}>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/share.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../source/首页分享.png')} style={styles.itemIcon}/>
                             <Text>{item.share_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/mes.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../source/首页评论.png')} style={styles.itemIcon}/>
                             <Text>{item.comment_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/blackPraise.jpg')} style={styles.itemIcon}/>
+                            <Image source={require('../source/首页点赞.png')} style={styles.itemIcon}/>
                             <Text>{item.praise_num}</Text>
                         </View>
                     </View>
@@ -243,13 +252,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
+        // backgroundColor: '#FB5442',
     },
     itemContainer1: {
-
+        backgroundColor: '#FB5442',
     },
     container2: {
         flexDirection: 'row',
-        backgroundColor: gColor.orangeTextColor,
         alignItems: 'center',
     },
     img1: {
@@ -367,7 +376,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2F2F2',
     },
     sectionList1: {
-        backgroundColor: '#FFFEFF',
     },
     text8: {
         color: '#333333',

@@ -61,7 +61,7 @@ export default class My extends Component {
     topView = () => {
         return(
             <ImageBackground style={styles.topContainer} source={require('../source/我的背景图.png')}>
-                <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
                 <View style={styles.personalInfoContainer}>
                     <Text style={styles.nickName}>{this.state.personalData.user_info.nick_name}</Text>
                     <Text style={styles.commonText}>ID：{this.state.personalData.user_info.id}</Text>
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     topContainer: {
         height: 150,
         flexDirection: 'row',
+        paddingTop: gScreen.statusBarHeight,
     },
     avatar: {
         height: 60,
@@ -154,6 +155,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     list: {
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     }
 });

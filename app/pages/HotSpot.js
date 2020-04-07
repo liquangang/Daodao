@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import {Text, View, FlatList, StyleSheet, Dimensions} from "react-native";
+import {Text, View, FlatList, StyleSheet, Dimensions, StatusBar} from "react-native";
 import BannerView from "../component/BannerView"
 import NewsView from "../component/news/NewsView"
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
+import MyNavigationBar from '../component/MyNavigationBar'
+import MyStatusBar from "../component/MyStatusBar";
+import {gViewStyles} from "../style/ViewStyles";
 
 export default class HotSpot extends Component {
 
@@ -17,7 +20,7 @@ export default class HotSpot extends Component {
     }
 
     componentDidMount() {
-        this.fetchNewsListData(1)
+        this.fetchNewsListData()
     }
 
     // 点击帖子
@@ -47,7 +50,7 @@ export default class HotSpot extends Component {
     }
 
     // 下载具体新闻分类数据
-    fetchNewsListData = async (newsId) => {
+    fetchNewsListData = async () => {
         let params = {
             post_cate_id: 2,
         };
@@ -72,6 +75,11 @@ export default class HotSpot extends Component {
 
         return(
             <View>
+                <MyStatusBar/>
+                <MyNavigationBar
+                    title={'热点'}
+                    hiddenBack={true}
+                ></MyNavigationBar>
                 {/*新闻列表*/}
                 <FlatList
                     data={this.state.newsList}
@@ -110,7 +118,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     newsList: {
-
+        backgroundColor: 'white'
     }
 });
 

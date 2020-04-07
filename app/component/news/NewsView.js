@@ -29,7 +29,7 @@ export default class NewsView extends Component {
                     <TouchableOpacity onPress={()=>this.onClickAvatar(this.state.data.user.id)}>
                         {/*<Image source={{uri: this.state.data.user.avatar}}*/}
                                {/*style={styles.avatar}/>*/}
-                        <Image source={require('../../source/avatar.jpg')}
+                        <Image source={require('../../source/未登陆.png')}
                                style={styles.avatar}/>
                     </TouchableOpacity>
                     <View style={styles.topSubInfoContainer}>

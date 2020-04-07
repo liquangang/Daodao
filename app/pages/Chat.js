@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import {Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, TextInput, FlatList} from "react-native";
+import MyNavigationBar from '../component/MyNavigationBar'
+import MyStatusBar from "../component/MyStatusBar";
 
 export default class Chat extends Component {
 
@@ -15,6 +17,11 @@ export default class Chat extends Component {
     render() {
         return(
             <View style={styles.container}>
+                <MyStatusBar/>
+                <MyNavigationBar
+                    title={'私信'}
+                    onClickBack={()=>{this.props.navigation.goBack();}}
+                ></MyNavigationBar>
                 <View style={styles.chat}>
                     <FlatList
                         data={[{key: '1'}, {key: '2'}]}
@@ -68,7 +75,7 @@ export default class Chat extends Component {
         return(
             <View style={styles.chatItemView1}>
                 <TouchableOpacity>
-                    <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                    <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
                 </TouchableOpacity>
                 {/*<Image source={require('../source/avatar.jpg')} style={styles.avatar}/>*/}
                 <View style={styles.leftMes}>
@@ -92,7 +99,7 @@ export default class Chat extends Component {
             </View>
             {/*<Image source={require('../source/avatar.jpg')} style={styles.avatar}/>*/}
             <TouchableOpacity>
-                <Image source={require('../source/avatar.jpg')} style={styles.avatar}/>
+                <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
             </TouchableOpacity>
         </View>);
     }
