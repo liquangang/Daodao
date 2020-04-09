@@ -4,37 +4,122 @@ import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
-import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
+import ScrollableTabView, {DefaultTabBar,ScrollableTabBar} from 'react-native-scrollable-tab-view';
+import {gViewStyles} from "../style/ViewStyles";
+import {gTextStyles} from "../style/TextStyles";
 
 export default class Message extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            mesData: [{0:[]}, {1:[]}, {2:[]}, {3:[]}],
+            data: [[], [], [], [], []],
+            titleList: ['关注', '评论', '点赞', '私信', '通知'],
             load: false,
-            showIndex: 0
+            showIndex: 1
         };
     }
 
     componentDidMount() {
-        this.fetchMesData();
+        this.fetchAttentionData();
     }
 
+    // 点击头像
+    onClickAvatar = (item) => {
+        let params = {
+            userId: item.to_user.id,
+        };
+        this.props.navigation.navigate('PersonInfo', params);
+    };
 
-
-    // 请求消息数据
-    fetchMesData = async () => {
+    // 请求关注列表
+    fetchAttentionData = async() => {
         let params = {};
-        let res = await httpApi.getMesData(params);
+        let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/user_fan_list", params);
+        this.updateData(0, res);
+    }
 
+    // 请求评论列表
+    fetchCommentData = async() => {
+        let params = {};
+        let res = await httpApi.httpPost('http://dd.shenruxiang.com/api/v1/user_comment_list', params);
+        this.updateData(1, res);
+    }
+
+    // 请求点赞列表
+    fetchPraiseData = async() => {
+        let params = {};
+        let res = await httpApi.httpPost('http://dd.shenruxiang.com/api/v1/user_praise_list', params);
+        this.updateData(2, res);
+    }
+
+    // 请求私信列表
+    fetchChatData = async() => {
+        let params = {};
+        let res = await httpApi.httpPost('http://dd.shenruxiang.com/api/v1/user_message_list', params);
         if (res.status == 0) {
+            let newData = this.state.data;
+            newData[3] = res.data;
             this.setState({
-                mesData: res.data,
+                data: newData,
+                showIndex: 3,
                 load: true
             });
         } else {
             alert("网络异常！请检查网络！");
+        }
+    }
+
+    // 请求通知列表
+    fetchNoticeData = async () => {
+        let params = {};
+        let res = await httpApi.httpPost('http://dd.shenruxiang.com/api/v1/notice_list', params);
+        this.updateData(4, res);
+    }
+
+    updateData = (index, res) => {
+        if (res.status == 0) {
+            let newData = this.state.data;
+            newData[index] = res.data.data;
+            this.setState({
+                data: newData,
+                showIndex: index,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+    // 切换tab
+    onChangeTabs = (index) => {
+
+        if (this.state.data != null && this.state.data[index].length > 0) {
+            // 有数据
+            let newData = this.state.data;
+            this.setState({
+                data: newData,
+                showIndex: index,
+                load: true
+            });
+        } else {
+            // 无数据
+            this.fetchData(index);
+        }
+
+    }
+
+    fetchData = (index) => {
+        if (index == 0) {
+            this.fetchAttentionData();
+        } else if (index == 1) {
+            this.fetchCommentData();
+        } else if (index == 2) {
+            this.fetchPraiseData();
+        } else if (index == 3) {
+            this.fetchChatData();
+        } else if (index == 4) {
+            this.fetchNoticeData();
         }
     }
 
@@ -45,31 +130,6 @@ export default class Message extends Component {
         this.props.navigation.navigate('Chat', params);
     }
 
-    onClickType = (index) => {
-        switch (index) {
-            case 0:
-            {
-                // 请求关注列表
-            }
-            break;
-            case 1:
-            {
-                // 请求评论列表
-            }
-            break;
-            case 2:
-            {
-                // 请求点赞列表
-            }
-                break;
-            case 3:
-            {
-                // 请求通知列表
-            }
-                break;
-        }
-    }
-
     render() {
         if (this.state.load == false) {
             return <LoadingView></LoadingView>
@@ -78,29 +138,19 @@ export default class Message extends Component {
             <View style={styles.container}>
                 <MyStatusBar/>
                 <MyNavigationBar
-                    title={'消息'}
+                    title={'消息记录'}
                     onClickBack={()=>{this.props.navigation.goBack();}}
                 ></MyNavigationBar>
-                {/*<FlatList*/}
-                    {/*data={this.state.mesData}*/}
-                    {/*renderItem={this.msgListItemView}*/}
-                    {/*style={styles.msgListContainer}*/}
-                    {/*ListHeaderComponent={this.headerItemView}*/}
-                {/*/>*/}
 
-                <ScrollableTabView
-                    initialPage={this.state.showIndex}
-                >
-                    {this.state.newsTypeList.map((value, index, array)=>{
-                        return(<FlatList
-                            data={this.state.mesData[value.id]}
-                            renderItem={this.newsListItemView}
-                            style={styles.newsList}
-                            key={index}
-                        />);
-                    })}
+                <FlatList
+                    extraData={this.state}
+                    data={this.state.data[this.state.showIndex]}
+                    ListHeaderComponent={this.headerItemView}
+                    renderItem={this.listItemView}
+                    style={gViewStyles.flatList}
+                />
 
-                </ScrollableTabView>
+
             </View>
 
         );
@@ -110,41 +160,109 @@ export default class Message extends Component {
         return(
             <View style={styles.topContainer}>
                 <View style={styles.msgIconContainer}>
-                    <TouchableOpacity onPress={()=>{alert(1)}}>
+                    <TouchableOpacity onPress={()=>this.onChangeTabs(0)}>
                         <Image source={require('../source/关注.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>关注</Text>
+                    {this.state.showIndex == 0 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
                 </View>
 
                 <View style={styles.msgIconContainer}>
-                    <TouchableOpacity onPress={()=>{alert(1)}}>
+                    <TouchableOpacity onPress={()=>this.onChangeTabs(1)}>
                         <Image source={require('../source/评论.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>评论</Text>
+                    {this.state.showIndex == 1 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
                 </View>
 
                 <View style={styles.msgIconContainer}>
-                    <TouchableOpacity onPress={()=>{alert(1)}}>
+                    <TouchableOpacity onPress={()=>this.onChangeTabs(2)}>
                         <Image source={require('../source/点赞.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>点赞</Text>
+                    {this.state.showIndex == 2 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
                 </View>
 
                 <View style={styles.msgIconContainer}>
-                    <TouchableOpacity onPress={()=>{alert(1)}}>
+                    <TouchableOpacity onPress={()=>this.onChangeTabs(3)}>
+                        <Image source={require('../source/评论.png')} style={styles.msgIcon}/>
+                    </TouchableOpacity>
+                    <Text style={styles.msgDes}>私信</Text>
+                    {this.state.showIndex == 3 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
+                </View>
+
+                <View style={styles.msgIconContainer}>
+                    <TouchableOpacity onPress={()=>this.onChangeTabs(4)}>
                         <Image source={require('../source/通知.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>通知</Text>
+                    {this.state.showIndex == 4 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
                 </View>
             </View>
         );
     }
 
+    listItemView = ({item}) => {
+        switch (this.state.showIndex) {
+            case 0:
+            {
+                return(this.attentionItemView(item));
+            }
+                break;
+            case 1:
+            {
+                return(this.commentItemView(item));
+            }
+                break;
+            case 2:
+            {
+                return(this.praiseItemView(item));
+            }
+                break;
+            case 3:
+            {
+                return(this.chatItemView(item));
+            }
+                break;
+            case 4:
+            {
+                return(this.noticeItemView(item));
+            }
+                break;
+            default:
+            {
+                return(<View></View>);
+            }
+                break;
+        }
+    }
 
+    attentionItemView = (item) => {
+        return(
+            <View>
+                <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                    <View style={styles.line}></View>
+                    <View style={styles.msgContainer}>
+                        <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
+                            {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
+                            <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                        </TouchableOpacity>
+                        <View style={styles.msgSubContainer}>
+                            <View style={styles.mesSubContainer}>
+                                <Text style={styles.text1}>{item.user.nick_name}</Text>
+                            </View>
+                            <View style={styles.mesSubContainer1}>
+                                <Text style={styles.text2}>Ta关注了你！</Text>
+                            </View>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 
-
-    msgListItemView = ({ item }) => {
-        return (
+    commentItemView = (item) => {
+        return(
             <View>
                 <TouchableOpacity onPress={()=>this.onClickItem(item)}>
                     <View style={styles.line}></View>
@@ -154,9 +272,9 @@ export default class Message extends Component {
                         </TouchableOpacity>
                         <View style={styles.msgSubContainer}>
                             <View style={styles.mesSubContainer}>
-                                <Text style={styles.text1}>昵称啦啦啦</Text>
+                                <Text style={styles.text1}>{item.user.nick_name}</Text>
                                 <View style={styles.container1}>
-                                    <Text style={styles.text3}>{item.created_at}</Text>
+                                    <Text style={styles.text3}>1小时前</Text>
                                     <Text style={styles.text2}> * </Text>
                                 </View>
                             </View>
@@ -171,6 +289,77 @@ export default class Message extends Component {
         );
     }
 
+    praiseItemView = (item) => {
+        return(<View><View>
+            <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                <View style={styles.line}></View>
+                <View style={styles.msgContainer}>
+                    <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
+                        {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
+                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                    </TouchableOpacity>
+                    <View style={styles.msgSubContainer}>
+                        <View style={styles.mesSubContainer}>
+                            <Text style={styles.text1}>给你点赞的用户昵称</Text>
+                        </View>
+                        <View style={styles.mesSubContainer1}>
+                            <Text style={styles.text2}>Ta给你点赞啦！</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </View></View>);
+    }
+
+    chatItemView = (item) => {
+        return(<View>
+            <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                <View style={styles.line}></View>
+                <View style={styles.msgContainer}>
+                    <TouchableOpacity>
+                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                    </TouchableOpacity>
+                    <View style={styles.msgSubContainer}>
+                        <View style={styles.mesSubContainer}>
+                            <Text style={styles.text1}>给你发私信的人的昵称</Text>
+                            <View style={styles.container1}>
+                                <Text style={styles.text3}>1小时前</Text>
+                                <Text style={styles.text2}> * </Text>
+                            </View>
+                        </View>
+                        <View style={styles.mesSubContainer1}>
+                            <Text style={styles.text2}>私信：</Text>
+                            <Text style={styles.text3}>{item.content}</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </View>)
+    }
+
+    noticeItemView = (item) => {
+
+        return(<View><View>
+            <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                <View style={styles.line}></View>
+                <View style={styles.msgContainer}>
+                    <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
+                        {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
+                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                    </TouchableOpacity>
+                    <View style={styles.msgSubContainer}>
+                        <View style={styles.mesSubContainer}>
+                            <Text style={styles.text1}>消息通知</Text>
+                        </View>
+                        <View style={styles.mesSubContainer1}>
+                            <Text style={styles.text2}>{item.content}</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </View></View>);
+    }
+
 }
 
 const {width, height, scale} = Dimensions.get('window');
@@ -183,11 +372,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     topContainer: {
-        marginTop: 15,
-        marginBottom: 15,
+        paddingTop: 8,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        height: 60,
+        height: 80,
+        backgroundColor: 'white'
     },
     msgIcon: {
         width: 42,
@@ -195,9 +384,11 @@ const styles = StyleSheet.create({
     },
     msgIconContainer: {
         alignItems: 'center',
+        backgroundColor: 'white',
     },
     msgDes: {
         marginTop: 5,
+        fontSize: 12,
     },
     msgContainer: {
         flexDirection: 'row',
@@ -247,6 +438,6 @@ const styles = StyleSheet.create({
         color: gColor.orangeTextColor,
     },
     text3: {
-        color: gColor.grayTextColor,
+        color: '#333333',
     }
 });

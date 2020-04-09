@@ -56,5 +56,25 @@ export const gViewStyles = StyleSheet.create({
         height: 44,
         flexDirection: 'row',
         alignItems: 'center'
-    }
+    },
+    scrollBar: {
+        height: 20,
+        width: gScreen.screen_width,
+    },
+    scrollBarBottomLine: {
+        height: 2,
+        backgroundColor: '#FB5442',
+    },
+    scrollTapView: {
+        backgroundColor: 'white'
+    },
+    flatList: {
+        backgroundColor: 'white'
+    },
+    scrollBarBottomLine1: {
+        height: 2,
+        width: 42,
+        backgroundColor: '#FB5442',
+        marginTop: 10,
+    },
 });

@@ -12,8 +12,8 @@ export const gImageStyles = StyleSheet.create({
     },
     middelTabbarItem: {
         marginTop: 10,
-        height: 44,
-        width: 44,
+        height: 35,
+        width: 35,
     },
     avatar: {
         height: 25,

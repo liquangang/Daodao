@@ -9,4 +9,7 @@ export const gTextStyles = StyleSheet.create({
         flex: 1,
         height: 33,
     },
+    scrollBarText: {
+        fontSize: 14,
+    }
 });
