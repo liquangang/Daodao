@@ -15,8 +15,9 @@ export default class PersonInfo extends Component {
         this.state = {
             personalData: [],
             albumData: [],
+            attentionData: [],
             load: false,
-            showType: 1, // 展示数据类型，1：资料部分，2：相册
+            showType: 0, // 展示数据类型，0：资料部分，1：相册 2: 关注
         };
     }
 
@@ -27,7 +28,7 @@ export default class PersonInfo extends Component {
     showNewsList = () => {
         this.setState({
             load: false,
-            showType: 1,
+            showType: 0,
         });
         this.fetchPersonalData(this.props.route.params.userId);
     }
@@ -35,9 +36,13 @@ export default class PersonInfo extends Component {
     showalbum = () => {
         this.setState({
             load: false,
-            showType: 2,
+            showType: 1,
         });
         this.fetchAlbumData(this.props.route.params.userId);
+    }
+
+    showAttentioin = () => {
+        this.fetchAttentionData();
     }
 
     // 请求个人数据
@@ -82,89 +87,110 @@ export default class PersonInfo extends Component {
         }
     }
 
+    // 请求关注列表
+    fetchAttentionData = async() => {
+        let params = {};
+        let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/user_fan_list", params);
+        if (res.status == 0) {
+            this.setState({
+                attentionData: res.data.data,
+                showType: 2,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
     render() {
         if (this.state.load == false) {
             return <LoadingView></LoadingView>
         }
 
         return(
-            <View style={gViewStyles.viewContainer1}>
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
                 <MyStatusBar/>
-                <MyNavigationBar
-                    title={'个人信息'}
-                    onClickBack={()=>{this.props.navigation.goBack();}}
-                ></MyNavigationBar>
-                {this.state.showType == 1 ? (
-                    // 资料部分
-                    <FlatList
-                        style={styles.container}
-                        data={this.state.personalData.post_list.data}
-                        renderItem={this.newsItemView}
-                        ListHeaderComponent={this.topView}
-                    />
-                ) : (
-                    // 相册
-                    <SectionList
-                        style={styles.sectionList1}
-                        stickySectionHeadersEnabled={false}
-                        ListHeaderComponent={this.topView}
-                        sections={this.state.albumData}
-                        renderItem={this.albumItemView}
-                        renderSectionHeader={this.albumHeaderItemView}
-                        renderSectionFooter={()=><View style={styles.line3}></View>}
-                    ></SectionList>
-                )
-                }
+                <SafeAreaView style={gViewStyles.rootViewContainer}>
+                    <MyNavigationBar
+                        title={'个人信息'}
+                        onClickBack={()=>{this.props.navigation.goBack();}}
+                    ></MyNavigationBar>
 
-                {
-                    this.state.showType == 1 ? (
-                        <View style={styles.container6}>
-                            <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
-                            <Image source={require('../source/attention.jpg')} style={styles.img2}/>
+                    <View style={styles.itemContainer1}>
+                        {/*有头像的部分*/}
+                        <View style={styles.container2}>
+                            <Image source={require('../source/未登陆.png')}
+                                // source={{uri: this.state.data.user_info.avatar}}
+                                   style={styles.img1}/>
+                            <View style={styles.container3}>
+                                <Text style={styles.text1}>{this.state.personalData.user_info.nick_name}</Text>
+                                <Text style={styles.text2}>签名：{this.state.personalData.user_info.desc}</Text>
+                                <Text style={styles.text3}>粉丝：{this.state.personalData.user_info.fan_num}    关注：{this.state.personalData.user_info.follow_num}</Text>
+                            </View>
                         </View>
+                        <View style={styles.container4}>
+                            <TouchableOpacity onPress={this.showNewsList}>
+                                <Text style={styles.text4}>资料</Text>
+                                {this.state.showType == 0 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.showalbum}>
+                                <Text style={styles.text4}>相册</Text>
+                                {this.state.showType == 1 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.showAttentioin}>
+                                <Text style={styles.text4}>关注</Text>
+                                {this.state.showType == 2 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.line5}></View>
+                    </View>
 
-                    ) : (<View></View>)
-                }
+                    {this.listView()}
+
+                    <View style={styles.container6}>
+                        <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
+                        <Image source={require('../source/attention.jpg')} style={styles.img2}/>
+                    </View>
+                </SafeAreaView>
             </View>
+
 
         );
     };
 
-    footerLoadView = () => {
-        if (this.state.load) {
+    listView = () => {
+        if (this.state.showType == 0) {
             return(
-                <LoadingView></LoadingView>
+                <FlatList
+                    style={styles.container}
+                    data={this.state.personalData.post_list.data}
+                    renderItem={this.newsItemView}
+                    ListHeaderComponent={this.topView}
+                />
             );
+        } else if (this.state.showType == 1) {
+            return(<SectionList
+                style={styles.sectionList1}
+                stickySectionHeadersEnabled={false}
+                ListHeaderComponent={this.topView}
+                sections={this.state.albumData}
+                renderItem={this.albumItemView}
+                renderSectionHeader={this.albumHeaderItemView}
+                renderSectionFooter={()=><View style={styles.line3}></View>}
+            ></SectionList>);
         } else {
-            return(<View></View>);
+            return(<FlatList
+                extraData={this.state}
+                data={this.state.attentionData}
+                renderItem={this.attentionItemView}
+                style={gViewStyles.flatList}
+            />);
         }
     }
 
     topView = () => {
         return(
             <View style={gViewStyles.viewContainer2}>
-                <View style={styles.itemContainer1}>
-                    {/*有头像的部分*/}
-                    <View style={styles.container2}>
-                        <Image source={require('../source/未登陆.png')}
-                               // source={{uri: this.state.data.user_info.avatar}}
-                               style={styles.img1}/>
-                        <View style={styles.container3}>
-                            <Text style={styles.text1}>{this.state.personalData.user_info.nick_name}</Text>
-                            <Text style={styles.text2}>签名：{this.state.personalData.user_info.desc}</Text>
-                            <Text style={styles.text3}>粉丝：{this.state.personalData.user_info.fan_num}    关注：{this.state.personalData.user_info.follow_num}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.container4}>
-                        <TouchableOpacity onPress={this.showNewsList}>
-                            <Text style={styles.text4}>资料</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.showalbum}>
-                            <Text style={styles.text4}>相册</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.line5}></View>
-                </View>
 
                 {
                     this.state.showType == 1 ? (<View style={styles.container5}>
@@ -177,6 +203,30 @@ export default class PersonInfo extends Component {
                     </View>) : (<View></View>)
                 }
 
+            </View>
+        );
+    }
+
+    attentionItemView = ({item}) => {
+        return(
+            <View>
+                <TouchableOpacity onPress={()=>this.onClickAttention(item)}>
+                    <View style={styles.line}></View>
+                    <View style={styles.msgContainer}>
+                        {/*<TouchableOpacity onPress={()=>this.onClickAvatar(item)}>*/}
+                        {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
+                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                        {/*</TouchableOpacity>*/}
+                        <View style={styles.msgSubContainer}>
+                            <View style={styles.mesSubContainer}>
+                                <Text style={styles.attentionNickNametext}>{item.user.nick_name}</Text>
+                            </View>
+                            <View style={styles.mesSubContainer1}>
+                                <Text style={styles.attentiontext1}>Ta关注了你！</Text>
+                            </View>
+                        </View>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -391,5 +441,16 @@ const styles = StyleSheet.create({
         height: (gScreen.screen_width - 44) / 3,
         margin: 5,
         borderRadius: 5,
-    }
+    },
+    attentionNickNametext: {
+        fontSize: 17,
+    },
+    attentiontext1: {
+        color: gColor.orangeTextColor,
+    },
+    msgContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 60,
+    },
 });

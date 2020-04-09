@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, TextInput, FlatList} from "react-native";
+import {Text, View, StyleSheet, SafeAreaView, Image, TouchableOpacity, Dimensions, TextInput, FlatList} from "react-native";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
+import {gViewStyles} from "../style/ViewStyles";
+import {gImageStyles} from "../style/ImageStyles";
+import {gTextStyles} from "../style/TextStyles";
 
 export default class Chat extends Component {
 
@@ -16,41 +19,44 @@ export default class Chat extends Component {
 
     render() {
         return(
-            <View style={styles.container}>
-                <MyStatusBar/>
-                <MyNavigationBar
-                    title={'私信'}
-                    onClickBack={()=>{this.props.navigation.goBack();}}
-                ></MyNavigationBar>
-                <View style={styles.chat}>
-                    <FlatList
-                        data={[{key: '1'}, {key: '2'}]}
-                        renderItem={this.chatItemView}
-                        style={styles.chatList}
-                    ></FlatList>
-                </View>
-                <View style={styles.input}>
-                    <TextInput underlineColorAndroid="transparent" placeholder="这里输入消息"
-                               style={styles.searchTextInput}>
-                    </TextInput>
-                    {/*<View style={styles.input2}>*/}
+
+            <View style={gViewStyles.rootViewContainer}>
+                <MyStatusBar></MyStatusBar>
+                <SafeAreaView style={gViewStyles.grayRootViewContainer1}>
+                    <MyNavigationBar
+                        title={'私信'}
+                        onClickBack={()=>{this.props.navigation.goBack();}}
+                    ></MyNavigationBar>
+                    <View style={styles.chat}>
+                        <FlatList
+                            data={[{key: '1'}, {key: '2'}]}
+                            renderItem={this.chatItemView}
+                            style={styles.chatList}
+                        ></FlatList>
+                    </View>
+                    <View style={styles.input}>
+                        <TextInput underlineColorAndroid="transparent" placeholder="这里输入消息"
+                                   style={styles.searchTextInput}>
+                        </TextInput>
+                        {/*<View style={styles.input2}>*/}
                         {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
-                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
                         {/*</TouchableOpacity>*/}
                         {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
-                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
                         {/*</TouchableOpacity>*/}
                         {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
-                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
                         {/*</TouchableOpacity>*/}
                         {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
-                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
                         {/*</TouchableOpacity>*/}
                         {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
-                            {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
+                        {/*<Image source={require('../source/attention1.jpg')} style={styles.inputIcon}/>*/}
                         {/*</TouchableOpacity>*/}
-                    {/*</View>*/}
-                </View>
+                        {/*</View>*/}
+                    </View>
+                </SafeAreaView>
             </View>
         );
     };

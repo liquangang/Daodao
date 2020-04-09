@@ -32,6 +32,16 @@ export default class Message extends Component {
         this.props.navigation.navigate('PersonInfo', params);
     };
 
+    // 点击关注
+    onClickAttention = (item) => {
+        console.log("-----------item", item);
+        // 跳转个人详情
+        let params = {
+            userId: item.user.id,
+        };
+        this.props.navigation.navigate('PersonInfo', params);
+    }
+
     // 请求关注列表
     fetchAttentionData = async() => {
         let params = {};
@@ -142,19 +152,25 @@ export default class Message extends Component {
                     onClickBack={()=>{this.props.navigation.goBack();}}
                 ></MyNavigationBar>
 
-                <FlatList
-                    extraData={this.state}
-                    data={this.state.data[this.state.showIndex]}
-                    ListHeaderComponent={this.headerItemView}
-                    renderItem={this.listItemView}
-                    style={gViewStyles.flatList}
-                />
+                {this.headerItemView()}
 
+                {this.listView()}
 
             </View>
 
         );
     };
+
+    listView = () => {
+        return(
+            <FlatList
+                extraData={this.state}
+                data={this.state.data[this.state.showIndex]}
+                renderItem={this.listItemView}
+                style={gViewStyles.flatList}
+            />
+        );
+    }
 
     headerItemView = () => {
         return(
@@ -240,13 +256,13 @@ export default class Message extends Component {
     attentionItemView = (item) => {
         return(
             <View>
-                <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                <TouchableOpacity onPress={()=>this.onClickAttention(item)}>
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
-                        <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
+                        {/*<TouchableOpacity onPress={()=>this.onClickAvatar(item)}>*/}
                             {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
                             <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
-                        </TouchableOpacity>
+                        {/*</TouchableOpacity>*/}
                         <View style={styles.msgSubContainer}>
                             <View style={styles.mesSubContainer}>
                                 <Text style={styles.text1}>{item.user.nick_name}</Text>
@@ -367,9 +383,6 @@ const {width, height, scale} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    msgListContainer: {
-        backgroundColor: 'white',
     },
     topContainer: {
         paddingTop: 8,

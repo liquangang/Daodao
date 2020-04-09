@@ -35,6 +35,10 @@ export const gViewStyles = StyleSheet.create({
         backgroundColor: 'white',
         flex: 1,
     },
+    grayRootViewContainer1: {
+        backgroundColor: '#F4F1F2',
+        flex: 1,
+    },
     view3: {
         height: 44,
         backgroundColor: '#FB5442',
@@ -76,5 +80,18 @@ export const gViewStyles = StyleSheet.create({
         width: 42,
         backgroundColor: '#FB5442',
         marginTop: 10,
+    },
+    scrollBarBottomLine2: {
+        height: 2,
+        width: 42,
+        backgroundColor: '#FB5442',
+    },
+    statusbar1: {
+        backgroundColor: '#FB5442',
+        height: gScreen.statusBarHeight
+    },
+    statusbar2: {
+        backgroundColor: 'white',
+        height: gScreen.statusBarHeight
     },
 });

@@ -49,12 +49,14 @@ export default class My extends Component {
             return <LoadingView></LoadingView>
         }
         return(
+            <View style={styles.container}>
+                {this.topView()}
                 <FlatList
                     style={styles.list}
                     renderItem={this.myItemView}
                     data={this.state.optionData}
-                    ListHeaderComponent={this.topView}
                 />
+            </View>
         );
     };
 
@@ -92,7 +94,8 @@ const {width, height, scale} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        flex: 1,
     },
     topContainer: {
         height: 150,
