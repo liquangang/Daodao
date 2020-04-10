@@ -94,4 +94,53 @@ export const gViewStyles = StyleSheet.create({
         backgroundColor: 'white',
         height: gScreen.statusBarHeight
     },
+    spalshViewContainer: {
+        flex: 1,
+        backgroundColor: '#FB5442',
+    },
+    fullScreenSwiper: {
+        flex: 1,
+    },
+    splashTextView: {
+        position:'absolute',
+        right: 10,
+        top: gScreen.statusBarHeight,
+        width: 60,
+        height: 25,
+        borderRadius: 20,
+        backgroundColor: '#FB5442',
+        opacity: 0.6
+    },
+    btnBack: {
+        height: 44,
+        width: 44,
+        marginTop: gScreen.statusBarHeight + 18
+    },
+    qqloginBack: {
+        height: 50,
+        width: 311,
+        backgroundColor: '#30A5DD',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 25,
+    },
+    wechatLoginBack: {
+        marginTop: 20,
+        height: 50,
+        width: 311,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#50B674',
+        borderRadius: 25,
+    },
+    qqIcon: {
+        height: 30,
+        width: 29,
+        marginLeft: 20,
+    },
+    wechatIcon: {
+        width: 30,
+        height: 25,
+        marginLeft: 20,
+    }
 });

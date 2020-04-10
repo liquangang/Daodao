@@ -17,14 +17,14 @@ export default class MyStatusBar extends Component {
             return (
                 <View>
                     <StatusBar barStyle="dark-content"/>
-                    <SafeAreaView style={gViewStyles.statusbar2}></SafeAreaView>
+                    <View style={gViewStyles.statusbar2}></View>
                 </View>
             );
         } else {
             return (
                 <View>
                     <StatusBar barStyle="light-content"/>
-                    <SafeAreaView style={gViewStyles.statusbar1}></SafeAreaView>
+                    <View style={gViewStyles.statusbar1}></View>
                 </View>
             );
         }

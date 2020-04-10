@@ -21,12 +21,13 @@ import NewsDetail from "./app/pages/NewsDetail"
 import WebPage from "./app/pages/WebPage";
 import Search from "./app/pages/Search";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Splash from "./app/pages/Splash";
 
-const Tab = createBottomTabNavigator();
+const mainTab = createBottomTabNavigator();
 
-function MyTab() {
+function MainTab() {
     return(
-        <Tab.Navigator
+        <mainTab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -51,36 +52,47 @@ function MyTab() {
                 inactiveTintColor: '#D3D3D3',
             }}
         >
-            <Tab.Screen name="首页" component={HomePage} />
-            <Tab.Screen name="热点" component={HotSpot} />
-            <Tab.Screen name="发布" component={Publish} />
-            <Tab.Screen name="便民" component={Convenience} />
-            <Tab.Screen name="我的" component={My} />
-        </Tab.Navigator>
+            <mainTab.Screen name="首页" component={HomePage} />
+            <mainTab.Screen name="热点" component={HotSpot} />
+            <mainTab.Screen name="发布" component={Publish} />
+            <mainTab.Screen name="便民" component={Convenience} />
+            <mainTab.Screen name="我的" component={My} />
+        </mainTab.Navigator>
     );
 }
 
-const Nav = createStackNavigator();
+const mainNav = createStackNavigator();
+
+function MainNav() {
+    return(
+        <mainNav.Navigator
+            headerMode={'none'}>
+            <mainNav.Screen name='Login' component={Login}/>
+            {/*tabbar部分*/}
+            <mainNav.Screen name='MyTab' component={MainTab}/>
+            {/*其他可跳转页面*/}
+            <mainNav.Screen name='PersonInfo' component={PersonInfo}/>
+            <mainNav.Screen name='Message' component={Message}/>
+            <mainNav.Screen name='Chat' component={Chat}/>
+            <mainNav.Screen name='NewsDetail' component={NewsDetail}/>
+            <mainNav.Screen name='WebPage' component={WebPage}/>
+            <mainNav.Screen name='Search' component={Search}/>
+        </mainNav.Navigator>
+    );
+}
+
 
 export default function App() {
+    const rootNav = createStackNavigator();
     return (
         <NavigationContainer>
-            <Nav.Navigator
+            <rootNav.Navigator
                 headerMode={'none'}
             >
                 {/*启动广告*/}
-                {/*tabbar部分*/}
-                <Nav.Screen name='tab' component={MyTab}/>
-                {/*其他可跳转页面*/}
-                <Nav.Screen name='HomePage' component={HomePage}/>
-                <Nav.Screen name='PersonInfo' component={PersonInfo}/>
-                <Nav.Screen name='Login' component={Login}/>
-                <Nav.Screen name='Message' component={Message}/>
-                <Nav.Screen name='Chat' component={Chat}/>
-                <Nav.Screen name='NewsDetail' component={NewsDetail}/>
-                <Nav.Screen name='WebPage' component={WebPage}/>
-                <Nav.Screen name='Search' component={Search}/>
-            </Nav.Navigator>
+                <rootNav.Screen name='Splash' component={Splash}/>
+                <rootNav.Screen name="MainNav" component={MainNav}/>
+            </rootNav.Navigator>
         </NavigationContainer>
     );
 }

@@ -20,4 +20,15 @@ export const gImageStyles = StyleSheet.create({
         width: 25,
         margin: 5,
     },
+    splashImg: {
+        position:'absolute',
+        left:0,
+        top:0,
+        width:gScreen.screen_width,
+    },
+    closeImg: {
+        height: 18,
+        width: 18,
+        marginLeft: 13,
+    }
 });

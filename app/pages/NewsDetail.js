@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {Text, View, StyleSheet, FlatList, TextInput, TouchableOpacity,
-    Image, Dimensions, SectionList} from "react-native";
+    Image, Dimensions, SectionList, SafeAreaView} from "react-native";
 import httpApi from "../tools/Api";
 import BannerView from "../component/BannerView"
 import LoadingView from "../component/LoadingView";
@@ -79,33 +79,36 @@ export default class NewsDetail extends Component {
             return <LoadingView/>;
         }
         return(
-            <View style={styles.container}>
+            <View style={gViewStyles.rootViewContainer}>
                 <MyStatusBar/>
-                <MyNavigationBar
-                    title={'帖子详情'}
-                    onClickBack={()=>{this.props.navigation.goBack();}}
-                ></MyNavigationBar>
-                <View style={styles.topContainer}>
-                    <SectionList
-                        showsVerticalScrollIndicator = {false}
-                        ListHeaderComponent={this.headerView}
-                        sections={this.state.commentList}
-                        renderItem={this.subCommentItemView}
-                        renderSectionHeader={this.commentItemView}
-                        stickySectionHeadersEnabled={false}
-                        keyExtractor={(item, index) => item + index}
-                    ></SectionList>
-                </View>
+                <SafeAreaView style={styles.container}>
+                    <MyNavigationBar
+                        title={'帖子详情'}
+                        onClickBack={()=>{this.props.navigation.goBack();}}
+                    ></MyNavigationBar>
+                    <View style={styles.topContainer}>
+                        <SectionList
+                            showsVerticalScrollIndicator = {false}
+                            ListHeaderComponent={this.headerView}
+                            sections={this.state.commentList}
+                            renderItem={this.subCommentItemView}
+                            renderSectionHeader={this.commentItemView}
+                            stickySectionHeadersEnabled={false}
+                            keyExtractor={(item, index) => item + index}
+                        ></SectionList>
+                    </View>
 
-                <View style={styles.inputContainer}>
-                    <TextInput underlineColorAndroid="transparent" placeholder="输入评论内容"
-                               style={styles.input}>
-                    </TextInput>
-                    <TouchableOpacity>
-                        <Image source={require('../source/详情分享.png')} style={styles.shareIcon}/>
-                    </TouchableOpacity>
-                </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput underlineColorAndroid="transparent" placeholder="输入评论内容"
+                                   style={styles.input}>
+                        </TextInput>
+                        <TouchableOpacity>
+                            <Image source={require('../source/详情分享.png')} style={styles.shareIcon}/>
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
             </View>
+
         );
     };
 

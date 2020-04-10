@@ -32,14 +32,6 @@ export default class HomePage extends Component {
         this.showNewsList(this.state.newsTypeList[0]);
     }
 
-    componentWillUnmount() {
-        this.props.navigation.setOptions({ tabBarVisible: false })
-    }
-
-    componentWillUpdate() {
-        this.props.navigation.setOptions({ tabBarVisible: true })
-    }
-
     // ------------------------- 主题逻辑 ------------------------------
 
     // 点击头像

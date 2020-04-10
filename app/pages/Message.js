@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, Dimensions} from "react-native";
+import {Text, View, StyleSheet, SafeAreaView, Image, FlatList, TouchableOpacity, Dimensions} from "react-native";
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
 import MyNavigationBar from '../component/MyNavigationBar'
@@ -145,17 +145,19 @@ export default class Message extends Component {
             return <LoadingView></LoadingView>
         }
         return (
-            <View style={styles.container}>
-                <MyStatusBar/>
-                <MyNavigationBar
-                    title={'消息记录'}
-                    onClickBack={()=>{this.props.navigation.goBack();}}
-                ></MyNavigationBar>
+            <View style={gViewStyles.rootViewContainer}>
+                <MyStatusBar></MyStatusBar>
+                <SafeAreaView style={styles.container}>
+                    <MyNavigationBar
+                        title={'消息记录'}
+                        onClickBack={()=>{this.props.navigation.goBack();}}
+                    ></MyNavigationBar>
 
-                {this.headerItemView()}
+                    {this.headerItemView()}
 
-                {this.listView()}
+                    {this.listView()}
 
+                </SafeAreaView>
             </View>
 
         );

@@ -11,5 +11,17 @@ export const gTextStyles = StyleSheet.create({
     },
     scrollBarText: {
         fontSize: 14,
+    },
+    splashText: {
+        position:'absolute',
+        right: 24,
+        top: gScreen.statusBarHeight + 4,
+        fontSize: 15,
+        color: "white",
+    },
+    loginText: {
+        marginLeft: 70,
+        fontSize: 16,
+        color: 'white'
     }
 });
