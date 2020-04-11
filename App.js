@@ -22,6 +22,7 @@ import WebPage from "./app/pages/WebPage";
 import Search from "./app/pages/Search";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Splash from "./app/pages/Splash";
+import Type from "./app/pages/Type";
 
 const mainTab = createBottomTabNavigator();
 
@@ -77,6 +78,7 @@ function MainNav() {
             <mainNav.Screen name='NewsDetail' component={NewsDetail}/>
             <mainNav.Screen name='WebPage' component={WebPage}/>
             <mainNav.Screen name='Search' component={Search}/>
+            <mainNav.Screen name='Type' component={Type}/>
         </mainNav.Navigator>
     );
 }

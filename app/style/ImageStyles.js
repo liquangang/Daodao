@@ -30,5 +30,9 @@ export const gImageStyles = StyleSheet.create({
         height: 18,
         width: 18,
         marginLeft: 13,
-    }
+    },
+    bannerImg: {
+        width: gScreen.screen_width,
+        padding: 12,
+    },
 });

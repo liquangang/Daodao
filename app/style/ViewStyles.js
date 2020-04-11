@@ -142,5 +142,26 @@ export const gViewStyles = StyleSheet.create({
         width: 30,
         height: 25,
         marginLeft: 20,
+    },
+    line: {
+        height: 0.5,
+        marginLeft: 2,
+        marginRight: 2,
+        backgroundColor: gColor.grayLineColor,
+    },
+    itemView: {
+        height: 44,
+        width: gScreen.screen_width,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    loading: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

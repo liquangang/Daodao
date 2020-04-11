@@ -24,5 +24,9 @@ export const gTextStyles = StyleSheet.create({
         marginLeft: 70,
         fontSize: 16,
         color: 'white'
+    },
+    nickNameText: {
+        fontSize: 17,
+        marginLeft: 6,
     }
 });

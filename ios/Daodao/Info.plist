@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>NSCameraUsageDescription</key>
+	<string>需要使用相机</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
@@ -39,6 +41,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>需要使用相册</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要使用相册</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

@@ -7,6 +7,7 @@ import LoadingView from "../component/LoadingView";
 import {gViewStyles} from "../style/ViewStyles";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
+import {gImageStyles} from "../style/ImageStyles";
 
 export default class NewsDetail extends Component {
 
@@ -22,8 +23,8 @@ export default class NewsDetail extends Component {
 
     componentDidMount() {
         let newsId = this.props.route.params.newsId;
-         this.fetchNewsData(newsId);
-         this.fetchNewsCommentListData(newsId);
+        this.fetchNewsData(newsId);
+        this.fetchNewsCommentListData(newsId);
     }
 
     // 点击广告
@@ -88,7 +89,6 @@ export default class NewsDetail extends Component {
                     ></MyNavigationBar>
                     <View style={styles.topContainer}>
                         <SectionList
-                            showsVerticalScrollIndicator = {false}
                             ListHeaderComponent={this.headerView}
                             sections={this.state.commentList}
                             renderItem={this.subCommentItemView}
@@ -156,7 +156,6 @@ export default class NewsDetail extends Component {
                     data={this.state.newsDetailData.newsDetail.source}
                     renderItem={this.imgItemView}
                     style={styles.newsImgList}
-                    numColumns={3}
                 />
                 <View style={styles.newsInfoContainer1}>
                     <Image source={require('../source/首页定位.png')} style={styles.itemIcon}/>
@@ -168,9 +167,9 @@ export default class NewsDetail extends Component {
 
     imgItemView({ item }) {
         return (
-            <View style={styles.item}>
+            <View>
                 {/*<Image source={{uri: item.src}} style={styles.newsImg}/>*/}
-                <Image source={require('../source/banner.jpg')} style={styles.img2}/>
+                <Image source={require('../source/banner.jpg')} style={gImageStyles.bannerImg}/>
             </View>
         );
     }
