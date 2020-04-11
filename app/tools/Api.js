@@ -24,6 +24,19 @@ const httpApi={
         return res;
     },
 
+    async httpPostWithParamsStr(url, paramsStr) {
+        const [err, res] = await to(http.postWithStr(url, paramsStr));
+        if (err) {
+            //请求失败
+            return Object.assign(err, {
+                status: "406",
+                description: err.errMsg
+            }, true);
+        }
+        //请求成功
+        return res;
+    },
+
     // 获取新闻分类列表
     async getNewsTypeList(params) {
         const url = 'http://dd.shenruxiang.com/api/v1/post_cate_list';

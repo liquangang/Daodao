@@ -36,6 +36,8 @@ target 'Daodao' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'DaodaoTests' do
     inherit! :search_paths
     # Pods for testing

@@ -34,12 +34,29 @@ export default class Message extends Component {
 
     // 点击关注
     onClickAttention = (item) => {
-        console.log("-----------item", item);
         // 跳转个人详情
         let params = {
             userId: item.user.id,
         };
         this.props.navigation.navigate('PersonInfo', params);
+    }
+
+    // 点击评论
+    onClickComment = (item) => {
+        // 跳转帖子详情
+        let params = {
+            userId: item.post_id,
+        };
+        this.props.navigation.navigate('NewsDetail', params);
+    }
+
+    // 点击关注
+    onClickPraise = (item) => {
+        // 跳转帖子详情
+        let params = {
+            userId: item.post_id,
+        };
+        this.props.navigation.navigate('NewsDetail', params);
     }
 
     // 请求关注列表
@@ -282,7 +299,7 @@ export default class Message extends Component {
     commentItemView = (item) => {
         return(
             <View>
-                <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                <TouchableOpacity onPress={()=>this.onClickComment(item)}>
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
                         <TouchableOpacity>
@@ -309,7 +326,7 @@ export default class Message extends Component {
 
     praiseItemView = (item) => {
         return(<View><View>
-            <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+            <TouchableOpacity onPress={()=>this.onClickPraise(item)}>
                 <View style={styles.line}></View>
                 <View style={styles.msgContainer}>
                     <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
@@ -358,7 +375,7 @@ export default class Message extends Component {
     noticeItemView = (item) => {
 
         return(<View><View>
-            <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+            <TouchableOpacity>
                 <View style={styles.line}></View>
                 <View style={styles.msgContainer}>
                     <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>

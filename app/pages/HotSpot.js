@@ -74,7 +74,7 @@ export default class HotSpot extends Component {
         }
 
         return(
-            <View>
+            <View style={gViewStyles.rootViewContainer}>
                 <MyStatusBar/>
                 <MyNavigationBar
                     title={'热点'}

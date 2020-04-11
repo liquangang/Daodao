@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     searchTextInput: {
         flex: 1,
         height: 33,
+        color: '#333333'
     },
     avatar: {
         height: 25,
