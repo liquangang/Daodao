@@ -32,15 +32,13 @@ export default class BannerView extends Component {
                             Array.from(this.state.data).map((value, index, array)=>{
                                 return(
                                     <TouchableOpacity onPress={()=>this.onClickImg(value)} key={index}>
-                                        {/*<Image source={{uri: value.src}} style={styles.img}/>*/}
-                                        <Image source={require('../source/广告1.png')} style={styles.img}/>
+                                        <Image source={{uri: value.src}} style={styles.img}/>
                                     </TouchableOpacity>
                                 );
                             })
                         ) : (
                             <TouchableOpacity onPress={()=>this.onClickImg(this.state.data)}>
-                                {/*<Image source={{uri: this.state.data.src}} style={styles.img}/>*/}
-                                <Image source={require('../source/广告1.png')} style={styles.img}/>
+                                <Image source={{uri: this.state.data.src}} style={styles.img}/>
                             </TouchableOpacity>
                         )
                     }
@@ -56,11 +54,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     swiper: {
-        height: 144,
+        height: gScreen.screen_width / 3 * 2,
     },
     img: {
         width: gScreen.screen_width - 24,
-        height: 120,
+        height: gScreen.screen_width / 3 * 2 - 24 ,
         borderRadius: 5,
         margin: 12,
         marginBottom: 12,

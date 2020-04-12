@@ -5,6 +5,7 @@ import LoadingView from "../component/LoadingView";
 import {gViewStyles} from "../style/ViewStyles";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
+import NewsView from "../component/news/NewsView"
 
 // 个人详情页，注意与my页区分
 // 需要传入userid
@@ -18,10 +19,14 @@ export default class PersonInfo extends Component {
             attentionData: [],
             load: false,
             showType: 0, // 展示数据类型，0：资料部分，1：相册 2: 关注
+            userId: null,
         };
     }
 
     componentDidMount() {
+        this.setState({
+            userId: this.props.route.params.userId
+        });
         this.showNewsList();
     }
 
@@ -30,7 +35,7 @@ export default class PersonInfo extends Component {
             load: false,
             showType: 0,
         });
-        this.fetchPersonalData(this.props.route.params.userId);
+        this.fetchPersonalData(this.state.userId);
     }
 
     showalbum = () => {
@@ -38,11 +43,23 @@ export default class PersonInfo extends Component {
             load: false,
             showType: 1,
         });
-        this.fetchAlbumData(this.props.route.params.userId);
+        this.fetchAlbumData(this.state.userId);
     }
 
     showAttentioin = () => {
         this.fetchAttentionData();
+    }
+
+    // 点击关注
+    onClickAttention = (item) => {
+        // 跳转个人详情
+        this.setState({
+            userId: item.to_user_id,
+            personalData: [],
+            albumData: [],
+            attentionData: [],
+        });
+        this.showNewsList();
     }
 
     // 请求个人数据
@@ -89,11 +106,13 @@ export default class PersonInfo extends Component {
 
     // 请求关注列表
     fetchAttentionData = async() => {
-        let params = {};
-        let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/user_fan_list", params);
+        let params = {
+
+        };
+        let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/user_follow_list", params);
         if (res.status == 0) {
             this.setState({
-                attentionData: res.data.data,
+                attentionData: res.data,
                 showType: 2,
                 load: true
             });
@@ -119,8 +138,7 @@ export default class PersonInfo extends Component {
                     <View style={styles.itemContainer1}>
                         {/*有头像的部分*/}
                         <View style={styles.container2}>
-                            <Image source={require('../source/未登陆.png')}
-                                // source={{uri: this.state.data.user_info.avatar}}
+                            <Image source={{uri: this.state.personalData.user_info.avatar}}
                                    style={styles.img1}/>
                             <View style={styles.container3}>
                                 <Text style={styles.text1}>{this.state.personalData.user_info.nick_name}</Text>
@@ -137,10 +155,10 @@ export default class PersonInfo extends Component {
                                 <Text style={styles.text4}>相册</Text>
                                 {this.state.showType == 1 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={this.showAttentioin}>
-                                <Text style={styles.text4}>关注</Text>
-                                {this.state.showType == 2 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
-                            </TouchableOpacity>
+                            {/*<TouchableOpacity onPress={this.showAttentioin}>*/}
+                                {/*<Text style={styles.text4}>关注</Text>*/}
+                                {/*{this.state.showType == 2 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}*/}
+                            {/*</TouchableOpacity>*/}
                         </View>
                         <View style={styles.line5}></View>
                     </View>
@@ -160,15 +178,26 @@ export default class PersonInfo extends Component {
 
     listView = () => {
         if (this.state.showType == 0) {
+            // 资料
             return(
                 <FlatList
+                    extraData={this.state}
                     style={styles.container}
-                    data={this.state.personalData.post_list.data}
-                    renderItem={this.newsItemView}
+                    data={this.state.personalData.post_list}
+                    renderItem={({item})=>(<NewsView
+                         onClickNews={()=>{
+                             let params = {
+                                 newsId: item.id,
+                             };
+                             this.props.navigation.navigate('NewsDetail', params);
+                         }}
+                         data={item}
+                     ></NewsView>)}
                     ListHeaderComponent={this.topView}
                 />
             );
         } else if (this.state.showType == 1) {
+            // 相册
             return(<SectionList
                 style={styles.sectionList1}
                 stickySectionHeadersEnabled={false}
@@ -179,6 +208,7 @@ export default class PersonInfo extends Component {
                 renderSectionFooter={()=><View style={styles.line3}></View>}
             ></SectionList>);
         } else {
+            // 关注
             return(<FlatList
                 extraData={this.state}
                 data={this.state.attentionData}
@@ -193,7 +223,7 @@ export default class PersonInfo extends Component {
             <View style={gViewStyles.viewContainer2}>
 
                 {
-                    this.state.showType == 1 ? (<View style={styles.container5}>
+                    this.state.showType != 2 ? (<View style={styles.container5}>
                         <Text style={styles.text5}>性别：{this.state.personalData.user_info.sex}</Text>
                         <Text style={styles.text5}>星座：摩羯座</Text>
                         <Text style={styles.text5}>感情状况：单身</Text>
@@ -213,16 +243,13 @@ export default class PersonInfo extends Component {
                 <TouchableOpacity onPress={()=>this.onClickAttention(item)}>
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
-                        {/*<TouchableOpacity onPress={()=>this.onClickAvatar(item)}>*/}
-                        {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
-                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
-                        {/*</TouchableOpacity>*/}
+                        <Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>
                         <View style={styles.msgSubContainer}>
                             <View style={styles.mesSubContainer}>
-                                <Text style={styles.attentionNickNametext}>{item.user.nick_name}</Text>
+                                <Text style={styles.attentionNickNametext}>{item.to_user.nick_name}</Text>
                             </View>
                             <View style={styles.mesSubContainer1}>
-                                <Text style={styles.attentiontext1}>Ta关注了你！</Text>
+                                <Text style={styles.attentiontext1}>你关注了Ta！</Text>
                             </View>
                         </View>
                     </View>
@@ -237,7 +264,16 @@ export default class PersonInfo extends Component {
                 <Text style={styles.text5}>{item.created_at}</Text>
                 <View style={styles.line2}></View>
                 <Text style={styles.text6}>{item.post_content}</Text>
-                <Image source={require('../source/banner.jpg')} style={styles.newsImg}/>
+                {/*<Image source={{uri: item.src}} style={styles.newsImg}/>*/}
+                {/*<Image source={require('../source/广告4.jpg')} style={styles.newsImg}/>*/}
+
+                {/*动态图片部分*/}
+                <FlatList
+                    data={item.source}
+                    renderItem={this.newsImgItemView}
+                    style={styles.newsImgList}
+                    numColumns={2}
+                />
                 <View style={styles.bottomContainer}>
                     <View style={styles.bottomTopContainer}>
                         <Image source={require('../source/首页定位.png')} style={styles.itemIcon}/>
@@ -253,10 +289,12 @@ export default class PersonInfo extends Component {
                             <Image source={require('../source/首页评论.png')} style={styles.itemIcon}/>
                             <Text>{item.comment_num}</Text>
                         </View>
-                        <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/首页点赞.png')} style={styles.itemIcon}/>
-                            <Text>{item.praise_num}</Text>
-                        </View>
+                        <TouchableOpacity onPress={()=>this.onPraise(item)}>
+                            <View style={styles.bottomBottomSubContainer}>
+                                <Image source={require('../source/首页点赞.png')} style={styles.itemIcon}/>
+                                <Text>{item.praise_num}</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -280,8 +318,7 @@ export default class PersonInfo extends Component {
     imgItemView = ({item}) => {
         return(
             <View>
-                {/*<Image source={{uri: item.src}} style={styles.itemIcon}/>*/}
-                <Image source={require('../source/banner.jpg')} style={styles.newsImg}/>
+                <Image source={{uri: item.src}} style={styles.albumImg}/>
             </View>
         );
     }
@@ -290,6 +327,14 @@ export default class PersonInfo extends Component {
         return(
             <View>
                 <Text style={styles.text8}>{section.title}</Text>
+            </View>
+        );
+    }
+
+    newsImgItemView({ item }) {
+        return (
+            <View>
+                <Image source={{uri: item.src}} style={styles.newsImgs}/>
             </View>
         );
     }
@@ -346,9 +391,6 @@ const styles = StyleSheet.create({
         marginTop: 1,
         backgroundColor: 'white',
         padding: 10,
-    },
-    text5: {
-        margin: 5,
     },
     itemContainer2: {
         marginTop: 5,
@@ -409,14 +451,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
     },
-    newsImg: {
-        marginTop: 2,
-        marginBottom: 2,
-        marginLeft: 2,
-        marginRight: 2,
-        height: width/4,
-        width: width/4,
-    },
     line3: {
         height: 10,
         backgroundColor: '#F2F2F2'
@@ -437,8 +471,14 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     newsImg: {
-        width: (gScreen.screen_width - 44) / 3,
-        height: (gScreen.screen_width - 44) / 3,
+        width: (gScreen.screen_width - 20) / 2,
+        height: (gScreen.screen_width - 20) / 2,
+        margin: 5,
+        borderRadius: 5,
+    },
+    albumImg: {
+        width: (gScreen.screen_width - 30) / 3,
+        height: (gScreen.screen_width - 30) / 3,
         margin: 5,
         borderRadius: 5,
     },
@@ -452,5 +492,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 60,
+    },
+    avatar: {
+        borderRadius: 27,
+        width: 54,
+        height: 54,
+        marginLeft: 10,
+    },
+    msgSubContainer: {
+        width: width - 100,
+        marginLeft: 7,
+    },
+    newsImgs: {
+        marginTop: 2,
+        marginBottom: 2,
+        marginLeft: 2,
+        marginRight: 2,
+        width: width/2 - 5,
+        height: width/2 - 5,
     },
 });

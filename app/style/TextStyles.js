@@ -28,5 +28,8 @@ export const gTextStyles = StyleSheet.create({
     nickNameText: {
         fontSize: 17,
         marginLeft: 6,
-    }
+    },
+    timeText: {
+        margin: 5,
+    },
 });

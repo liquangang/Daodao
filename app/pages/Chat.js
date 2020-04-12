@@ -1,23 +1,100 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, SafeAreaView, Image, TouchableOpacity, Dimensions, TextInput, FlatList} from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    SafeAreaView,
+    Image,
+    TouchableOpacity,
+    Dimensions,
+    TextInput,
+    FlatList,
+    Keyboard
+} from "react-native";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import {gViewStyles} from "../style/ViewStyles";
 import {gImageStyles} from "../style/ImageStyles";
 import {gTextStyles} from "../style/TextStyles";
+import httpApi from "../tools/Api";
+import LoadingView from "../component/LoadingView";
 
 export default class Chat extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            a: 1,
+            data: null,
+            load: false,
+            keyboardHeight: 0,
         };
+
+        this.keyboardWillShowListener = null;
+        this.keyboardWillHideListener = null;
+    }
+
+    componentDidMount() {
+        this.fetchChatData();
+        this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow',this.keyboardDidShow);
+        this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide',this.keyboardDidHide);
     }
 
 
+    //注销监听
+    componentWillUnmount () {
+        this.keyboardWillShowListener && this.keyboardWillShowListener.remove();
+        this.keyboardWillHideListener && this.keyboardWillHideListener.remove();
+    }
+
+
+    //键盘弹起后执行
+    keyboardDidShow = (event) =>  {
+        this.setState({
+            keyboardHeight: event.endCoordinates.height,
+        });
+    }
+
+    //键盘收起后执行
+    keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0,
+        });
+    }
+
+    onEndEditing = async (text) => {
+        let params = '';
+        params+=("to_user_id=" + this.props.route.params.userId + '&');
+        params+=('content=' + text + '&');
+        params+=('content_type=' + 1 + '&');
+
+        let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_send_message', params);
+        if (res.status == 0) {
+            this.fetchChatData();
+            this.refs.textInput.clear();
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+    fetchChatData = async () => {
+        let params = '';
+        params+=("to_user_id=" + this.props.route.params.userId + '&');
+
+        let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_message_history_list', params);
+        if (res.status == 0) {
+            this.setState({
+                data: res.data,
+                load: true,
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
 
     render() {
+        if (!this.state.load) {
+            return <LoadingView/>;
+        }
         return(
 
             <View style={gViewStyles.rootViewContainer}>
@@ -29,14 +106,18 @@ export default class Chat extends Component {
                     ></MyNavigationBar>
                     <View style={styles.chat}>
                         <FlatList
-                            data={[{key: '1'}, {key: '2'}]}
+                            ref = "flatList"
+                            onContentSizeChange={()=> this.refs.flatList.scrollToEnd()}
+                            data={this.state.data}
                             renderItem={this.chatItemView}
                             style={styles.chatList}
                         ></FlatList>
                     </View>
-                    <View style={styles.input}>
+                    <View style={[styles.input, {marginBottom: this.state.keyboardHeight}]}>
                         <TextInput underlineColorAndroid="transparent" placeholder="这里输入消息"
-                                   style={styles.searchTextInput}>
+                                   ref='textInput'
+                                   style={styles.searchTextInput}
+                                   onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
                         </TextInput>
                         {/*<View style={styles.input2}>*/}
                         {/*<TouchableOpacity onPress={()=>{alert(1)}}>*/}
@@ -62,18 +143,10 @@ export default class Chat extends Component {
     };
 
     chatItemView = ({item}) => {
-        switch (item.key) {
-            case '1':
-            {
-                return(this.leftChatItemView({item}));
-            }
-                break;
-            case '2':
-            {
-                return(this.rightChatItemView({item}));
-
-            }
-                break;
+        if (item.user_id == 2) {
+            return(this.leftChatItemView({item}));
+        } else {
+            return(this.rightChatItemView({item}));
         }
     }
 
@@ -81,14 +154,10 @@ export default class Chat extends Component {
         return(
             <View style={styles.chatItemView1}>
                 <TouchableOpacity>
-                    <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                    <Image source={{uri: item.user.avatar}} style={styles.avatar}/>
                 </TouchableOpacity>
-                {/*<Image source={require('../source/avatar.jpg')} style={styles.avatar}/>*/}
                 <View style={styles.leftMes}>
-                    <Text style={styles.mes1}>{item.key} {this.state.a}这里是消息这里是消息这里是消息这里是消息这里是消息这
-                        里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
-                        消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
-                        息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
+                    <Text style={styles.mes1}>{item.content}</Text>
                 </View>
 
             </View>
@@ -98,14 +167,10 @@ export default class Chat extends Component {
     rightChatItemView = ({ item }) =>  {
         return(<View style={styles.chatItemView2}>
             <View style={styles.rightMes}>
-                <Text style={styles.mes2}>这里是消息这里是消息这里是消息这里是消息这里是消息这
-                    里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是
-                    消息这里是消息这里是消息这里是消息这里是消息这里是消息这里是消
-                    息这里是消息这里是消息这里是消息这里是消息这里是消息</Text>
+                <Text style={styles.mes2}>{item.content}</Text>
             </View>
-            {/*<Image source={require('../source/avatar.jpg')} style={styles.avatar}/>*/}
             <TouchableOpacity>
-                <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                <Image source={{uri: item.user.avatar}} style={styles.avatar}/>
             </TouchableOpacity>
         </View>);
     }

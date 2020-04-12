@@ -163,5 +163,16 @@ export const gViewStyles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    praiseView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    bottomLoad: {
+        width: gScreen.screen_width,
+        height: 25,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

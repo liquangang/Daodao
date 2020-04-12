@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, Image, ImageBackground, FlatList, Dimensions } from "react-native";
+import {Text, View, StyleSheet, Image, ImageBackground, FlatList, Dimensions, TouchableOpacity } from "react-native";
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
 
@@ -53,7 +53,45 @@ export default class My extends Component {
                 {this.topView()}
                 <FlatList
                     style={styles.list}
-                    renderItem={this.myItemView}
+                    renderItem={({item, index})=>(<TouchableOpacity onPress={()=>{
+                        if (item.title == '我的动态') {
+                            let params = {
+                                userId: 2,
+                            };
+                            this.props.navigation.navigate('PersonInfo', params);
+                        } else if (item.title == '我的相册') {
+                            let params = {
+                                userId: 2,
+                            };
+                            this.props.navigation.navigate('PersonInfo', params);
+                        } else if (item.title == '实名认证') {
+
+                        } else if (item.title == '广告投放') {
+
+                        } else if (item.title == '帮助中心') {
+
+                        } else if (item.title == '投诉反馈') {
+
+                        } else if (item.title == '在线客服') {
+
+                        } else if (item.title == '关于我们') {
+
+                        } else if (item.title == '检查更新') {
+
+                        } else {
+
+                        }
+                    }}>
+                        <View style={styles.itemContainer}>
+                            <View style={styles.itemInfoContainer}>
+                                <Image source={item.img}
+                                       style={styles.itemIcon}/>
+                                <Text style={styles.itemText}>{item.title}</Text>
+                                <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
+                            </View>
+                            <View style={styles.bottomLine}></View>
+                        </View>
+                    </TouchableOpacity>)}
                     data={this.state.optionData}
                 />
             </View>
@@ -75,19 +113,6 @@ export default class My extends Component {
         );
     }
 
-    myItemView({ item }) {
-        return (
-            <View style={styles.itemContainer}>
-                <View style={styles.itemInfoContainer}>
-                    <Image source={item.img}
-                           style={styles.itemIcon}/>
-                    <Text style={styles.itemText}>{item.title}</Text>
-                    <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
-                </View>
-                <View style={styles.bottomLine}></View>
-            </View>
-        );
-    }
 }
 
 const {width, height, scale} = Dimensions.get('window');

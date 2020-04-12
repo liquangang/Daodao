@@ -1,12 +1,15 @@
 import React, {Component} from "react";
 import {View, StyleSheet, Image, Text, Dimensions, FlatList, TouchableOpacity, ImageBackground } from "react-native";
+import httpApi from "../../tools/Api";
+import {gTextStyles} from "../../style/TextStyles";
 
 export default class NewsView extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: this.props.data
+            data: this.props.data,
+            isShowPersonInfo: this.props.isShowPersonInfo,
         };
     }
 
@@ -18,29 +21,53 @@ export default class NewsView extends Component {
         this.props.onClickNews(newsId);
     }
 
+    onPraise = async (item) => {
+        let params = '';
+        params+=("post_id=" + item.id + '&');
+        params+=('to_user_id=' + item.user_id + '&');
+
+        let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/post_comment_praise', params);
+        if (res.status == 0) {
+            let newData = this.state.data;
+            if (newData.user_priase == null) {
+                newData.user_priase = 1;
+                newData.praise_num+=1;
+            } else {
+                newData.user_priase = null;
+                newData.praise_num-=1;
+            }
+            this.setState({
+                data: newData
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.bottomSegmentation}></View>
 
-                {/*动态上部部分*/}
-                <View style={styles.topInfoContainer}>
-                    {/*头像*/}
-                    <TouchableOpacity onPress={()=>this.onClickAvatar(this.state.data.user.id)}>
-                        {/*<Image source={{uri: this.state.data.user.avatar}}*/}
-                               {/*style={styles.avatar}/>*/}
-                        <Image source={require('../../source/未登陆.png')}
-                               style={styles.avatar}/>
-                    </TouchableOpacity>
-                    <View style={styles.topSubInfoContainer}>
-                        <Text style={styles.nickName}>{this.state.data.user.nick_name}</Text>
-                        <View style={styles.topSubInfoBottomContainer}>
-                            <Text style={styles.publishTime}>{this.state.data.created_at}</Text>
-                            <Text style={styles.phoneModel}>来自：{this.state.data.phone_model}</Text>
+                {this.state.isShowPersonInfo == true ? (
+                    <View style={styles.topInfoContainer}>
+                        {/*头像*/}
+                        <TouchableOpacity onPress={()=>this.onClickAvatar(this.state.data.user.id)}>
+                            <Image source={{uri: this.state.data.user.avatar}}
+                                   style={styles.avatar}/>
+                            {/*<Image source={require('../../source/未登陆.png')}*/}
+                            {/*style={styles.avatar}/>*/}
+                        </TouchableOpacity>
+                        <View style={styles.topSubInfoContainer}>
+                            <Text style={styles.nickName}>{this.state.data.user.nick_name}</Text>
+                            <View style={styles.topSubInfoBottomContainer}>
+                                <Text style={styles.publishTime}>{this.state.data.created_at}</Text>
+                                <Text style={styles.phoneModel}>来自：{this.state.data.phone_model}</Text>
+                            </View>
                         </View>
-                    </View>
-                    <Text style={styles.text10}>+ 关注</Text>
-                </View>
+                        <Text style={styles.text10}>+ 关注</Text>
+                    </View>) : (<Text style={gTextStyles.timeText}>{this.state.data.created_at}</Text>)}
+
 
                 <View style={styles.segmentation}></View>
 
@@ -53,7 +80,7 @@ export default class NewsView extends Component {
                         data={this.state.data.source}
                         renderItem={this.imgItemView}
                         style={styles.newsImgList}
-                        numColumns={3}
+                        numColumns={2}
                     />
                 </TouchableOpacity>
 
@@ -74,10 +101,15 @@ export default class NewsView extends Component {
                             <Image source={require('../../source/首页评论.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.comment_num}</Text>
                         </View>
-                        <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/首页点赞.png')} style={styles.itemIcon}/>
-                            <Text>{this.state.data.praise_num}</Text>
-                        </View>
+                        <TouchableOpacity onPress={()=>this.onPraise(this.state.data)}>
+                            <View style={styles.bottomBottomSubContainer}>
+                                {this.state.data.user_priase != null ? (
+                                    <Image source={require('../../source/首页点赞.png')} style={styles.itemIcon}/>
+                                ) : (<Image source={require('../../source/首页点赞-未点亮.png')} style={styles.itemIcon}/>
+                                )}
+                                <Text>{this.state.data.praise_num}</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -87,10 +119,8 @@ export default class NewsView extends Component {
 
     imgItemView({ item }) {
         return (
-            <View style={styles.item}>
-                <ImageBackground source={require('../../source/banner.jpg')} style={styles.newsImg}>
-                    <Image source={{uri: item.src}} style={styles.newsImg}/>
-                </ImageBackground>
+            <View>
+                <Image source={{uri: item.src}} style={styles.newsImg}/>
             </View>
         );
     }
@@ -149,8 +179,8 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         marginLeft: 2,
         marginRight: 2,
-        height: width/4,
-        width: width/4,
+        width: width/2 - 5,
+        height: width/2 - 5,
     },
     bottomContainer: {
 

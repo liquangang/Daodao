@@ -16,12 +16,12 @@ export default class Message extends Component {
             data: [[], [], [], [], []],
             titleList: ['关注', '评论', '点赞', '私信', '通知'],
             load: false,
-            showIndex: 1
+            showIndex: 0
         };
     }
 
     componentDidMount() {
-        this.fetchAttentionData();
+        this.fetchFansData();
     }
 
     // 点击头像
@@ -59,11 +59,21 @@ export default class Message extends Component {
         this.props.navigation.navigate('NewsDetail', params);
     }
 
-    // 请求关注列表
-    fetchAttentionData = async() => {
+    // 请求粉丝列表
+    fetchFansData = async() => {
         let params = {};
         let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/user_fan_list", params);
-        this.updateData(0, res);
+        if (res.status == 0) {
+            let newData = this.state.data;
+            newData[0] = res.data;
+            this.setState({
+                data: newData,
+                showIndex: 0,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
     }
 
     // 请求评论列表
@@ -73,11 +83,21 @@ export default class Message extends Component {
         this.updateData(1, res);
     }
 
-    // 请求点赞列表
-    fetchPraiseData = async() => {
+    // 请求关注列表
+    fetchAttentionData = async() => {
         let params = {};
-        let res = await httpApi.httpPost('http://dd.shenruxiang.com/api/v1/user_praise_list', params);
-        this.updateData(2, res);
+        let res = await httpApi.httpPost('http://dd.shenruxiang.com/api/v1/user_follow_list', params);
+        if (res.status == 0) {
+            let newData = this.state.data;
+            newData[2] = res.data;
+            this.setState({
+                data: newData,
+                showIndex: 2,
+                load: true
+            });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
     }
 
     // 请求私信列表
@@ -138,11 +158,11 @@ export default class Message extends Component {
 
     fetchData = (index) => {
         if (index == 0) {
-            this.fetchAttentionData();
+            this.fetchFansData();
         } else if (index == 1) {
             this.fetchCommentData();
         } else if (index == 2) {
-            this.fetchPraiseData();
+            this.fetchAttentionData();
         } else if (index == 3) {
             this.fetchChatData();
         } else if (index == 4) {
@@ -150,9 +170,9 @@ export default class Message extends Component {
         }
     }
 
-    onClickItem = (item) => {
+    onClickChat = (item) => {
         let params = {
-
+            userId: item.to_user_id,
         };
         this.props.navigation.navigate('Chat', params);
     }
@@ -198,7 +218,7 @@ export default class Message extends Component {
                     <TouchableOpacity onPress={()=>this.onChangeTabs(0)}>
                         <Image source={require('../source/关注.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
-                    <Text style={styles.msgDes}>关注</Text>
+                    <Text style={styles.msgDes}>粉丝</Text>
                     {this.state.showIndex == 0 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
                 </View>
 
@@ -214,7 +234,7 @@ export default class Message extends Component {
                     <TouchableOpacity onPress={()=>this.onChangeTabs(2)}>
                         <Image source={require('../source/点赞.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
-                    <Text style={styles.msgDes}>点赞</Text>
+                    <Text style={styles.msgDes}>关注</Text>
                     {this.state.showIndex == 2 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
                 </View>
 
@@ -241,7 +261,7 @@ export default class Message extends Component {
         switch (this.state.showIndex) {
             case 0:
             {
-                return(this.attentionItemView(item));
+                return(this.fansItemView(item));
             }
                 break;
             case 1:
@@ -251,7 +271,7 @@ export default class Message extends Component {
                 break;
             case 2:
             {
-                return(this.praiseItemView(item));
+                return(this.attentionItemView(item));
             }
                 break;
             case 3:
@@ -279,8 +299,32 @@ export default class Message extends Component {
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
                         {/*<TouchableOpacity onPress={()=>this.onClickAvatar(item)}>*/}
-                            {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
-                            <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                            <Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>
+                            {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
+                        {/*</TouchableOpacity>*/}
+                        <View style={styles.msgSubContainer}>
+                            <View style={styles.mesSubContainer}>
+                                <Text style={styles.text1}>{item.to_user.nick_name}</Text>
+                            </View>
+                            <View style={styles.mesSubContainer1}>
+                                <Text style={styles.text2}>你关注了Ta！</Text>
+                            </View>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    fansItemView = (item) => {
+        return(
+            <View>
+                <TouchableOpacity onPress={()=>this.onClickAttention(item)}>
+                    <View style={styles.line}></View>
+                    <View style={styles.msgContainer}>
+                        {/*<TouchableOpacity onPress={()=>this.onClickAvatar(item)}>*/}
+                        <Image source={{uri: item.user.avatar}} style={styles.avatar}/>
+                        {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
                         {/*</TouchableOpacity>*/}
                         <View style={styles.msgSubContainer}>
                             <View style={styles.mesSubContainer}>
@@ -303,7 +347,8 @@ export default class Message extends Component {
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
                         <TouchableOpacity>
-                            <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                            {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
+                            <Image source={{uri: item.user.avatar}} style={styles.avatar}/>
                         </TouchableOpacity>
                         <View style={styles.msgSubContainer}>
                             <View style={styles.mesSubContainer}>
@@ -330,12 +375,12 @@ export default class Message extends Component {
                 <View style={styles.line}></View>
                 <View style={styles.msgContainer}>
                     <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
-                        {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
-                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                        <Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>
+                        {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
                     </TouchableOpacity>
                     <View style={styles.msgSubContainer}>
                         <View style={styles.mesSubContainer}>
-                            <Text style={styles.text1}>给你点赞的用户昵称</Text>
+                            <Text style={styles.text1}>{item.to_user.nick_name}</Text>
                         </View>
                         <View style={styles.mesSubContainer1}>
                             <Text style={styles.text2}>Ta给你点赞啦！</Text>
@@ -348,15 +393,16 @@ export default class Message extends Component {
 
     chatItemView = (item) => {
         return(<View>
-            <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+            <TouchableOpacity onPress={()=>this.onClickChat(item)}>
                 <View style={styles.line}></View>
                 <View style={styles.msgContainer}>
                     <TouchableOpacity>
-                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+                        {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
+                        <Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>
                     </TouchableOpacity>
                     <View style={styles.msgSubContainer}>
                         <View style={styles.mesSubContainer}>
-                            <Text style={styles.text1}>给你发私信的人的昵称</Text>
+                            <Text style={styles.text1}>{item.to_user.nick_name}</Text>
                             <View style={styles.container1}>
                                 <Text style={styles.text3}>1小时前</Text>
                                 <Text style={styles.text2}> * </Text>
@@ -378,10 +424,6 @@ export default class Message extends Component {
             <TouchableOpacity>
                 <View style={styles.line}></View>
                 <View style={styles.msgContainer}>
-                    <TouchableOpacity onPress={()=>this.onClickAvatar(item)}>
-                        {/*<Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>*/}
-                        <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
-                    </TouchableOpacity>
                     <View style={styles.msgSubContainer}>
                         <View style={styles.mesSubContainer}>
                             <Text style={styles.text1}>消息通知</Text>
@@ -428,7 +470,6 @@ const styles = StyleSheet.create({
         height: 60,
     },
     avatar: {
-        flex: 54,
         borderRadius: 27,
         width: 54,
         height: 54,

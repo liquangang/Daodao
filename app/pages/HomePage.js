@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions, FlatList, Image, TouchableOpacity, Text, ScrollView, StatusBar } from "react-native";
+import { View, StyleSheet, Dimensions, FlatList, Image, TouchableOpacity, Text, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchView from "../component/SearchView";
 import TitleListView from "../component/TitleListView";
@@ -10,6 +10,7 @@ import LoadingView from "../component/LoadingView";
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import {gViewStyles} from "../style/ViewStyles";
 import MyStatusBar from "../component/MyStatusBar";
+import NewsList from '../component/NewsList'
 
 export default class HomePage extends Component {
 
@@ -19,8 +20,11 @@ export default class HomePage extends Component {
         this.state = {
             newsTypeList: [],
             newsList: [],
+            pageList: [],
             loaded: false,
-            showIndex: 0
+            showIndex: 0,
+            headerLoad: false,
+            listLoad: true,
         };
 
     }
@@ -75,6 +79,7 @@ export default class HomePage extends Component {
 
         this.setState({
             showIndex: this.state.newsTypeList.findIndex(()=>item==item),
+            headerLoad: false,
         });
 
     }
@@ -98,6 +103,7 @@ export default class HomePage extends Component {
         this.props.navigation.navigate('Search', params);
     }
 
+
     // ------------------------------ 网络请求 -------------------------------------------
 
     // 请求新闻分类列表
@@ -106,7 +112,12 @@ export default class HomePage extends Component {
         let res = await httpApi.getNewsTypeList(params);
 
         if (res.status == 0) {
+            let newPageList = [];
+            for (let i = 0; i < res.data.length; i++) {
+                newPageList[res.data[i].id] = 1;
+            }
             this.setState({
+                pageList: newPageList,
                 newsTypeList: res.data,
                 loaded: true
             });
@@ -135,7 +146,40 @@ export default class HomePage extends Component {
         }
     }
 
-    // -------------------------- view 层 ------------------------------------
+    // 上拉加载
+    onLoadMoreData = async (value) => {
+
+        if (this.state.listLoad == false) {
+            return;
+        }
+
+        let params = '';
+        params+=("post_cate_id=" + value.id + '&');
+        params+=('page=' + (this.state.pageList[value.id]+=1) + '&');
+
+        let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/post_list', params);
+        if (res.status == 0) {
+
+            if (res.data.data.length > 0) {
+                let newNewsList = this.state.newsList;
+                for (let i = 0; i < res.data.data.length; i++) {
+                    newNewsList[value.id].push(res.data.data[i]);
+                }
+                this.setState({
+                    newsList: newNewsList,
+                });
+            } else {
+                this.setState({
+                    listLoad: false,
+                });
+            }
+
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+ // -------------------------- view 层 ------------------------------------
     render() {
 
         if (!this.state.loaded) {
@@ -168,14 +212,52 @@ export default class HomePage extends Component {
                     tabBarTextStyle={styles.text9}
                     onChangeTab={this.onChangeTabs}
                 >
-                    {this.state.newsTypeList.map((value, index, array)=>{
-                        return(<FlatList
-                            tabLabel={value.name}
-                            data={this.state.newsList[value.id]}
-                            renderItem={this.newsListItemView}
-                            style={styles.newsList}
-                            key={index}
-                        />);
+                    {this.state.newsTypeList.map((value, index, array) => {
+                        return (
+                            <View
+                                tabLabel={value.name}
+                            >
+                                <FlatList
+                                    data={this.state.newsList[value.id]}
+                                    renderItem={this.newsListItemView}
+                                    style={styles.newsList}
+                                    key={index}
+                                    ListFooterComponent={()=>(
+                                        this.state.listLoad == true ? (<View style={styles.indicatorContainer}>
+                                            <ActivityIndicator
+                                                style={styles.indicator}
+                                                size={'small'}
+                                                animating={true}
+                                            />
+                                        </View>) : (<View style={gViewStyles.bottomLoad}><Text>到底啦！</Text></View>)
+                                        )}
+                                    refreshControl={
+                                        <RefreshControl
+                                            refreshing={this.state.headerLoad}
+                                            onRefresh={()=>{
+                                                this.setState({
+                                                    newsTypeList: [],
+                                                    newsList: [],
+                                                    pageList: [],
+                                                    loaded: false,
+                                                    showIndex: index,
+                                                    listLoad: true,
+                                                    headerLoad: true,
+                                                });
+                                                this.componentDidMount();
+                                            }}
+                                            enabled={true}
+                                        />
+                                    }
+                                    onEndReached={()=>{
+                                        this.onLoadMoreData(value, index);
+                                    }}
+                                    onEndReachedThreshold={0.1}
+                                />
+                            </View>
+
+
+                        );
                     })}
 
                 </ScrollableTabView>
@@ -197,6 +279,7 @@ export default class HomePage extends Component {
                     onClickAvatar = {this.onClickAvatar}
                     onClickNews={this.onClickNews}
                     data={item.item.data}
+                    isShowPersonInfo={true}
                 ></NewsView>
             );
         }
@@ -245,5 +328,12 @@ const styles = StyleSheet.create({
     text9: {
         color: 'white',
         fontSize: 16
+    },
+    indicatorContainer:{
+        alignItems:'center'
+    },
+    indicator:{
+        color:'red',
+        margin:10
     }
 });

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {Text, View, StyleSheet, FlatList, TextInput, TouchableOpacity,
-    Image, Dimensions, SectionList, SafeAreaView} from "react-native";
+    Image, Dimensions, SectionList, SafeAreaView, Keyboard} from "react-native";
 import httpApi from "../tools/Api";
 import BannerView from "../component/BannerView"
 import LoadingView from "../component/LoadingView";
@@ -17,7 +17,14 @@ export default class NewsDetail extends Component {
             newsDetailData: [],
             commentList: [],
             load: false,
+            toUserId: null,
+            autoFocus: null,
+            keyboardHeight: 0,
+            commentId: null,
         };
+
+        this.keyboardWillShowListener = null;
+        this.keyboardWillHideListener = null;
 
     }
 
@@ -25,6 +32,30 @@ export default class NewsDetail extends Component {
         let newsId = this.props.route.params.newsId;
         this.fetchNewsData(newsId);
         this.fetchNewsCommentListData(newsId);
+
+        this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow',this.keyboardDidShow);
+        this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide',this.keyboardDidHide);
+    }
+
+    //注销监听
+    componentWillUnmount () {
+        this.keyboardWillShowListener && this.keyboardWillShowListener.remove();
+        this.keyboardWillHideListener && this.keyboardWillHideListener.remove();
+    }
+
+
+    //键盘弹起后执行
+    keyboardDidShow = (event) =>  {
+        this.setState({
+            keyboardHeight: event.endCoordinates.height
+        });
+    }
+
+    //键盘收起后执行
+    keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0
+        });
     }
 
     // 点击广告
@@ -34,6 +65,29 @@ export default class NewsDetail extends Component {
                 url: item.href,
             };
             this.props.navigation.navigate('WebPage', params);
+        }
+    }
+
+    // 结束评论编辑
+    onEndEditing = (text) => {
+        this.uploadComment(text)
+    }
+
+    // 上传评论
+    uploadComment = async (text) => {
+        let params = '';
+        params+=("post_id=" + this.props.route.params.newsId + '&');
+        params+=('comment_content=' + text + '&');
+        params+=('to_user_id=' + this.state.toUserId + '&');
+        params+=('comment_id=' + this.state.commentId + '&');
+
+        let res = await httpApi.httpPostWithParamsStr("http://dd.shenruxiang.com/api/v1/send_post_comment", params);
+        if (res.status == 0) {
+            this.refs.textInputRefer.clear();
+            let newsId = this.props.route.params.newsId;
+            this.fetchNewsCommentListData(newsId);
+        } else {
+            alert("网络异常！请检查网络！");
         }
     }
 
@@ -48,7 +102,22 @@ export default class NewsDetail extends Component {
 
             this.setState({
                 newsDetailData: res.data,
+                toUserId: res.data.newsDetail.user.nick_name
             });
+        } else {
+            alert("网络异常！请检查网络！");
+        }
+    }
+
+    onPraise = async (item) => {
+        let params = '';
+        params+=("post_id=" + this.props.route.params.newsId + '&');
+        params+=('to_user_id=' + item.to_user_id + '&');
+        params+=('comment_id=' + item.comment_id + '&');
+
+        let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/post_comment_praise', params);
+        if (res.status == 0) {
+            this.fetchNewsCommentListData(this.props.route.params.newsId);
         } else {
             alert("网络异常！请检查网络！");
         }
@@ -57,7 +126,7 @@ export default class NewsDetail extends Component {
     // 请求帖子评论列表数据
     fetchNewsCommentListData = async (newsId) => {
         let params = {
-            post_id: 4
+            post_id: newsId
         };
         let res = await httpApi.getNewsCommentListData(params);
 
@@ -98,9 +167,13 @@ export default class NewsDetail extends Component {
                         ></SectionList>
                     </View>
 
-                    <View style={styles.inputContainer}>
-                        <TextInput underlineColorAndroid="transparent" placeholder="输入评论内容"
-                                   style={styles.input}>
+                    <View style={[styles.inputContainer, {marginBottom: this.state.keyboardHeight}]}>
+                        <TextInput underlineColorAndroid="transparent"
+                                   placeholder="输入评论内容"
+                                   ref='textInputRefer'
+                                   style={styles.input}
+                                   returnKeyType="send"
+                                   onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
                         </TextInput>
                         <TouchableOpacity>
                             <Image source={require('../source/详情分享.png')} style={styles.shareIcon}/>
@@ -131,9 +204,9 @@ export default class NewsDetail extends Component {
         return(
             <View style={styles.userInfoContainer}>
                 <TouchableOpacity>
-                    <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
-                    {/*<Image source={{uri: this.state.newsDetailData.newsDetail.user.avatar}}*/}
-                           {/*style={styles.avatar}/>*/}
+                    {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
+                    <Image source={{uri: this.state.newsDetailData.newsDetail.user.avatar}}
+                           style={styles.avatar}/>
                 </TouchableOpacity>
                 <View style={styles.userInfoContainer1}>
                     <Text style={styles.userInfoText1}>{this.state.newsDetailData.newsDetail.user.nick_name}</Text>
@@ -176,40 +249,78 @@ export default class NewsDetail extends Component {
 
     commentItemView = ({ section: { title, data } }) => {
         let commentData = title;
+
         return(
             <View>
-                <View style={styles.commentContainer}>
-                    <Image source={require('../source/未登陆.png')} style={styles.img1}/>
-                    <View style={styles.commentContainer1}>
-                        <View style={styles.commentContainer2}>
-                            <Text style={styles.commentText}>{commentData.user.nick_name}</Text>
-                            <Image source={require('../source/首页点赞.png')} style={styles.commentImg}/>
-                            <Text style={styles.commentText2}>{commentData.praise_num}</Text>
-                        </View>
-                        <Text style={styles.commentText1}>{commentData.content}</Text>
-                        <Text style={styles.commentText3}>{commentData.created_at}</Text>
+                <TouchableOpacity onPress={()=>{
+                    this.setState({
+                        toUserId: commentData.user.id,
+                        commentId: commentData.id,
+                    });
+                    this.refs.textInputRefer.focus();
+                }}>
+                    <View style={styles.commentContainer}>
+                        <Image source={{uri: commentData.user.avatar}} style={styles.img1}/>
+                            <View style={styles.commentContainer1}>
+                                <View style={styles.commentContainer2}>
+                                    <Text style={styles.commentText}>{commentData.user.nick_name}</Text>
+                                    <TouchableOpacity onPress={() => this.onPraise(commentData)}>
+                                        <View style={gViewStyles.praiseView}>
+                                            {commentData.comment_priase != null ? (
+                                                <Image source={require('../source/首页点赞.png')}
+                                                       style={styles.commentImg}/>
+                                            ) : (<Image source={require('../source/首页点赞-未点亮.png')}
+                                                        style={styles.commentImg}/>
+                                            )}
+                                            <Text style={styles.commentText2}>{commentData.praise_num}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <Text style={styles.commentText1}>{commentData.content}</Text>
+                                <Text style={styles.commentText3}>{commentData.created_at}</Text>
+                            </View>
                     </View>
-                </View>
-                <View style={styles.commentLine}></View>
+                    <View style={styles.commentLine}></View>
+                </TouchableOpacity>
             </View>
         );
     };
 
     subCommentItemView = ({ item }) => {
-        return( <View>
-            <View style={styles.subCommentContainer}>
-                <Image source={require('../source/未登陆.png')} style={styles.img1}/>
-                <View style={styles.commentContainer1}>
-                    <View style={styles.commentContainer2}>
-                        <Text style={styles.commentText}> {item.user.nick_name}</Text>
-                        <Image source={require('../source/首页点赞.png')} style={styles.commentImg}/>
-                        <Text style={styles.commentText2}>{item.praise_num}</Text>
+
+        return(
+            <View>
+                <TouchableOpacity onPress={()=>{
+                    this.setState({
+                        toUserId: item.user.id,
+                        commentId: commentData.id,
+                    });
+                    this.refs.textInputRefer.focus();
+                }}>
+                    <View style={styles.subCommentContainer}>
+                        <Image source={{uri: item.user.avatar}} style={styles.img1}/>
+                            <View style={styles.commentContainer3}>
+                                <View style={styles.commentContainer4}>
+                                    <Text style={styles.commentText}> {item.user.nick_name}</Text>
+                                    <TouchableOpacity onPress={() => this.onPraise(item)}>
+                                        <View style={gViewStyles.praiseView}>
+                                            {item.comment_priase != null ? (
+                                                <Image source={require('../source/首页点赞.png')}
+                                                       style={styles.commentImg}/>
+                                            ) : (<Image source={require('../source/首页点赞-未点亮.png')}
+                                                        style={styles.commentImg}/>
+                                            )}
+                                            <Text style={styles.commentText2}>{item.praise_num}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <Text style={styles.commentText1}>{item.user.nick_name} @ {item.to_user.nick_name}：{item.content}</Text>
+                                <Text style={styles.commentText3}>{item.created_at}</Text>
+                            </View>
                     </View>
-                    <Text style={styles.commentText1}>{item.user.nick_name} @ {item.to_user.nick_name}：{item.content}</Text>
-                    <Text style={styles.commentText3}>{item.created_at}</Text>
-                </View>
-            </View>
-            <View style={styles.commentLine}></View>
+                    <View style={styles.commentLine}></View>
+                </TouchableOpacity>
+
         </View>);
     }
 }
@@ -312,11 +423,10 @@ const styles = StyleSheet.create({
     },
     commentContainer1: {
         marginLeft: 5,
-        flex: width - 100,
+        marginRight: width - 70,
         justifyContent: 'center',
     },
     commentText: {
-        flex: width - 150,
     },
     commentText1: {
         margin: 5,
@@ -324,15 +434,26 @@ const styles = StyleSheet.create({
         color: '#333333'
     },
     commentContainer2: {
+        width: width - 70,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    commentContainer3: {
+        marginLeft: 5,
+        marginRight: width - 70 - 44,
+        justifyContent: 'center',
+    },
+    commentContainer4: {
+        width: width - 70 - 44,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     commentImg: {
-        height: 30,
         width: 30,
     },
     commentText2: {
-
     },
     commentText3: {
         color: "#C0C0C0",
