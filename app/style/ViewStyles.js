@@ -111,6 +111,15 @@ export const gViewStyles = StyleSheet.create({
         backgroundColor: '#FB5442',
         opacity: 0.6
     },
+    splashBtnView: {
+        position:'absolute',
+        right: 10,
+        top: gScreen.statusBarHeight,
+        width: 60,
+        height: 25,
+        borderRadius: 20,
+        opacity: 0.6
+    },
     btnBack: {
         height: 44,
         width: 44,

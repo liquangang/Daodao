@@ -16,7 +16,7 @@ export const gTextStyles = StyleSheet.create({
     splashText: {
         position:'absolute',
         right: 24,
-        top: gScreen.statusBarHeight + 4,
+        top: gScreen.statusBarHeight + 3,
         fontSize: 15,
         color: "white",
     },

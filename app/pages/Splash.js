@@ -18,11 +18,7 @@ export default class Splash extends Component {
 
     componentDidMount() {
         this.fetchADData();
-        setTimeout(this.onClickNext,3000);
-    }
-
-    onClickNext = () => {
-        this.props.navigation.navigate('MainNav', null);
+        // setTimeout(this.onClickNext,3000);
     }
 
     onClickImg = (data) => {
@@ -48,12 +44,15 @@ export default class Splash extends Component {
         return(
             <View>
                 <StatusBar barStyle="dark-content"/>
-                <Image source={require('../source/splashAd.png')} style={gImageStyles.splashImgBack}/>
-                <TouchableOpacity onPress={this.onClickNext}>
+                <Image source={require('../source/ad6.jpg')} style={gImageStyles.splashImgBack}/>
+
                     <View style={gViewStyles.splashTextView}>
                     </View>
                     <Text style={gTextStyles.splashText}>跳过</Text>
-                </TouchableOpacity>
+                <TouchableOpacity style={[gViewStyles.splashBtnView]} onPress={() => {
+                    this.props.navigation.navigate('MainNav', null);
+                }}/>
+
                     {/*<Swiper*/}
                         {/*style={gViewStyles.splashImgBack}*/}
                         {/*horizontal={true}*/}
