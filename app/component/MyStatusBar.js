@@ -17,14 +17,14 @@ export default class MyStatusBar extends Component {
             return (
                 <View>
                     <StatusBar barStyle="dark-content"/>
-                    <View style={gViewStyles.statusbar2}></View>
+                    {Platform.OS === "android" ? (<View></View>) : (<View style={gViewStyles.statusbar2}></View>)}
                 </View>
             );
         } else {
             return (
                 <View>
                     <StatusBar barStyle="light-content"/>
-                    <View style={gViewStyles.statusbar1}></View>
+                    {Platform.OS === "android" ? (<View></View>) : (<View style={gViewStyles.statusbar1}></View>)}
                 </View>
             );
         }

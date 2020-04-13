@@ -276,22 +276,22 @@ export default class PersonInfo extends Component {
                 />
                 <View style={styles.bottomContainer}>
                     <View style={styles.bottomTopContainer}>
-                        <Image source={require('../source/首页定位.png')} style={styles.itemIcon}/>
+                        <Image source={require('../source/dingwei1.png')} style={styles.itemIcon}/>
                         <Text>{item.post_position}</Text>
                     </View>
                     <View style={styles.segmentation}></View>
                     <View style={styles.bottomBottomContainer}>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/首页分享.png')} style={styles.itemIcon}/>
+                            <Image source={require('../source/fenxiang.png')} style={styles.itemIcon}/>
                             <Text>{item.share_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../source/首页评论.png')} style={styles.itemIcon}/>
+                            <Image source={require('../source/pinglun1.png')} style={styles.itemIcon}/>
                             <Text>{item.comment_num}</Text>
                         </View>
                         <TouchableOpacity onPress={()=>this.onPraise(item)}>
                             <View style={styles.bottomBottomSubContainer}>
-                                <Image source={require('../source/首页点赞.png')} style={styles.itemIcon}/>
+                                <Image source={require('../source/dianzanblack.png')} style={styles.itemIcon}/>
                                 <Text>{item.praise_num}</Text>
                             </View>
                         </TouchableOpacity>

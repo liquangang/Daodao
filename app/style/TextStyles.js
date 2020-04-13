@@ -7,7 +7,7 @@ export const gTextStyles = StyleSheet.create({
     },
     searchTextInput: {
         flex: 1,
-        height: 33,
+        height: 40,
         color: '#333333'
     },
     scrollBarText: {

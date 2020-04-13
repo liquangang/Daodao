@@ -198,7 +198,7 @@ export default class HomePage extends Component {
                         />
                     </View>
                     <TouchableOpacity onPress={this.onClickMesBtn}>
-                        <Image source={require('../source/信息.png')} style={styles.img3}/>
+                        <Image source={require('../source/xinxi.png')} style={styles.img3}/>
                     </TouchableOpacity>
                 </View>
 

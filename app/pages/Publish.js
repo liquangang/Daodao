@@ -142,6 +142,7 @@ export default class Publish extends Component {
                         placeholderTextColor={gColor.grayTextColor}
                         underlineColorAndroid={'transparent'}
                         style={styles.textInput}
+                        underlineColorAndroid="transparent"
                         multiline={true}
                         onChangeText={(text) => this.setState({post_content:text})}
                     />
@@ -163,10 +164,10 @@ export default class Publish extends Component {
                     {/*选择分类*/}
                     <TouchableOpacity onPress={()=>this.onClickType()}>
                         <View style={styles.subContainer}>
-                            <Image source={require('../source/分类.png')} style={styles.itemIcon}/>
+                            <Image source={require('../source/fenlei.png')} style={styles.itemIcon}/>
                             <Text style={styles.itemText}>选择分类</Text>
                             {this.state.typeData != null ? (<Text style={styles.itemText1}>{this.state.typeData.name}</Text>) : (<Text style={styles.itemText1}>默认发布到最新板块</Text>)}
-                            <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
+                            <Image source={require('../source/youjiantou.png')} style={styles.itemArrow}/>
                         </View>
                     </TouchableOpacity>
 
@@ -175,10 +176,10 @@ export default class Publish extends Component {
 
                     {/*选择定位*/}
                     <View style={styles.subContainer}>
-                        <Image source={require('../source/定位.png')} style={styles.itemIcon}/>
+                        <Image source={require('../source/dingwei.png')} style={styles.itemIcon}/>
                         <Text style={styles.itemText}>选择定位</Text>
                         <Text style={styles.itemText1}>确认定位已开启</Text>
-                        <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
+                        <Image source={require('../source/youjiantou.png')} style={styles.itemArrow}/>
                     </View>
 
                     <View style={styles.line1}></View>

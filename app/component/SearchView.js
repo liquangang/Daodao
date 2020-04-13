@@ -10,7 +10,7 @@ export default class SearchView extends Component {
     render() {
         return(
             <View style={styles.searchView}>
-                <Image source={require('../source/搜索.png')} style={styles.avatar}/>
+                <Image source={require('../source/sousuo.png')} style={styles.avatar}/>
                 <TextInput underlineColorAndroid="transparent" placeholder="搜索你想要的内容" placeholderTextColor={'#999999'}
                            style={styles.searchTextInput}
                            onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
     searchTextInput: {
         flex: 1,
-        height: 33,
+        height: 40,
         color: '#333333'
     },
     avatar: {

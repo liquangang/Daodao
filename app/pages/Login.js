@@ -10,7 +10,7 @@ export default class Login extends Component {
             <View style={gViewStyles.rootViewContainer}>
                 <TouchableOpacity onPress={()=>{this.props.navigation.navigate('MyTab', null)}}>
                     <View style={gViewStyles.btnBack}>
-                        <Image source={require('../source/关闭.png')} style={gImageStyles.closeImg}/>
+                        <Image source={require('../source/guanbi.png')} style={gImageStyles.closeImg}/>
                     </View>
                 </TouchableOpacity>
                 <View style={styles.container}>
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
         paddingBottom: 60,
     },
     iconImg: {
+        height: gScreen.screen_height - 300,
     },
     LoginIcon: {
         width: 3,

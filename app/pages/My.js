@@ -9,16 +9,16 @@ export default class My extends Component {
         super(props);
         this.state = {
             optionData: [
-                {title: '我的动态', img: require('../source/动态.png')},
-                {title: '我的相册', img: require('../source/相册.png')},
-                {title: '实名认证', img: require('../source/实名.png')},
-                {title: '广告投放', img: require('../source/广告.png')},
-                {title: '帮助中心', img: require('../source/帮助.png')},
-                {title: '投诉反馈', img: require('../source/投诉.png')},
-                {title: '在线客服', img: require('../source/客服.png')},
-                {title: '关于我们', img: require('../source/关于.png')},
-                {title: '检查更新', img: require('../source/更新.png')},
-                {title: '退出登录', img: require('../source/退出.png')},
+                {title: '我的动态', img: require('../source/dongtai.png')},
+                {title: '我的相册', img: require('../source/xiangce.png')},
+                {title: '实名认证', img: require('../source/shiming.png')},
+                {title: '广告投放', img: require('../source/guanggao.png')},
+                {title: '帮助中心', img: require('../source/bangzhu.png')},
+                {title: '投诉反馈', img: require('../source/tousu.png')},
+                {title: '在线客服', img: require('../source/kefu.png')},
+                {title: '关于我们', img: require('../source/guanyu.png')},
+                {title: '检查更新', img: require('../source/gengxin.png')},
+                {title: '退出登录', img: require('../source/tuichu.png')},
             ],
             personalData: [],
             load: false,
@@ -87,7 +87,7 @@ export default class My extends Component {
                                 <Image source={item.img}
                                        style={styles.itemIcon}/>
                                 <Text style={styles.itemText}>{item.title}</Text>
-                                <Image source={require('../source/右箭头.png')} style={styles.itemArrow}/>
+                                <Image source={require('../source/youjiantou.png')} style={styles.itemArrow}/>
                             </View>
                             <View style={styles.bottomLine}></View>
                         </View>
@@ -100,15 +100,15 @@ export default class My extends Component {
 
     topView = () => {
         return(
-            <ImageBackground style={styles.topContainer} source={require('../source/我的背景图.png')}>
-                <Image source={require('../source/未登陆.png')} style={styles.avatar}/>
+            <ImageBackground style={styles.topContainer} source={require('../source/wodebeijingtu.png')}>
+                <Image source={require('../source/weidenglu.png')} style={styles.avatar}/>
                 <View style={styles.personalInfoContainer}>
                     <Text style={styles.nickName}>{this.state.personalData.user_info.nick_name}</Text>
                     <Text style={styles.commonText}>ID：{this.state.personalData.user_info.id}</Text>
                     <Text style={styles.commonText}>粉丝：{this.state.personalData.user_info.fan_num}
                     关注：{this.state.personalData.user_info.follow_num}</Text>
                 </View>
-                <Image source={require('../source/修改.png')} style={styles.updateNickName}/>
+                <Image source={require('../source/xiugai.png')} style={styles.updateNickName}/>
             </ImageBackground>
         );
     }

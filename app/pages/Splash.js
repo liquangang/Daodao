@@ -48,14 +48,14 @@ export default class Splash extends Component {
         return(
             <View>
                 <StatusBar barStyle="dark-content"/>
-                    <Image  source={require('../source/广告4.jpg')} style={gImageStyles.splashImg}/>
+                <Image source={require('../source/splashAd.png')} style={gImageStyles.splashImgBack}/>
                 <TouchableOpacity onPress={this.onClickNext}>
                     <View style={gViewStyles.splashTextView}>
                     </View>
                     <Text style={gTextStyles.splashText}>跳过</Text>
                 </TouchableOpacity>
                     {/*<Swiper*/}
-                        {/*style={gViewStyles.fullScreenSwiper}*/}
+                        {/*style={gViewStyles.splashImgBack}*/}
                         {/*horizontal={true}*/}
                         {/*activeDotColor={'#FB5442'}*/}
                         {/*paginationStyle={{bottom: 12}}*/}
@@ -68,15 +68,15 @@ export default class Splash extends Component {
                                 {/*Array.from(this.state.data).map((value, index, array)=>{*/}
                                     {/*return(*/}
                                         {/*<TouchableOpacity onPress={()=>this.onClickImg(value)} key={index}>*/}
-                                            {/*/!*<Image source={{uri: value.src}} style={styles.img}/>*!/*/}
-                                            {/*<Image source={require('../source/广告1.png')} style={styles.img}/>*/}
+                                            {/*<Image source={{uri: value.src}} style={gImageStyles.splashImg}/>*/}
+                                            {/*/!*<Image source={require('../source/广告1.png')} style={styles.img}/>*!/*/}
                                         {/*</TouchableOpacity>*/}
                                     {/*);*/}
                                 {/*})*/}
                             {/*) : (*/}
                                 {/*<TouchableOpacity onPress={()=>this.onClickImg(this.state.data)}>*/}
                                     {/*/!*<Image source={{uri: this.state.data.src}} style={styles.img}/>*!/*/}
-                                    {/*<Image source={require('../source/广告1.png')} style={styles.img}/>*/}
+                                    {/*<Image source={require('../source/启动广告.jpg')} style={gImageStyles.gImageStyles.splashImg}/>*/}
                                 {/*</TouchableOpacity>*/}
                             {/*)*/}
                         {/*}*/}

@@ -38,6 +38,8 @@ target 'Daodao' do
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
+  pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
+
   target 'DaodaoTests' do
     inherit! :search_paths
     # Pods for testing

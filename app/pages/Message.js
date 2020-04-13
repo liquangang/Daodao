@@ -216,7 +216,7 @@ export default class Message extends Component {
             <View style={styles.topContainer}>
                 <View style={styles.msgIconContainer}>
                     <TouchableOpacity onPress={()=>this.onChangeTabs(0)}>
-                        <Image source={require('../source/关注.png')} style={styles.msgIcon}/>
+                        <Image source={require('../source/guanzhu.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>粉丝</Text>
                     {this.state.showIndex == 0 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
@@ -224,7 +224,7 @@ export default class Message extends Component {
 
                 <View style={styles.msgIconContainer}>
                     <TouchableOpacity onPress={()=>this.onChangeTabs(1)}>
-                        <Image source={require('../source/评论.png')} style={styles.msgIcon}/>
+                        <Image source={require('../source/pinglun.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>评论</Text>
                     {this.state.showIndex == 1 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
@@ -232,7 +232,7 @@ export default class Message extends Component {
 
                 <View style={styles.msgIconContainer}>
                     <TouchableOpacity onPress={()=>this.onChangeTabs(2)}>
-                        <Image source={require('../source/点赞.png')} style={styles.msgIcon}/>
+                        <Image source={require('../source/dianzan.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>关注</Text>
                     {this.state.showIndex == 2 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
@@ -240,7 +240,7 @@ export default class Message extends Component {
 
                 <View style={styles.msgIconContainer}>
                     <TouchableOpacity onPress={()=>this.onChangeTabs(3)}>
-                        <Image source={require('../source/评论.png')} style={styles.msgIcon}/>
+                        <Image source={require('../source/pinglun.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>私信</Text>
                     {this.state.showIndex == 3 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}
@@ -248,7 +248,7 @@ export default class Message extends Component {
 
                 <View style={styles.msgIconContainer}>
                     <TouchableOpacity onPress={()=>this.onChangeTabs(4)}>
-                        <Image source={require('../source/通知.png')} style={styles.msgIcon}/>
+                        <Image source={require('../source/tongzhi.png')} style={styles.msgIcon}/>
                     </TouchableOpacity>
                     <Text style={styles.msgDes}>通知</Text>
                     {this.state.showIndex == 4 ? (<View style={gViewStyles.scrollBarBottomLine1}></View>) : (<View></View>)}

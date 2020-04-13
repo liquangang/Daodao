@@ -88,24 +88,24 @@ export default class NewsView extends Component {
                 {/*动态底部部分*/}
                 <View style={styles.bottomContainer}>
                     <View style={styles.bottomTopContainer}>
-                        <Image source={require('../../source/首页定位.png')} style={styles.itemIcon}/>
+                        <Image source={require('../../source/dingwei1.png')} style={styles.itemIcon}/>
                         <Text>{this.state.data.post_position}</Text>
                     </View>
                     <View style={styles.segmentation}></View>
                     <View style={styles.bottomBottomContainer}>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/首页分享.png')} style={styles.itemIcon}/>
+                            <Image source={require('../../source/fenxiang.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.share_num}</Text>
                         </View>
                         <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/首页评论.png')} style={styles.itemIcon}/>
+                            <Image source={require('../../source/pinglun1.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.comment_num}</Text>
                         </View>
                         <TouchableOpacity onPress={()=>this.onPraise(this.state.data)}>
                             <View style={styles.bottomBottomSubContainer}>
                                 {this.state.data.user_priase != null ? (
-                                    <Image source={require('../../source/首页点赞.png')} style={styles.itemIcon}/>
-                                ) : (<Image source={require('../../source/首页点赞-未点亮.png')} style={styles.itemIcon}/>
+                                    <Image source={require('../../source/dianzanred.png')} style={styles.itemIcon}/>
+                                ) : (<Image source={require('../../source/dianzanblack.png')} style={styles.itemIcon}/>
                                 )}
                                 <Text>{this.state.data.praise_num}</Text>
                             </View>

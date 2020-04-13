@@ -59,12 +59,12 @@ export default class Search extends Component {
                         {/*返回*/}
                         <TouchableOpacity onPress={()=>{this.props.navigation.goBack();}}>
                             <View style={gViewStyles.backView}>
-                                <Image source={require('../source/返回.png')} style={gImageStyles.leftArrow}/>
+                                <Image source={require('../source/fanhui.png')} style={gImageStyles.leftArrow}/>
                             </View>
                         </TouchableOpacity>
                         {/*搜索框*/}
                         <View style={gViewStyles.searchView}>
-                            <Image source={require('../source/搜索.png')} style={gImageStyles.avatar}/>
+                            <Image source={require('../source/sousuo.png')} style={gImageStyles.avatar}/>
                             <TextInput underlineColorAndroid="transparent" placeholder="搜索你想要的内容" placeholderTextColor={'#999999'}
                                        style={gTextStyles.searchTextInput}
                                        onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>

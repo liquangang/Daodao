@@ -23,7 +23,7 @@ export default class MyStatusBar extends Component {
             <View style={gViewStyles.navigationBar}>
                 {(this.state.hiddenBack == true) ? (<View></View>) : (<TouchableOpacity onPress={()=>this.onClickBack()}>
                     <View style={gViewStyles.backView}>
-                        <Image source={require('../source/返回.png')} style={gImageStyles.leftArrow}/>
+                        <Image source={require('../source/fanhui.png')} style={gImageStyles.leftArrow}/>
                     </View>
                     </TouchableOpacity>)}
 

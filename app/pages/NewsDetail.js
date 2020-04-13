@@ -94,7 +94,7 @@ export default class NewsDetail extends Component {
     // 请求帖子详情
     fetchNewsData = async (newsId) => {
         let params = {
-            post_id: 7
+            post_id: newsId
         };
         let res = await httpApi.getNewsData(params);
 
@@ -102,7 +102,8 @@ export default class NewsDetail extends Component {
 
             this.setState({
                 newsDetailData: res.data,
-                toUserId: res.data.newsDetail.user.nick_name
+                toUserId: res.data.newsDetail.user.nick_name,
+                load: true
             });
         } else {
             alert("网络异常！请检查网络！");
@@ -132,8 +133,8 @@ export default class NewsDetail extends Component {
 
         if (res.status == 0) {
             let newCommentList = [];
-            for (let i = 0; i < res.data.data.length; i++) {
-                newCommentList.push({title:res.data.data[i], data:res.data.data[i].reply_list});
+            for (let i = 0; i < res.data.length; i++) {
+                newCommentList.push({title:res.data[i], data:(res.data[i].reply_list != null ? res.data[i].reply_list : [])});
             }
             this.setState({
                 commentList: newCommentList,
@@ -176,7 +177,7 @@ export default class NewsDetail extends Component {
                                    onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
                         </TextInput>
                         <TouchableOpacity>
-                            <Image source={require('../source/详情分享.png')} style={styles.shareIcon}/>
+                            <Image source={require('../source/xiangqingfenxiang.png')} style={styles.shareIcon}/>
                         </TouchableOpacity>
                     </View>
                 </SafeAreaView>
@@ -231,7 +232,7 @@ export default class NewsDetail extends Component {
                     style={styles.newsImgList}
                 />
                 <View style={styles.newsInfoContainer1}>
-                    <Image source={require('../source/首页定位.png')} style={styles.itemIcon}/>
+                    <Image source={require('../source/dingwei1.png')} style={styles.itemIcon}/>
                     <Text>{this.state.newsDetailData.newsDetail.post_position}</Text>
                 </View>
             </View>
@@ -241,8 +242,8 @@ export default class NewsDetail extends Component {
     imgItemView({ item }) {
         return (
             <View>
-                {/*<Image source={{uri: item.src}} style={styles.newsImg}/>*/}
-                <Image source={require('../source/banner.jpg')} style={gImageStyles.bannerImg}/>
+                <Image source={{uri: item.src}} style={styles.newsImg}/>
+                {/*<Image source={require('../source/banner.jpg')} style={gImageStyles.bannerImg}/>*/}
             </View>
         );
     }
@@ -267,9 +268,9 @@ export default class NewsDetail extends Component {
                                     <TouchableOpacity onPress={() => this.onPraise(commentData)}>
                                         <View style={gViewStyles.praiseView}>
                                             {commentData.comment_priase != null ? (
-                                                <Image source={require('../source/首页点赞.png')}
+                                                <Image source={require('../source/dianzanred.png')}
                                                        style={styles.commentImg}/>
-                                            ) : (<Image source={require('../source/首页点赞-未点亮.png')}
+                                            ) : (<Image source={require('../source/dianzanblack.png')}
                                                         style={styles.commentImg}/>
                                             )}
                                             <Text style={styles.commentText2}>{commentData.praise_num}</Text>
@@ -305,9 +306,9 @@ export default class NewsDetail extends Component {
                                     <TouchableOpacity onPress={() => this.onPraise(item)}>
                                         <View style={gViewStyles.praiseView}>
                                             {item.comment_priase != null ? (
-                                                <Image source={require('../source/首页点赞.png')}
+                                                <Image source={require('../source/dianzanred.png')}
                                                        style={styles.commentImg}/>
-                                            ) : (<Image source={require('../source/首页点赞-未点亮.png')}
+                                            ) : (<Image source={require('../source/dianzanblack.png')}
                                                         style={styles.commentImg}/>
                                             )}
                                             <Text style={styles.commentText2}>{item.praise_num}</Text>

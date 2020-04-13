@@ -35,15 +35,15 @@ function MainTab() {
 
                     // 配置tabbaricon
                     if (route.name === '首页') {
-                        return <Image source={require('./app/source/组38.png')} style={gImageStyles.tabbarItem}/>
+                        return <Image source={require('./app/source/tap1.png')} style={gImageStyles.tabbarItem}/>
                     } else if (route.name === '热点') {
-                        return <Image source={require('./app/source/组3.png')} style={gImageStyles.tabbarItem}/>
+                        return <Image source={require('./app/source/tap2.png')} style={gImageStyles.tabbarItem}/>
                     } else if (route.name == '发布') {
-                        return <Image source={require('./app/source/组43.png')} style={gImageStyles.middelTabbarItem}/>
+                        return <Image source={require('./app/source/tap3.png')} style={gImageStyles.middelTabbarItem}/>
                     } else if (route.name == '便民') {
-                        return <Image source={require('./app/source/组4.png')} style={gImageStyles.tabbarItem}/>
+                        return <Image source={require('./app/source/tap4.png')} style={gImageStyles.tabbarItem}/>
                     } else if (route.name == '我的') {
-                        return <Image source={require('./app/source/组5.png')} style={gImageStyles.tabbarItem}/>
+                        return <Image source={require('./app/source/tap5.png')} style={gImageStyles.tabbarItem}/>
                     }
                 },
             })}

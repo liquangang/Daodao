@@ -144,9 +144,9 @@ export default class Chat extends Component {
 
     chatItemView = ({item}) => {
         if (item.user_id == 2) {
-            return(this.leftChatItemView({item}));
-        } else {
             return(this.rightChatItemView({item}));
+        } else {
+            return(this.leftChatItemView({item}));
         }
     }
 
