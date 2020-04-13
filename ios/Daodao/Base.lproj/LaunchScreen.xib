@@ -13,24 +13,23 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="启动页" translatesAutoresizingMaskIntoConstraints="NO" id="mFp-RK-Mu0">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
-                    <color key="backgroundColor" red="0.98431372549019602" green="0.32941176470588235" blue="0.25882352941176467" alpha="1" colorSpace="calibratedRGB"/>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="iOA-ph-GDn">
+                    <rect key="frame" x="0.0" y="-656" width="480" height="1136"/>
+                    <color key="backgroundColor" red="0.98431372549999996" green="0.3294117647" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="mFp-RK-Mu0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="3eG-IW-p0q"/>
-                <constraint firstAttribute="trailing" secondItem="mFp-RK-Mu0" secondAttribute="trailing" id="Wfq-Tb-x1i"/>
-                <constraint firstAttribute="bottom" secondItem="mFp-RK-Mu0" secondAttribute="bottom" id="tVO-MV-tk3"/>
-                <constraint firstItem="mFp-RK-Mu0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="vyo-BQ-Pvn"/>
+                <constraint firstAttribute="bottom" secondItem="iOA-ph-GDn" secondAttribute="bottom" id="FiC-kt-wjh"/>
+                <constraint firstItem="iOA-ph-GDn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Mqx-Z8-kDE"/>
+                <constraint firstAttribute="trailing" secondItem="iOA-ph-GDn" secondAttribute="trailing" id="TBu-Al-MNP"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="548" y="455"/>
+            <point key="canvasLocation" x="547.82608695652175" y="454.6875"/>
         </view>
     </objects>
     <resources>
-        <image name="启动页" width="375" height="667"/>
+        <image name="splash" width="660" height="1136"/>
     </resources>
 </document>

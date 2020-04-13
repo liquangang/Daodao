@@ -149,11 +149,20 @@ export const gViewStyles = StyleSheet.create({
         marginRight: 2,
         backgroundColor: gColor.grayLineColor,
     },
+    line2: {
+        height: 10,
+        backgroundColor: '#F4F1F4',
+    },
     itemView: {
         height: 44,
         width: gScreen.screen_width,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    itemView1: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: gScreen.screen_width,
     },
     loading: {
         position: 'absolute',

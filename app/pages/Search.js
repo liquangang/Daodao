@@ -94,6 +94,7 @@ export default class Search extends Component {
                     onClickAvatar = {this.onClickAvatar}
                     data={item.item.data}
                     onClickNews={this.onClickNews}
+                    isShowPersonInfo={true}
                 ></NewsView>
             );
         }

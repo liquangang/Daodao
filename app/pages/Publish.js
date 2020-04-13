@@ -5,6 +5,7 @@ import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import {gViewStyles} from "../style/ViewStyles";
 import httpApi from "../tools/Api";
+import {WToast} from 'react-native-smart-tip'
 
 
 export default class Publish extends Component {
@@ -62,7 +63,7 @@ export default class Publish extends Component {
             this.setState({
                 load: false
             });
-            alert("发布成功！")
+            WToast.show({data: '发布成功'});
         } else {
             alert("网络异常！请检查网络！");
         }
@@ -137,29 +138,31 @@ export default class Publish extends Component {
                     hiddenBack={true}
                 ></MyNavigationBar>
                 <ScrollView style={styles.scorllviewContainer}>
-                    <TextInput
-                        placeholder={'输入你想说的话。。。'}
-                        placeholderTextColor={gColor.grayTextColor}
-                        underlineColorAndroid={'transparent'}
-                        style={styles.textInput}
-                        underlineColorAndroid="transparent"
-                        multiline={true}
-                        onChangeText={(text) => this.setState({post_content:text})}
-                    />
+                    <View style={styles.topContainer}>
+                        <TextInput
+                            placeholder={'输入你想说的话。。。'}
+                            placeholderTextColor={gColor.grayTextColor}
+                            underlineColorAndroid={'transparent'}
+                            style={styles.textInput}
+                            underlineColorAndroid="transparent"
+                            multiline={true}
+                            onChangeText={(text) => this.setState({post_content:text})}
+                        />
 
-                    <FlatList
-                        extraData={this.state}
-                        ListHeaderComponent={this.selectImgView}
-                        data={this.state.imageArr}
-                        renderItem={({item, index})=>(<TouchableOpacity onPress={()=>this.deleteImg(index)}>
-                            <Image source={item} style={styles.selectImg} />
-                        </TouchableOpacity>)}
-                        horizontal={true}
-                    >
-                    </FlatList>
+                        <FlatList
+                            extraData={this.state}
+                            ListHeaderComponent={this.selectImgView}
+                            data={this.state.imageArr}
+                            renderItem={({item, index})=>(<TouchableOpacity onPress={()=>this.deleteImg(index)}>
+                                <Image source={item} style={styles.selectImg} />
+                            </TouchableOpacity>)}
+                            horizontal={true}
+                        >
+                        </FlatList>
+                    </View>
 
 
-                    <View style={styles.line1}></View>
+                    <View style={gViewStyles.line2}></View>
 
                     {/*选择分类*/}
                     <TouchableOpacity onPress={()=>this.onClickType()}>
@@ -213,24 +216,26 @@ const {width, height, scale} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     scorllviewContainer: {
-        backgroundColor: 'white',
+        backgroundColor: '#F4F1F4',
         flex: 1,
     },
     textInput: {
-        marginTop: 10,
-        marginLeft: 10,
-        marginRight: 10,
-        height: 300,
+        textAlignVertical: 'top',
+        padding: 5,
+        margin: 5,
+        height: 140,
         fontSize: 14,
-        paddingLeft: 5,
-        borderColor: gColor.grayTextColor,
-        borderWidth: 1,
-        backgroundColor: gColor.grayLineColor
+    },
+    topContainer: {
+        marginTop: 10,
+        flex: 1,
+        height: 250,
+        backgroundColor: 'white',
     },
     selectImg: {
-        margin: 10,
-        height: 70,
-        width: 70,
+        margin: 5,
+        height: 90,
+        width: 90,
     },
     line1: {
         marginLeft: 10,
@@ -241,7 +246,8 @@ const styles = StyleSheet.create({
     subContainer: {
         height: 50,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'white'
     },
     itemIcon: {
         flex: 50,
