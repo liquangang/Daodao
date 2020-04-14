@@ -65,7 +65,9 @@ export default class NewsView extends Component {
                                 <Text style={styles.phoneModel}>来自：{this.state.data.phone_model}</Text>
                             </View>
                         </View>
-                        <Text style={styles.text10}>+ 关注</Text>
+                        <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                            <Text style={gTextStyles.text}> + 关注</Text>
+                        </View>
                     </View>) : (<Text style={gTextStyles.timeText}>{this.state.data.created_at}</Text>)}
 
 
@@ -223,12 +225,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    textBack: {
+      backgroundColor: '#FB5442',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     text10: {
-        backgroundColor: '#FB5442',
         color: 'white',
-        padding: 8,
-        height: 30,
-        width: 60,
-        margin: 5,
+        fontSize: 12,
+        margin: 13.
     }
 });

@@ -109,7 +109,8 @@ export const gViewStyles = StyleSheet.create({
         height: 25,
         borderRadius: 20,
         backgroundColor: '#FB5442',
-        opacity: 0.6
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     splashBtnView: {
         position:'absolute',
@@ -169,9 +170,6 @@ export const gViewStyles = StyleSheet.create({
         alignItems: 'center'
     },
     itemView1: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: gScreen.screen_width,
     },
     loading: {
         position: 'absolute',
@@ -192,5 +190,10 @@ export const gViewStyles = StyleSheet.create({
         height: 25,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    segmentation: {
+        marginTop: 3,
+        height: 1,
+        backgroundColor: gColor.grayLineColor
+    },
 });

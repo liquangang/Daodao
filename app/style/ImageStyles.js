@@ -41,8 +41,8 @@ export const gImageStyles = StyleSheet.create({
     },
     ad1: {
         width: gScreen.screen_width - 24,
-        height: (gScreen.screen_width - 24) / 3 * 2,
         margin: 12,
-        resizeMode: 'stretch'
+        resizeMode: 'contain',
+        borderRadius: 10,
     }
 });

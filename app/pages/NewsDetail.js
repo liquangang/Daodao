@@ -8,6 +8,7 @@ import {gViewStyles} from "../style/ViewStyles";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import {gImageStyles} from "../style/ImageStyles";
+import {gTextStyles} from "../style/TextStyles";
 
 export default class NewsDetail extends Component {
 
@@ -214,7 +215,9 @@ export default class NewsDetail extends Component {
                     <Text style={styles.userInfoText}>{this.state.newsDetailData.newsDetail.user.created_at} 来自
                         {this.state.newsDetailData.newsDetail.user.phone_model}</Text>
                 </View>
-                <Text style={styles.text10}>+ 关注</Text>
+                <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                    <Text style={gTextStyles.text}> + 关注</Text>
+                </View>
             </View>
         );
     };
@@ -222,7 +225,7 @@ export default class NewsDetail extends Component {
     newsInfoItemView = () => {
         return(
             <View style={styles.newsInfoContainer}>
-                <View style={styles.newsInfoLine}></View>
+                <View style={styles.commentLine}></View>
                 <Text style={styles.newsInfoText}>{this.state.newsDetailData.newsDetail.user.post_content}</Text>
 
                 {/*动态图片部分*/}
@@ -484,6 +487,7 @@ const styles = StyleSheet.create({
     text10: {
         backgroundColor: '#FB5442',
         color: 'white',
+        fontSize: 12,
         padding: 8,
         height: 30,
         width: 60,

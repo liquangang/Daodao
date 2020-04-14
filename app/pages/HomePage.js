@@ -269,10 +269,15 @@ export default class HomePage extends Component {
 
     newsListItemView = (item) => {
         if (item.item.is_adv) {
-            return(<BannerView
-                onClickAd = {this.onClickAd}
-                data={item.item.data}
-            ></BannerView>);
+            return(
+                <View>
+                    <View style={styles.bottomSegmentation}></View>
+                    <BannerView
+                        onClickAd = {this.onClickAd}
+                        data={item.item.data}
+                    ></BannerView>
+                </View>
+                );
         } else {
             return (
                 <NewsView
@@ -335,5 +340,9 @@ const styles = StyleSheet.create({
     indicator:{
         color:'red',
         margin:10
-    }
+    },
+    bottomSegmentation: {
+        height: 10,
+        backgroundColor: gColor.grayLineColor
+    },
 });

@@ -14,9 +14,6 @@ export const gTextStyles = StyleSheet.create({
         fontSize: 14,
     },
     splashText: {
-        position:'absolute',
-        right: 24,
-        top: gScreen.statusBarHeight + 3,
         fontSize: 15,
         color: "white",
     },
@@ -32,4 +29,17 @@ export const gTextStyles = StyleSheet.create({
     timeText: {
         margin: 5,
     },
+    textBack: {
+        height: 30,
+        borderRadius: 5,
+        backgroundColor: '#FB5442',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        color: 'white',
+        fontSize: 12,
+        marginLeft: 15,
+        marginRight: 15,
+    }
 });

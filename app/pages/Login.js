@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
         paddingBottom: 60,
     },
     iconImg: {
-        height: gScreen.screen_height - 300,
+        width: gScreen.screen_width,
+        resizeMode: 'center'
     },
     LoginIcon: {
         width: 3,

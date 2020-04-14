@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     avatar: {
         height: 60,
         width: 60,
-        margin: 10,
+        margin: 16,
         borderRadius: 30,
     },
     personalInfoContainer: {
@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
         flex: 20,
         marginTop: 10,
         width: 16,
-        height: 16,
     },
     bottomLine: {
         marginTop: 13,

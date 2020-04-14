@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
+import { Image, View, SafeAreaView, FlatList, TouchableWithoutFeedback } from "react-native";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import {gImageStyles} from "../style/ImageStyles";
@@ -17,15 +17,29 @@ export default class Convenience extends Component {
                     ></MyNavigationBar>
                     <FlatList
                         style={backgroundColor='#F4F1F4'}
-                        data={[require('../source/ad1.png'),
-                            require('../source/ad5.png'),
-                            require('../source/ad2.png'),]}
+                        data={[require('../source/ad1.jpg'),
+                            require('../source/ad2.jpg'),
+                            require('../source/ad3.jpg'),
+                            require('../source/ad4.jpg'),
+                            require('../source/ad5.jpg'),
+                            require('../source/ad6.jpg'),
+                            require('../source/ad7.jpg'),
+                            require('../source/splashAd.jpg'),
+                            require('../source/splashAd1.png'),]}
                         renderItem={({item})=>{
-                            return(<View style={gViewStyles.itemView1}>
-                                <TouchableOpacity>
-                                    <Image source={item} style={gImageStyles.ad1}></Image>
-                                </TouchableOpacity>
-                            </View>);
+                            let imgW = Image.resolveAssetSource(item).width;
+                            let imgH = Image.resolveAssetSource(item).height;
+                            let showW = gScreen.screen_width - 24;
+                            let showH = showW / imgW * imgH;
+                                return(<View style={gViewStyles.itemView1}>
+                                    <TouchableWithoutFeedback>
+                                        <View>
+                                            <Image source={item}
+                                                   style={[gImageStyles.ad1, {height: showH}]}></Image>
+                                            <View style={gViewStyles.segmentation}></View>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                </View>);
                         }}
                     >
                     </FlatList>

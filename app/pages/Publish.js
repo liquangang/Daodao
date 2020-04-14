@@ -234,8 +234,8 @@ const styles = StyleSheet.create({
     },
     selectImg: {
         margin: 5,
-        height: 90,
-        width: 90,
+        height: 60,
+        width: 60,
     },
     line1: {
         marginLeft: 10,
@@ -251,7 +251,6 @@ const styles = StyleSheet.create({
     },
     itemIcon: {
         flex: 50,
-        height: 18,
         width: 18,
         marginLeft: 10,
     },
