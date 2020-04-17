@@ -50,10 +50,11 @@ export default class Type extends Component {
                         data={this.state.data}
                         renderItem={({item})=>(
                             <TouchableOpacity onPress={()=>this.onClickItem(item)}>
+                                <View style={gViewStyles.line}></View>
                                 <View style={gViewStyles.itemView}>
-                                    <View style={gViewStyles.line}></View>
                                     <Text style={gTextStyles.nickNameText}>{item.name}</Text>
                                 </View>
+                                <View style={gViewStyles.segmentation}></View>
                             </TouchableOpacity>
                             )}
                         style={gViewStyles.flatList}

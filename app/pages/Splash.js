@@ -22,7 +22,12 @@ export default class Splash extends Component {
     }
 
     onClickImg = (data) => {
-        this.props.onClickAd(data);
+        // if (item.href != null && item.href.length > 0) {
+        //     let params = {
+        //         url: item.href,
+        //     };
+        //     this.props.navigation.navigate('WebPage', params);
+        // }
     }
 
     fetchADData = async() => {

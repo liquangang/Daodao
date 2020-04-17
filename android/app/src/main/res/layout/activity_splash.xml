@@ -12,7 +12,7 @@
         android:layout_marginBottom="0dp"
         android:layout_marginRight="0dp"
         android:src="@drawable/splash"
-        android:scaleType="fitStart"
+        android:scaleType="fitXY"
         ></ImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

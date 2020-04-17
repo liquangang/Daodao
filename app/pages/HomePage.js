@@ -10,7 +10,6 @@ import LoadingView from "../component/LoadingView";
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import {gViewStyles} from "../style/ViewStyles";
 import MyStatusBar from "../component/MyStatusBar";
-import NewsList from '../component/NewsList'
 
 export default class HomePage extends Component {
 

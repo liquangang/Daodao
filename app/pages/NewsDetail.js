@@ -30,6 +30,15 @@ export default class NewsDetail extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            newsDetailData: [],
+            commentList: [],
+            load: false,
+            toUserId: null,
+            autoFocus: null,
+            keyboardHeight: 0,
+            commentId: null,
+        });
         let newsId = this.props.route.params.newsId;
         this.fetchNewsData(newsId);
         this.fetchNewsCommentListData(newsId);
@@ -103,8 +112,7 @@ export default class NewsDetail extends Component {
 
             this.setState({
                 newsDetailData: res.data,
-                toUserId: res.data.newsDetail.user.nick_name,
-                load: true
+                toUserId: res.data.newsDetail.user.id,
             });
         } else {
             alert("网络异常！请检查网络！");
@@ -197,6 +205,11 @@ export default class NewsDetail extends Component {
                     onClickAd = {this.onClickAd}
                     data={this.state.newsDetailData.adDetail.data}
                 ></BannerView>
+                {/*评论总数、点赞总数*/}
+                <View style={styles.container7}>
+                    <Text style={[{color: '#666666'}, ]}>全部评论：{this.state.newsDetailData.newsDetail.comment_num}</Text>
+                    <Text style={[{color: '#666666'}, ]}>点赞：{this.state.newsDetailData.newsDetail.praise_num}</Text>
+                </View>
                 <View style={styles.bottomSegmentation}></View>
             </View>
         );
@@ -212,12 +225,28 @@ export default class NewsDetail extends Component {
                 </TouchableOpacity>
                 <View style={styles.userInfoContainer1}>
                     <Text style={styles.userInfoText1}>{this.state.newsDetailData.newsDetail.user.nick_name}</Text>
-                    <Text style={styles.userInfoText}>{this.state.newsDetailData.newsDetail.user.created_at} 来自
+                    <Text style={styles.userInfoText}>{this.state.newsDetailData.newsDetail.user.created_at} 来自：
                         {this.state.newsDetailData.newsDetail.user.phone_model}</Text>
                 </View>
-                <View style={[gTextStyles.textBack, {marginRight: 5}]}>
-                    <Text style={gTextStyles.text}> + 关注</Text>
-                </View>
+                {this.state.newsDetailData.newsDetail.user_follow == null ? (<TouchableOpacity onPress={async ()=>{
+                    let params = ('user_id=' + this.state.newsDetailData.newsDetail.user.id + '&');
+                    let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                    if (res.status = 0) {
+                        let newsDetailData = this.state.newsDetailData;
+                        newsDetailData.newsDetail.user_follow = 1;
+                        this.setState({
+                            newsDetailData: newsDetailData,
+                        });
+                        WToast.show({data: '关注成功!'});
+                    } else {
+                        alert("网络异常！请检查网络！");
+                    }
+                }}>
+                    <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                        <Text style={gTextStyles.text}> + 关注</Text>
+                    </View>
+                </TouchableOpacity>) : (<View></View>)}
+
             </View>
         );
     };
@@ -282,6 +311,7 @@ export default class NewsDetail extends Component {
                                 </View>
                                 <Text style={styles.commentText1}>{commentData.content}</Text>
                                 <Text style={styles.commentText3}>{commentData.created_at}</Text>
+                                <Text>回复Ta</Text>
                             </View>
                     </View>
                     <View style={styles.commentLine}></View>
@@ -320,6 +350,7 @@ export default class NewsDetail extends Component {
                                 </View>
                                 <Text style={styles.commentText1}>{item.user.nick_name} @ {item.to_user.nick_name}：{item.content}</Text>
                                 <Text style={styles.commentText3}>{item.created_at}</Text>
+                                <Text>回复Ta</Text>
                             </View>
                     </View>
                     <View style={styles.commentLine}></View>
@@ -382,6 +413,7 @@ const styles = StyleSheet.create({
     userInfoText: {
         margin: 5,
         fontSize: 12,
+        color: '#666666'
     },
     userInfoText1: {
         margin: 5,
@@ -431,6 +463,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     commentText: {
+        color: '#1A1A1A'
     },
     commentText1: {
         margin: 5,
@@ -492,5 +525,10 @@ const styles = StyleSheet.create({
         height: 30,
         width: 60,
         margin: 5,
+    },
+    container7: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 12,
     }
 });

@@ -5,7 +5,6 @@ import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import {gViewStyles} from "../style/ViewStyles";
 import httpApi from "../tools/Api";
-import {WToast} from 'react-native-smart-tip'
 
 
 export default class Publish extends Component {

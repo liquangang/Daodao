@@ -421,12 +421,18 @@ export default class Message extends Component {
     noticeItemView = (item) => {
 
         return(<View><View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>{
+                alert(item.content);
+            }
+            }>
                 <View style={styles.line}></View>
                 <View style={styles.msgContainer}>
                     <View style={styles.msgSubContainer}>
                         <View style={styles.mesSubContainer}>
                             <Text style={styles.text1}>消息通知</Text>
+                            <View style={styles.container1}>
+                                <Text style={styles.text3}>{item.updated_at}</Text>
+                            </View>
                         </View>
                         <View style={styles.mesSubContainer1}>
                             <Text style={styles.text2}>{item.content}</Text>
@@ -469,9 +475,9 @@ const styles = StyleSheet.create({
         height: 60,
     },
     avatar: {
-        borderRadius: 27,
-        width: 54,
-        height: 54,
+        borderRadius: 19,
+        width: 38,
+        height: 38,
         marginLeft: 10,
     },
     line: {
@@ -489,7 +495,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     mesSubContainer1: {
-        height: 30,
+        height: 14,
         flexDirection: 'row',
         alignItems: 'center',
         marginLeft: 10,
@@ -497,6 +503,7 @@ const styles = StyleSheet.create({
     },
     msgSubContainer: {
         flex: width - 74,
+        height: 56,
     },
     container1: {
         flexDirection: 'row',
@@ -504,7 +511,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     text1: {
-        fontSize: 17,
+        fontSize: 14,
     },
     text2: {
         color: gColor.orangeTextColor,

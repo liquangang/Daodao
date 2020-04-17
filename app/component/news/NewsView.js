@@ -61,19 +61,38 @@ export default class NewsView extends Component {
                         <View style={styles.topSubInfoContainer}>
                             <Text style={styles.nickName}>{this.state.data.user.nick_name}</Text>
                             <View style={styles.topSubInfoBottomContainer}>
-                                <Text style={styles.publishTime}>{this.state.data.created_at}</Text>
-                                <Text style={styles.phoneModel}>来自：{this.state.data.phone_model}</Text>
+                                <Text style={styles.publishTime}>{this.state.data.created_at}   来自：{this.state.data.phone_model}</Text>
                             </View>
                         </View>
-                        <View style={[gTextStyles.textBack, {marginRight: 5}]}>
-                            <Text style={gTextStyles.text}> + 关注</Text>
-                        </View>
+                        {this.state.data.user_follow == null ? (<TouchableOpacity onPress={async ()=>{
+                            // 关注逻辑
+                            let params = ('user_id=' + this.state.data.user.id + '&');
+                            let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                            if (res.status = 0) {
+                                let itemData = this.state.data;
+                                itemData.user_follow = 1;
+                                this.setState({
+                                    data: itemData,
+                                });
+                                WToast.show({data: '关注成功!'});
+                            } else {
+                                alert("网络异常！请检查网络！");
+                            }
+
+                        }}>
+                            <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                                <Text style={gTextStyles.text}> + 关注</Text>
+                            </View>
+                        </TouchableOpacity>) : (<View></View>)}
                     </View>) : (<Text style={gTextStyles.timeText}>{this.state.data.created_at}</Text>)}
 
 
                 <View style={styles.segmentation}></View>
 
-                <TouchableOpacity onPress={()=>this.onClickNewsView(this.state.data.post_cate_id)}>
+                <TouchableOpacity onPress={()=>this.onClickNewsView(this.state.data.id)}>
+                    {/*分类标签*/}
+                        <Text style={[styles.newsType, {backgroundColor: this.state.data.color}]}>{this.state.data.name}</Text>
+
                     {/*动态文案部分*/}
                     <Text style={styles.newsContent}>{this.state.data.post_content}</Text>
 
@@ -99,10 +118,12 @@ export default class NewsView extends Component {
                             <Image source={require('../../source/fenxiang.png')} style={styles.itemIcon}/>
                             <Text>{this.state.data.share_num}</Text>
                         </View>
-                        <View style={styles.bottomBottomSubContainer}>
-                            <Image source={require('../../source/pinglun1.png')} style={styles.itemIcon}/>
-                            <Text>{this.state.data.comment_num}</Text>
-                        </View>
+                        <TouchableOpacity onPress={()=>this.onClickNewsView(this.state.data.id)}>
+                            <View style={styles.bottomBottomSubContainer}>
+                                <Image source={require('../../source/pinglun1.png')} style={styles.itemIcon}/>
+                                <Text>{this.state.data.comment_num}</Text>
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={()=>this.onPraise(this.state.data)}>
                             <View style={styles.bottomBottomSubContainer}>
                                 {this.state.data.user_priase != null ? (
@@ -166,10 +187,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     publishTime: {
-
+        color: '#666666',
     },
     phoneModel: {
         marginRight: 15,
+        color: '#666666',
     },
     newsContent: {
         margin: 10,
@@ -179,6 +201,7 @@ const styles = StyleSheet.create({
     newsImg: {
         marginTop: 2,
         marginBottom: 2,
+        borderRadius: 5,
         marginLeft: 2,
         marginRight: 2,
         width: width/2 - 5,
@@ -226,7 +249,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     textBack: {
-      backgroundColor: '#FB5442',
+        backgroundColor: '#FB5442',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -234,5 +257,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 12,
         margin: 13.
-    }
+    },
+    newsType: {
+        color: 'white',
+        padding: 6,
+        margin: 12,
+        fontSize: 14,
+        borderRadius: 5,
+        alignSelf: 'flex-start',
+    },
 });

@@ -101,12 +101,11 @@ export default class My extends Component {
     topView = () => {
         return(
             <ImageBackground style={styles.topContainer} source={require('../source/wodebeijingtu.png')}>
-                <Image source={require('../source/weidenglu.png')} style={styles.avatar}/>
+                <Image source={{uri: this.state.personalData.user_info.avatar}} style={styles.avatar}/>
                 <View style={styles.personalInfoContainer}>
                     <Text style={styles.nickName}>{this.state.personalData.user_info.nick_name}</Text>
                     <Text style={styles.commonText}>ID：{this.state.personalData.user_info.id}</Text>
-                    <Text style={styles.commonText}>粉丝：{this.state.personalData.user_info.fan_num}
-                    关注：{this.state.personalData.user_info.follow_num}</Text>
+                    <Text style={styles.commonText}>粉丝：{this.state.personalData.user_info.fan_num}  关注：{this.state.personalData.user_info.follow_num}</Text>
                 </View>
                 <Image source={require('../source/xiugai.png')} style={styles.updateNickName}/>
             </ImageBackground>

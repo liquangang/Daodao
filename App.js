@@ -23,6 +23,7 @@ import Search from "./app/pages/Search";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Splash from "./app/pages/Splash";
 import Type from "./app/pages/Type";
+import {WToast} from 'react-native-smart-tip'
 
 const mainTab = createBottomTabNavigator();
 
