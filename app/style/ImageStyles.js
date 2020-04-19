@@ -33,7 +33,7 @@ export const gImageStyles = StyleSheet.create({
     closeImg: {
         height: 18,
         width: 18,
-        marginLeft: 13,
+        margin: 10,
     },
     bannerImg: {
         width: gScreen.screen_width,

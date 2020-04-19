@@ -124,7 +124,6 @@ export const gViewStyles = StyleSheet.create({
     btnBack: {
         height: 44,
         width: 44,
-        marginTop: gScreen.statusBarHeight + 18
     },
     qqloginBack: {
         height: 50,

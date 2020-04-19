@@ -29,7 +29,7 @@ export default class NewsDetail extends Component {
 
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({
             newsDetailData: [],
             commentList: [],
@@ -40,8 +40,8 @@ export default class NewsDetail extends Component {
             commentId: null,
         });
         let newsId = this.props.route.params.newsId;
-        this.fetchNewsData(newsId);
-        this.fetchNewsCommentListData(newsId);
+        await this.fetchNewsData(newsId);
+        await this.fetchNewsCommentListData(newsId);
 
         this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow',this.keyboardDidShow);
         this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide',this.keyboardDidHide);
@@ -49,6 +49,15 @@ export default class NewsDetail extends Component {
 
     //注销监听
     componentWillUnmount () {
+        this.setState({
+            newsDetailData: [],
+            commentList: [],
+            load: false,
+            toUserId: null,
+            autoFocus: null,
+            keyboardHeight: 0,
+            commentId: null,
+        });
         this.keyboardWillShowListener && this.keyboardWillShowListener.remove();
         this.keyboardWillHideListener && this.keyboardWillHideListener.remove();
     }
