@@ -66,7 +66,7 @@ export default class My extends Component {
                             };
                             this.props.navigation.navigate('PersonInfo', params);
                         } else if (item.title == '实名认证') {
-
+                            this.props.navigation.navigate('Verified', null);
                         } else if (item.title == '广告投放') {
 
                         } else if (item.title == '帮助中心') {
@@ -108,7 +108,11 @@ export default class My extends Component {
                     <Text style={styles.commonText}>ID：{this.state.personalData.user_info.id}</Text>
                     <Text style={styles.commonText}>粉丝：{this.state.personalData.user_info.fan_num}  关注：{this.state.personalData.user_info.follow_num}</Text>
                 </View>
-                <Image source={require('../source/xiugai.png')} style={styles.updateNickName}/>
+                <TouchableOpacity onPress={()=>{
+                    this.props.navigation.navigate('EditNickName', null);
+                }}>
+                    <Image source={require('../source/xiugai.png')} style={styles.updateNickName}/>
+                </TouchableOpacity>
             </ImageBackground>
         );
     }

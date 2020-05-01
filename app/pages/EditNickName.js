@@ -3,7 +3,7 @@ import {View, SafeAreaView, TextInput, StyleSheet, Text, TouchableOpacity, } fro
 import MyStatusBar from '../component/MyStatusBar'
 import MyNavigationBar from '../component/MyNavigationBar'
 
-export default class Verified extends Component {
+export default class EditNickName extends Component {
 
     render() {
         return (
@@ -16,16 +16,9 @@ export default class Verified extends Component {
                     ></MyNavigationBar>
                 </SafeAreaView>
                 <View style={styles.container1}>
-                    <Text>姓名：</Text>
-                    <TextInput underlineColorAndroid="transparent" placeholder="请输入真实姓名！" placeholderTextColor={'#999999'}
+                    <Text>新昵称：</Text>
+                    <TextInput underlineColorAndroid="transparent" placeholder="请输入新昵称！" placeholderTextColor={'#999999'}
                                style={styles.textInput1}
-                               onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
-                    </TextInput>
-                </View>
-                <View style={styles.container1}>
-                    <Text>身份证号：</Text>
-                    <TextInput underlineColorAndroid="transparent" placeholder="请输入身份证号！" placeholderTextColor={'#999999'}
-                               style={styles.textInput2}
                                onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
                     </TextInput>
                 </View>
@@ -55,7 +48,7 @@ const styles = StyleSheet.create({
         borderColor: '#D8D8D8',
         borderWidth: 1,
         borderRadius: 20,
-        width: gScreen.screen_width - 60,
+        width: gScreen.screen_width - 80,
     },
     textInput2: {
         padding: 10,
