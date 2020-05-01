@@ -25,9 +25,16 @@ export default class PersonInfo extends Component {
 
     componentDidMount() {
         this.setState({
-            userId: this.props.route.params.userId
+            userId: this.props.route.params.userId,
+            showType: this.props.route.params.showType
         });
-        this.showNewsList();
+
+        if (this.props.route.params.showType == 1) {
+            this.showNewsList();
+            this.showalbum();
+        } else {
+            this.showNewsList();
+        }
     }
 
     showNewsList = () => {

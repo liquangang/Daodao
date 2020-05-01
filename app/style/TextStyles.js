@@ -31,6 +31,7 @@ export const gTextStyles = StyleSheet.create({
     },
     textBack: {
         height: 30,
+        marginTop: 10,
         borderRadius: 5,
         backgroundColor: '#FB5442',
         alignItems: 'center',
@@ -41,5 +42,10 @@ export const gTextStyles = StyleSheet.create({
         fontSize: 12,
         marginLeft: 15,
         marginRight: 15,
+    },
+    huifuText: {
+        color: '#1A7EFA',
+        fontSize: 12,
+        padding: 5,
     }
 });

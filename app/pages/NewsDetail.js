@@ -9,6 +9,7 @@ import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import {gImageStyles} from "../style/ImageStyles";
 import {gTextStyles} from "../style/TextStyles";
+import ImageItemView from "../component/ImageItemView";
 
 export default class NewsDetail extends Component {
 
@@ -254,7 +255,9 @@ export default class NewsDetail extends Component {
                     <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                         <Text style={gTextStyles.text}> + 关注</Text>
                     </View>
-                </TouchableOpacity>) : (<View></View>)}
+                </TouchableOpacity>) : (<View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                    <Text style={gTextStyles.text}>已关注</Text>
+                </View>)}
 
             </View>
         );
@@ -264,7 +267,7 @@ export default class NewsDetail extends Component {
         return(
             <View style={styles.newsInfoContainer}>
                 <View style={styles.commentLine}></View>
-                <Text style={styles.newsInfoText}>{this.state.newsDetailData.newsDetail.user.post_content}</Text>
+                <Text style={styles.newsInfoText}>{this.state.newsDetailData.newsDetail.post_content}</Text>
 
                 {/*动态图片部分*/}
                 <FlatList
@@ -280,13 +283,11 @@ export default class NewsDetail extends Component {
         );
     };
 
-    imgItemView({ item }) {
-        return (
-            <View>
-                <Image source={{uri: item.src}} style={styles.newsImg}/>
-                {/*<Image source={require('../source/banner.jpg')} style={gImageStyles.bannerImg}/>*/}
-            </View>
-        );
+   imgItemView({ item }) {
+        return(<ImageItemView
+            data={item}
+        ></ImageItemView>);
+
     }
 
     commentItemView = ({ section: { title, data } }) => {
@@ -320,7 +321,7 @@ export default class NewsDetail extends Component {
                                 </View>
                                 <Text style={styles.commentText1}>{commentData.content}</Text>
                                 <Text style={styles.commentText3}>{commentData.created_at}</Text>
-                                <Text>回复Ta</Text>
+                                <TouchableOpacity onPress={() => this.onPraise(commentData)}><Text style={gTextStyles.huifuText}>回复Ta</Text></TouchableOpacity>
                             </View>
                     </View>
                     <View style={styles.commentLine}></View>
@@ -434,6 +435,7 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     newsInfoContainer: {
+        flex: 1,
     },
     newsInfoLine1: {
         height: 1,
@@ -539,5 +541,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         margin: 12,
-    }
+    },
+    newsImg: {
+        margin: 2,
+        borderRadius: 5,
+        width: gScreen.screen_width - 4,
+        resizeMode: 'center',
+    },
 });

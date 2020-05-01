@@ -55,8 +55,6 @@ export default class NewsView extends Component {
                         <TouchableOpacity onPress={()=>this.onClickAvatar(this.state.data.user.id)}>
                             <Image source={{uri: this.state.data.user.avatar}}
                                    style={styles.avatar}/>
-                            {/*<Image source={require('../../source/未登陆.png')}*/}
-                            {/*style={styles.avatar}/>*/}
                         </TouchableOpacity>
                         <View style={styles.topSubInfoContainer}>
                             <Text style={styles.nickName}>{this.state.data.user.nick_name}</Text>
@@ -83,7 +81,9 @@ export default class NewsView extends Component {
                             <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                                 <Text style={gTextStyles.text}> + 关注</Text>
                             </View>
-                        </TouchableOpacity>) : (<View></View>)}
+                        </TouchableOpacity>) : (<View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                            <Text style={gTextStyles.text}>已关注</Text>
+                        </View>)}
                     </View>) : (<Text style={gTextStyles.timeText}>{this.state.data.created_at}</Text>)}
 
 
@@ -261,7 +261,8 @@ const styles = StyleSheet.create({
     newsType: {
         color: 'white',
         padding: 6,
-        margin: 12,
+        marginTop: 10,
+        marginLeft: 12,
         fontSize: 14,
         borderRadius: 5,
         alignSelf: 'flex-start',

@@ -62,6 +62,7 @@ export default class My extends Component {
                         } else if (item.title == '我的相册') {
                             let params = {
                                 userId: 2,
+                                showType: 1,
                             };
                             this.props.navigation.navigate('PersonInfo', params);
                         } else if (item.title == '实名认证') {
