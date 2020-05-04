@@ -357,7 +357,14 @@ export default class PersonInfo extends Component {
     imgItemView = ({item}) => {
         return(
             <View>
-                <Image source={{uri: item.src}} style={styles.albumImg}/>
+                <TouchableOpacity onPress={()=>{
+                    let params = {
+                        newsId: item.id,
+                    };
+                    this.props.navigation.navigate('NewsDetail', params);
+                }}>
+                    <Image source={{uri: item.src}} style={styles.albumImg}/>
+                </TouchableOpacity>
             </View>
         );
     }
