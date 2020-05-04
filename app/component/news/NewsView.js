@@ -91,7 +91,8 @@ export default class NewsView extends Component {
 
                 <TouchableOpacity onPress={()=>this.onClickNewsView(this.state.data.id)}>
                     {/*分类标签*/}
-                        <Text style={[styles.newsType, {backgroundColor: this.state.data.color}]}>{this.state.data.name}</Text>
+                    {this.state.data.name != null ? (<Text style={[styles.newsType, {backgroundColor: this.state.data.color}]}>{this.state.data.name}</Text>
+                    ) : (<View></View>)}
 
                     {/*动态文案部分*/}
                     <Text style={styles.newsContent}>{this.state.data.post_content}</Text>

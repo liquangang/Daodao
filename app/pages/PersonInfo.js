@@ -6,6 +6,7 @@ import {gViewStyles} from "../style/ViewStyles";
 import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import NewsView from "../component/news/NewsView"
+import {gTextStyles} from "../style/TextStyles";
 
 // 个人详情页，注意与my页区分
 // 需要传入userid
@@ -173,8 +174,39 @@ export default class PersonInfo extends Component {
                     {this.listView()}
 
                     <View style={styles.container6}>
-                        <Image source={require('../source/privateChat.jpg')} style={styles.img2}/>
-                        <Image source={require('../source/attention.jpg')} style={styles.img2}/>
+                        <TouchableOpacity onPress={()=>{
+                            let params = {
+                                userId: this.state.personalData.user_info.id,
+                            };
+                            this.props.navigation.navigate('Chat', params);
+                        }}>
+                            <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                                <Text style={gTextStyles.text}>私信Ta</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        {
+                            this.state.personalData.user_follow == 1 ? (<TouchableOpacity onPress={()=>{
+                                let params = ('user_id=' + this.state.personalData.user_info.id + '&');
+                                let res = httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                                if (res.status = 0) {
+                                    let personalData = this.state.personalData;
+                                    personalData.user_follow = 1;
+                                    this.setState({
+                                        personalData: personalData,
+                                    });
+                                    WToast.show({data: '关注成功!'});
+                                } else {
+                                    alert("网络异常！请检查网络！");
+                                }
+                            }}>
+                                <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                                    <Text style={gTextStyles.text}>+ 关注</Text>
+                                </View>
+                            </TouchableOpacity>) : (<View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                                <Text style={gTextStyles.text}>已关注</Text>
+                            </View>)
+                        }
                     </View>
                 </SafeAreaView>
             </View>
