@@ -72,7 +72,7 @@ export default class My extends Component {
                         } else if (item.title == '帮助中心') {
 
                         } else if (item.title == '投诉反馈') {
-
+                            this.props.navigation.navigate('Feedback', null);
                         } else if (item.title == '在线客服') {
 
                         } else if (item.title == '关于我们') {

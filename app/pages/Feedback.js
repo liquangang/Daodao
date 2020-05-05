@@ -3,7 +3,7 @@ import {View, SafeAreaView, TextInput, StyleSheet, Text, TouchableOpacity, } fro
 import MyStatusBar from '../component/MyStatusBar'
 import MyNavigationBar from '../component/MyNavigationBar'
 
-export default class EditNickName extends Component {
+export default class Feedback extends Component {
 
     render() {
         return (
@@ -11,14 +11,21 @@ export default class EditNickName extends Component {
                 <MyStatusBar></MyStatusBar>
                 <SafeAreaView>
                     <MyNavigationBar
-                        title={'修改昵称'}
+                        title={'实名认证'}
                         onClickBack={()=>{this.props.navigation.goBack();}}
                     ></MyNavigationBar>
                 </SafeAreaView>
                 <View style={styles.container1}>
-                    <Text>新昵称：</Text>
-                    <TextInput underlineColorAndroid="transparent" placeholder="请输入新昵称！" placeholderTextColor={'#999999'}
+                    <Text>邮箱：</Text>
+                    <TextInput underlineColorAndroid="transparent" placeholder="请输入邮箱号码！" placeholderTextColor={'#999999'}
                                style={styles.textInput1}
+                               onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
+                    </TextInput>
+                </View>
+                <View style={styles.container1}>
+                    <Text>反馈：</Text>
+                    <TextInput underlineColorAndroid="transparent" placeholder="请输入反馈内容！" placeholderTextColor={'#999999'}
+                               style={styles.textInput2}
                                onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
                     </TextInput>
                 </View>
@@ -48,7 +55,7 @@ const styles = StyleSheet.create({
         borderColor: '#D8D8D8',
         borderWidth: 1,
         borderRadius: 20,
-        width: gScreen.screen_width - 80,
+        width: gScreen.screen_width - 60,
     },
     textInput2: {
         padding: 10,
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
         borderColor: '#D8D8D8',
         borderWidth: 1,
         borderRadius: 20,
-        width: gScreen.screen_width - 90,
+        width: gScreen.screen_width - 60,
     },
     subContainer1: {
         marginTop: 30,
