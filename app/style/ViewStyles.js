@@ -195,4 +195,7 @@ export const gViewStyles = StyleSheet.create({
         height: 1,
         backgroundColor: gColor.grayLineColor
     },
+    scorllviewContainer: {
+
+    },
 });

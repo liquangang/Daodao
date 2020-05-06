@@ -695,7 +695,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.baidu.rimdemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qingdaofangaokeji.daodao;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -715,7 +715,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.baidu.rimdemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qingdaofangaokeji.daodao;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

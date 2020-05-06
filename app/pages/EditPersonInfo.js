@@ -3,7 +3,7 @@ import {View, SafeAreaView, TextInput, StyleSheet, Text, TouchableOpacity, } fro
 import MyStatusBar from '../component/MyStatusBar'
 import MyNavigationBar from '../component/MyNavigationBar'
 
-export default class EditNickName extends Component {
+export default class EditPersonInfo extends Component {
 
     render() {
         return (
@@ -11,7 +11,7 @@ export default class EditNickName extends Component {
                 <MyStatusBar></MyStatusBar>
                 <SafeAreaView>
                     <MyNavigationBar
-                        title={'修改昵称'}
+                        title={'个人信息修改'}
                         onClickBack={()=>{this.props.navigation.goBack();}}
                     ></MyNavigationBar>
                 </SafeAreaView>

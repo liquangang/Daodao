@@ -109,7 +109,7 @@ export default class My extends Component {
                     <Text style={styles.commonText}>粉丝：{this.state.personalData.user_info.fan_num}  关注：{this.state.personalData.user_info.follow_num}</Text>
                 </View>
                 <TouchableOpacity onPress={()=>{
-                    this.props.navigation.navigate('EditNickName', null);
+                    this.props.navigation.navigate('EditPersonInfo', null);
                 }}>
                     <Image source={require('../source/xiugai.png')} style={styles.updateNickName}/>
                 </TouchableOpacity>

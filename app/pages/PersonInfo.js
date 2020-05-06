@@ -189,7 +189,7 @@ export default class PersonInfo extends Component {
                             this.state.personalData.user_follow == 1 ? (<TouchableOpacity onPress={()=>{
                                 let params = ('user_id=' + this.state.personalData.user_info.id + '&');
                                 let res = httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
-                                if (res.status = 0) {
+                                if (res.status == 0) {
                                     let personalData = this.state.personalData;
                                     personalData.user_follow = 1;
                                     this.setState({

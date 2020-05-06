@@ -25,7 +25,6 @@ export default class HomePage extends Component {
             headerLoad: false,
             listLoad: true,
         };
-
     }
 
     async componentDidMount() {

@@ -25,7 +25,7 @@ import Splash from "./app/pages/Splash";
 import Type from "./app/pages/Type";
 import {WToast} from 'react-native-smart-tip'
 import Verified from "./app/pages/Verified";
-import EditNickName from "./app/pages/EditNickName";
+import EditPersonInfo from "./app/pages/EditPersonInfo";
 import Feedback from "./app/pages/Feedback";
 
 const mainTab = createBottomTabNavigator();
@@ -84,7 +84,7 @@ function MainNav() {
             <mainNav.Screen name='Search' component={Search}/>
             <mainNav.Screen name='Type' component={Type}/>
             <mainNav.Screen name='Verified' component={Verified}/>
-            <mainNav.Screen name='EditNickName' component={EditNickName}/>
+            <mainNav.Screen name='EditPersonInfo' component={EditPersonInfo}/>
             <mainNav.Screen name='Feedback' component={Feedback}/>
         </mainNav.Navigator>
     );

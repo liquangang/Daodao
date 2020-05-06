@@ -2,8 +2,23 @@ import React, { Component } from "react";
 import {View, SafeAreaView, TextInput, StyleSheet, Text, TouchableOpacity, } from "react-native";
 import MyStatusBar from '../component/MyStatusBar'
 import MyNavigationBar from '../component/MyNavigationBar'
+import httpApi from "../tools/Api";
+import {WToast} from 'react-native-smart-tip'
 
 export default class Feedback extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            feedbackContent: ''
+        };
+    }
+
+    onEndEditing = (text) => {
+        this.setState({
+            feedbackContent: text
+        });
+    }
 
     render() {
         return (
@@ -16,13 +31,6 @@ export default class Feedback extends Component {
                     ></MyNavigationBar>
                 </SafeAreaView>
                 <View style={styles.container1}>
-                    <Text>邮箱：</Text>
-                    <TextInput underlineColorAndroid="transparent" placeholder="请输入邮箱号码！" placeholderTextColor={'#999999'}
-                               style={styles.textInput1}
-                               onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
-                    </TextInput>
-                </View>
-                <View style={styles.container1}>
                     <Text>反馈：</Text>
                     <TextInput underlineColorAndroid="transparent" placeholder="请输入反馈内容！" placeholderTextColor={'#999999'}
                                style={styles.textInput2}
@@ -30,7 +38,21 @@ export default class Feedback extends Component {
                     </TextInput>
                 </View>
                 <View style={styles.subContainer1}>
-                    <TouchableOpacity onPress={()=>this.onPublish()}>
+                    <TouchableOpacity onPress={async ()=>{
+                        if (this.state.feedbackContent.length > 0) {
+                            let params = ('content=' + this.state.feedbackContent + '&');
+                            let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_suggest', params);
+                            if (res.status == 0) {
+                                WToast.show({data: res.msg});
+                                this.props.navigation.goBack();
+                            } else {
+                                alert("网络异常！请检查网络！");
+                            }
+                        } else {
+                            WToast.show({data: '反馈内容格式错误！'});
+                        }
+
+                    }}>
                         <View style={styles.backView}>
                             <Text style={styles.text7}>提交</Text>
                         </View>
