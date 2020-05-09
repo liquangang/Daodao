@@ -34,7 +34,12 @@ export default class Feedback extends Component {
                     <Text>反馈：</Text>
                     <TextInput underlineColorAndroid="transparent" placeholder="请输入反馈内容！" placeholderTextColor={'#999999'}
                                style={styles.textInput2}
-                               onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}>
+                               onSubmitEditing={(event)=>this.onEndEditing(event.nativeEvent.text)}
+                               onChange={(event)=>{
+                                   this.setState({
+                                       feedbackContent: event.nativeEvent.text,
+                                   })
+                               }}>
                     </TextInput>
                 </View>
                 <View style={styles.subContainer1}>

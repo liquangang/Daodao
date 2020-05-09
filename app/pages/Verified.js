@@ -79,7 +79,13 @@ export default class Verified extends Component {
                                            this.setState({
                                                realName: event.nativeEvent.text,
                                            })
-                                       }}>
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               realName: event.nativeEvent.text,
+                                           })
+                                       }}
+                            >
                             </TextInput>
                         </View>
                         <View style={styles.container1}>
@@ -103,7 +109,7 @@ export default class Verified extends Component {
                                     params+=('img_zheng=' + this.state.zhengImg + '&');
                                     params+=('img_fan=' + this.state.fanImg + '&');
                                     let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_cert', params);
-                                    if (res.status == 0) {
+                                    if (res.status == 1) {
                                         WToast.show({data: res.msg});
                                         this.props.navigation.goBack();
                                     } else {
