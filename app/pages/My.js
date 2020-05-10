@@ -102,7 +102,11 @@ export default class My extends Component {
     topView = () => {
         return(
             <ImageBackground style={styles.topContainer} source={require('../source/wodebeijingtu.png')}>
-                <Image source={{uri: this.state.personalData.user_info.avatar}} style={styles.avatar}/>
+                <TouchableOpacity onPress={()=>{
+                    this.props.navigation.navigate('EditPersonInfo', null);
+                }}>
+                    <Image source={{uri: this.state.personalData.user_info.avatar}} style={styles.avatar}/>
+                </TouchableOpacity>
                 <View style={styles.personalInfoContainer}>
                     <Text style={styles.nickName}>{this.state.personalData.user_info.nick_name}</Text>
                     <Text style={styles.commonText}>ID：{this.state.personalData.user_info.id}</Text>
