@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import {View, SafeAreaView, TextInput, StyleSheet, Text, TouchableOpacity, Image,} from "react-native";
+import {
+    View,
+    SafeAreaView,
+    TextInput,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Image,
+    ScrollView,
+    Keyboard
+} from "react-native";
 import MyStatusBar from '../component/MyStatusBar'
 import MyNavigationBar from '../component/MyNavigationBar'
 import ImagePicker from 'react-native-image-picker';
@@ -37,11 +47,38 @@ export default class EditPersonInfo extends Component {
             city: null,
             birthday: null,
             job: null,
+            keyboardHeight: 0,
         };
+
+        this.keyboardWillShowListener = null;
+        this.keyboardWillHideListener = null;
     }
 
     componentDidMount() {
         this.fetchPersonalData();
+        this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow',this.keyboardDidShow);
+        this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide',this.keyboardDidHide);
+    }
+
+    //注销监听
+    componentWillUnmount () {
+        this.keyboardWillShowListener && this.keyboardWillShowListener.remove();
+        this.keyboardWillHideListener && this.keyboardWillHideListener.remove();
+    }
+
+
+    //键盘弹起后执行
+    keyboardDidShow = (event) =>  {
+        this.setState({
+            keyboardHeight: event.endCoordinates.height,
+        });
+    }
+
+    //键盘收起后执行
+    keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0,
+        });
     }
 
     // 请求个人数据
@@ -72,166 +109,165 @@ export default class EditPersonInfo extends Component {
                         title={'个人信息修改'}
                         onClickBack={()=>{this.props.navigation.goBack();}}
                     ></MyNavigationBar>
-                    <View style={styles.container1}>
-                        <Text>头像：</Text>
-                        <TouchableOpacity onPress={()=>{
-                            ImagePicker.showImagePicker(options, (response) => {
+                    <ScrollView>
+                        <View style={styles.container1}>
+                            <Text>头像：</Text>
+                            <TouchableOpacity onPress={()=>{
+                                ImagePicker.showImagePicker(options, (response) => {
 
-                                if (response.didCancel) {
-                                } else if (response.error) {
-                                } else {
-                                    this.setState({
-                                        avatar: {uri: 'data:image/jpeg;base64,'+ response.data},
-                                    });
+                                    if (response.didCancel) {
+                                    } else if (response.error) {
+                                    } else {
+                                        this.setState({
+                                            avatar: {uri: 'data:image/jpeg;base64,'+ response.data},
+                                        });
+                                    }
+                                });
+                            }}>
+                                {
+                                    this.state.avatar == null ?
+                                        (<Image source={{uri: this.state.personalData.user_info.avatar}} style={styles.avatar}/>)
+                                        : (<Image source={this.state.avatar} style={styles.avatar}/>)
                                 }
-                            });
-                        }}>
-                            {
-                                this.state.avatar == null ?
-                                    (<Image source={{uri: this.state.personalData.user_info.avatar}} style={styles.avatar}/>)
-                                    : (<Image source={this.state.avatar} style={styles.avatar}/>)
-                            }
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>新昵称：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入新昵称！" placeholderTextColor={'#999999'}
-                                   style={styles.textInput1}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           nickName: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           nickName: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>性别（1男 2 女 3保密）：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入性别！" placeholderTextColor={'#999999'}
-                                   style={styles.textInput3}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           gender: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           gender: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>个人简介：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入个人简介！" placeholderTextColor={'#999999'}
-                                   style={[styles.textInput1, {width: gScreen.screen_width - 90}]}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           personalDes: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           personalDes: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>省份：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入省份！" placeholderTextColor={'#999999'}
-                                   style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           province: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           province: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>城市：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入城市！" placeholderTextColor={'#999999'}
-                                   style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           city: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           city: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>生日：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入生日！" placeholderTextColor={'#999999'}
-                                   style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           birthday: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           birthday: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.container1}>
-                        <Text>职业：</Text>
-                        <TextInput underlineColorAndroid="transparent" placeholder="请输入职业！" placeholderTextColor={'#999999'}
-                                   style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
-                                   onSubmitEditing={(event)=>{
-                                       this.setState({
-                                           job: event.nativeEvent.text,
-                                       })
-                                   }}
-                                   onChange={(event)=>{
-                                       this.setState({
-                                           job: event.nativeEvent.text,
-                                       })
-                                   }}>
-                        </TextInput>
-                    </View>
-                    <View style={styles.subContainer1}>
-                        <TouchableOpacity onPress={async ()=>{
-                            if (this.state.realName.length > 0) {
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>新昵称：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入新昵称！" placeholderTextColor={'#999999'}
+                                       style={styles.textInput1}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               nickName: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               nickName: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>性别（1男 2 女 3保密）：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入性别！" placeholderTextColor={'#999999'}
+                                       style={styles.textInput3}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               gender: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               gender: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>个人简介：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入个人简介！" placeholderTextColor={'#999999'}
+                                       style={[styles.textInput1, {width: gScreen.screen_width - 90}]}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               personalDes: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               personalDes: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>省份：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入省份！" placeholderTextColor={'#999999'}
+                                       style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               province: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               province: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>城市：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入城市！" placeholderTextColor={'#999999'}
+                                       style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               city: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               city: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>生日：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入生日！" placeholderTextColor={'#999999'}
+                                       style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               birthday: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               birthday: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.container1}>
+                            <Text>职业：</Text>
+                            <TextInput underlineColorAndroid="transparent" placeholder="请输入职业！" placeholderTextColor={'#999999'}
+                                       style={[styles.textInput1, {width: gScreen.screen_width - 65}]}
+                                       onSubmitEditing={(event)=>{
+                                           this.setState({
+                                               job: event.nativeEvent.text,
+                                           })
+                                       }}
+                                       onChange={(event)=>{
+                                           this.setState({
+                                               job: event.nativeEvent.text,
+                                           })
+                                       }}>
+                            </TextInput>
+                        </View>
+                        <View style={styles.subContainer1}>
+                            <TouchableOpacity onPress={async ()=>{
                                 let params = ('avatar=' + this.state.avatar + '&');
-                                params+=('nick_name=' + this.state.nickName + '&');
-                                params+=('sex=' + this.state.gender + '&');
-                                params+=('desc=' + this.state.personalDes + '&');
-                                params+=('province=' + this.state.province + '&');
-                                params+=('city=' + this.state.city + '&');
-                                params+=('birthday=' + this.state.birthday + '&');
-                                params+=('job=' + this.state.job + '&');
+                                params += ('nick_name=' + this.state.nickName + '&');
+                                params += ('sex=' + this.state.gender + '&');
+                                params += ('desc=' + this.state.personalDes + '&');
+                                params += ('province=' + this.state.province + '&');
+                                params += ('city=' + this.state.city + '&');
+                                params += ('birthday=' + this.state.birthday + '&');
+                                params += ('job=' + this.state.job + '&');
                                 let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_info', params);
-                                if (res.status == 1) {
+                                if (res.status == 0) {
                                     WToast.show({data: res.msg});
                                     this.props.navigation.goBack();
                                 } else {
                                     alert("网络异常！请检查网络！");
                                 }
-                            } else {
-                                alert('姓名格式错误！');
-                            }
-                        }}>
-                            <View style={styles.backView}>
-                                <Text style={styles.text7}>提交</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                            }}>
+                                <View style={styles.backView}>
+                                    <Text style={styles.text7}>提交</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[{height: this.state.keyboardHeight}]}></View>
+                    </ScrollView>
                 </SafeAreaView>
             </View>
 
