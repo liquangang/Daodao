@@ -35,26 +35,34 @@ export default class PersonInfo extends Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        this.setState({
+            personalData: [],
+            albumData: [],
+            attentionData: [],
+            load: false,
+            showType: 0, // 展示数据类型，0：资料部分，1：相册 2: 关注
+            userId: null,
+        });
         this.setState({
             userId: this.props.route.params.userId,
             showType: this.props.route.params.showType
         });
 
         if (this.props.route.params.showType == 1) {
-            this.showNewsList();
-            this.showalbum();
+            await this.showNewsList();
+            await this.showalbum();
         } else {
-            this.showNewsList();
+            await this.showNewsList();
         }
     }
 
-    showNewsList = () => {
+    showNewsList = async () => {
         this.setState({
             load: false,
             showType: 0,
         });
-        this.fetchPersonalData(this.state.userId);
+        await this.fetchPersonalData(this.state.userId);
     }
 
     showalbum = () => {

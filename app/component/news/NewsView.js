@@ -63,41 +63,55 @@ export default class NewsView extends Component {
                                 <Text style={styles.publishTime}>{this.state.data.created_at}   来自：{this.state.data.phone_model}</Text>
                             </View>
                         </View>
-                        {this.state.data.user_follow == null ? (<TouchableOpacity onPress={async ()=>{
-                            // 关注逻辑
-                            let params = ('to_user_id=' + this.state.data.user.id + '&');
-                            let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
-                            if (res.status == 0) {
-                                let itemData = this.state.data;
-                                itemData.user_follow = 1;
-                                this.setState({
-                                    data: itemData,
-                                });
-                                WToast.show({data: '关注成功!'});
-                            } else {
-                                alert("网络异常！请检查网络！");
-                            }
+                        {this.state.data.user_follow == null ? (<TouchableOpacity
 
-                        }}>
+                            onPress={()=>this.onClickAvatar(this.state.data.user.id)}
+                            // onPress={
+
+                        //     async ()=>{
+                        //     // 关注逻辑
+                        //     let params = ('to_user_id=' + this.state.data.user.id + '&');
+                        //     let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                        //     if (res.status == 0) {
+                        //         let itemData = this.state.data;
+                        //         itemData.user_follow = 1;
+                        //         this.setState({
+                        //             data: itemData,
+                        //         });
+                        //         WToast.show({data: '关注成功!'});
+                        //     } else {
+                        //         alert("网络异常！请检查网络！");
+                        //     }
+                        //
+                        // }
+
+                        // }
+
+                        >
                             <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                                 <Text style={gTextStyles.text}> + 关注</Text>
                             </View>
-                        </TouchableOpacity>) : (<TouchableOpacity onPress={async ()=>{
-                            // 关注逻辑
-                            let params = ('to_user_id=' + this.state.data.user.id + '&');
-                            let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
-                            if (res.status == 0) {
-                                let itemData = this.state.data;
-                                itemData.user_follow = null;
-                                this.setState({
-                                    data: itemData,
-                                });
-                                WToast.show({data: '取关成功!'});
-                            } else {
-                                alert("网络异常！请检查网络！");
-                            }
+                        </TouchableOpacity>) : (<TouchableOpacity
+                            onPress={()=>this.onClickAvatar(this.state.data.user.id)}
+                            // onPress={
+                        //     async ()=>{
+                        //     // 关注逻辑
+                        //     let params = ('to_user_id=' + this.state.data.user.id + '&');
+                        //     let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                        //     if (res.status == 0) {
+                        //         let itemData = this.state.data;
+                        //         itemData.user_follow = null;
+                        //         this.setState({
+                        //             data: itemData,
+                        //         });
+                        //         WToast.show({data: '取关成功!'});
+                        //     } else {
+                        //         alert("网络异常！请检查网络！");
+                        //     }
+                        // }
 
-                        }}>
+                        // }
+                            >
                             <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                                 <Text style={gTextStyles.text}>已关注</Text>
                             </View>

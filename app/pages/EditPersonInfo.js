@@ -39,14 +39,14 @@ export default class EditPersonInfo extends Component {
         this.state = {
             load: false,
             personalData: null,
-            avatar: null,
-            nickName: null,
-            gender: null,
-            personalDes: null,
-            province: null,
-            city: null,
-            birthday: null,
-            job: null,
+            avatar: '',
+            nickName: '',
+            gender: '',
+            personalDes: '',
+            province: '',
+            city: '',
+            birthday: '',
+            job: '',
             keyboardHeight: 0,
         };
 
