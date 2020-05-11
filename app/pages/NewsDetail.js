@@ -10,6 +10,9 @@ import MyStatusBar from "../component/MyStatusBar";
 import {gImageStyles} from "../style/ImageStyles";
 import {gTextStyles} from "../style/TextStyles";
 import ImageItemView from "../component/ImageItemView";
+import {WToast} from "react-native-smart-tip/index";
+import CommentItemView from "../component/CommentItemView";
+import SubCommentItemView from "../component/SubCommentItemView";
 
 export default class NewsDetail extends Component {
 
@@ -106,6 +109,7 @@ export default class NewsDetail extends Component {
             this.refs.textInputRefer.clear();
             let newsId = this.props.route.params.newsId;
             this.fetchNewsCommentListData(newsId);
+            WToast.show({data: '评论成功!'});
         } else {
             alert("网络异常！请检查网络！");
         }
@@ -162,6 +166,14 @@ export default class NewsDetail extends Component {
         } else {
             alert("网络异常！请检查网络！");
         }
+    }
+
+    onClickReply = (item) => {
+        this.setState({
+            toUserId: item.user.id,
+            commentId: item.id,
+        });
+        this.refs.textInputRefer.focus();
     }
 
     render() {
@@ -229,19 +241,18 @@ export default class NewsDetail extends Component {
         return(
             <View style={styles.userInfoContainer}>
                 <TouchableOpacity>
-                    {/*<Image source={require('../source/未登陆.png')} style={styles.avatar}/>*/}
                     <Image source={{uri: this.state.newsDetailData.newsDetail.user.avatar}}
                            style={styles.avatar}/>
                 </TouchableOpacity>
                 <View style={styles.userInfoContainer1}>
                     <Text style={styles.userInfoText1}>{this.state.newsDetailData.newsDetail.user.nick_name}</Text>
                     <Text style={styles.userInfoText}>{this.state.newsDetailData.newsDetail.user.created_at} 来自：
-                        {this.state.newsDetailData.newsDetail.user.phone_model}</Text>
+                        {this.state.newsDetailData.newsDetail.phone_model}</Text>
                 </View>
                 {this.state.newsDetailData.newsDetail.user_follow == null ? (<TouchableOpacity onPress={async ()=>{
-                    let params = ('user_id=' + this.state.newsDetailData.newsDetail.user.id + '&');
+                    let params = ('to_user_id=' + this.state.newsDetailData.newsDetail.user.id + '&');
                     let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
-                    if (res.status = 0) {
+                    if (res.status == 0) {
                         let newsDetailData = this.state.newsDetailData;
                         newsDetailData.newsDetail.user_follow = 1;
                         this.setState({
@@ -255,9 +266,24 @@ export default class NewsDetail extends Component {
                     <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                         <Text style={gTextStyles.text}> + 关注</Text>
                     </View>
-                </TouchableOpacity>) : (<View style={[gTextStyles.textBack, {marginRight: 5}]}>
-                    <Text style={gTextStyles.text}>已关注</Text>
-                </View>)}
+                </TouchableOpacity>) : (<TouchableOpacity onPress={async ()=>{
+                    let params = ('to_user_id=' + this.state.newsDetailData.newsDetail.user.id + '&');
+                    let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                    if (res.status == 0) {
+                    let newsDetailData = this.state.newsDetailData;
+                    newsDetailData.newsDetail.user_follow = null;
+                    this.setState({
+                    newsDetailData: newsDetailData,
+                });
+                    WToast.show({data: '取关成功!'});
+                } else {
+                    alert("网络异常！请检查网络！");
+                }
+                }}>
+                    <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                        <Text style={gTextStyles.text}>已关注</Text>
+                    </View>
+                </TouchableOpacity>)}
 
             </View>
         );
@@ -291,83 +317,19 @@ export default class NewsDetail extends Component {
     }
 
     commentItemView = ({ section: { title, data } }) => {
-        let commentData = title;
-
-        return(
-            <View>
-                <TouchableOpacity onPress={()=>{
-                    this.setState({
-                        toUserId: commentData.user.id,
-                        commentId: commentData.id,
-                    });
-                    this.refs.textInputRefer.focus();
-                }}>
-                    <View style={styles.commentContainer}>
-                        <Image source={{uri: commentData.user.avatar}} style={styles.img1}/>
-                            <View style={styles.commentContainer1}>
-                                <View style={styles.commentContainer2}>
-                                    <Text style={styles.commentText}>{commentData.user.nick_name}</Text>
-                                    <TouchableOpacity onPress={() => this.onPraise(commentData)}>
-                                        <View style={gViewStyles.praiseView}>
-                                            {commentData.comment_priase != null ? (
-                                                <Image source={require('../source/dianzanred.png')}
-                                                       style={styles.commentImg}/>
-                                            ) : (<Image source={require('../source/dianzanblack.png')}
-                                                        style={styles.commentImg}/>
-                                            )}
-                                            <Text style={styles.commentText2}>{commentData.praise_num}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                <Text style={styles.commentText1}>{commentData.content}</Text>
-                                <Text style={styles.commentText3}>{commentData.created_at}</Text>
-                                <TouchableOpacity onPress={() => this.onPraise(commentData)}><Text style={gTextStyles.huifuText}>回复Ta</Text></TouchableOpacity>
-                            </View>
-                    </View>
-                    <View style={styles.commentLine}></View>
-                </TouchableOpacity>
-            </View>
-        );
-    };
+       return(<CommentItemView
+       data={title}
+       onClickReply={this.onClickReply}
+       />);
+    }
 
     subCommentItemView = ({ item }) => {
-
-        return(
-            <View>
-                <TouchableOpacity onPress={()=>{
-                    this.setState({
-                        toUserId: item.user.id,
-                        commentId: commentData.id,
-                    });
-                    this.refs.textInputRefer.focus();
-                }}>
-                    <View style={styles.subCommentContainer}>
-                        <Image source={{uri: item.user.avatar}} style={styles.img1}/>
-                            <View style={styles.commentContainer3}>
-                                <View style={styles.commentContainer4}>
-                                    <Text style={styles.commentText}> {item.user.nick_name}</Text>
-                                    <TouchableOpacity onPress={() => this.onPraise(item)}>
-                                        <View style={gViewStyles.praiseView}>
-                                            {item.comment_priase != null ? (
-                                                <Image source={require('../source/dianzanred.png')}
-                                                       style={styles.commentImg}/>
-                                            ) : (<Image source={require('../source/dianzanblack.png')}
-                                                        style={styles.commentImg}/>
-                                            )}
-                                            <Text style={styles.commentText2}>{item.praise_num}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                <Text style={styles.commentText1}>{item.user.nick_name} @ {item.to_user.nick_name}：{item.content}</Text>
-                                <Text style={styles.commentText3}>{item.created_at}</Text>
-                                <Text>回复Ta</Text>
-                            </View>
-                    </View>
-                    <View style={styles.commentLine}></View>
-                </TouchableOpacity>
-
-        </View>);
+        return(<SubCommentItemView
+            data={item}
+            onClickReply={this.onClickReply}
+        />);
     }
+
 }
 
 const {width, height, scale} = Dimensions.get('window');

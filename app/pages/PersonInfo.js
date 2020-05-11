@@ -1,5 +1,15 @@
-import React, { Component } from "react";
-import {Text, View, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions, SectionList, SafeAreaView} from "react-native";
+import React, {Component} from "react";
+import {
+    Text,
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    FlatList,
+    Dimensions,
+    SectionList,
+    SafeAreaView
+} from "react-native";
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
 import {gViewStyles} from "../style/ViewStyles";
@@ -7,6 +17,7 @@ import MyNavigationBar from '../component/MyNavigationBar'
 import MyStatusBar from "../component/MyStatusBar";
 import NewsView from "../component/news/NewsView"
 import {gTextStyles} from "../style/TextStyles";
+import {WToast} from "react-native-smart-tip/index";
 
 // 个人详情页，注意与my页区分
 // 需要传入userid
@@ -100,8 +111,8 @@ export default class PersonInfo extends Component {
             for (var key in res.data) {
                 var value = res.data[key];
                 let subAlbumArr = value;
-                let dataArr = [{data:subAlbumArr}];
-                newAlbumArr.push({title:key, data:dataArr});
+                let dataArr = [{data: subAlbumArr}];
+                newAlbumArr.push({title: key, data: dataArr});
             }
             this.setState({
                 albumData: newAlbumArr,
@@ -113,10 +124,8 @@ export default class PersonInfo extends Component {
     }
 
     // 请求关注列表
-    fetchAttentionData = async() => {
-        let params = {
-
-        };
+    fetchAttentionData = async () => {
+        let params = {};
         let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/user_follow_list", params);
         if (res.status == 0) {
             this.setState({
@@ -134,13 +143,15 @@ export default class PersonInfo extends Component {
             return <LoadingView></LoadingView>
         }
 
-        return(
-            <View style={{ flex: 1, backgroundColor: 'white' }}>
+        return (
+            <View style={{flex: 1, backgroundColor: 'white'}}>
                 <MyStatusBar/>
                 <SafeAreaView style={gViewStyles.rootViewContainer}>
                     <MyNavigationBar
                         title={'个人信息'}
-                        onClickBack={()=>{this.props.navigation.goBack();}}
+                        onClickBack={() => {
+                            this.props.navigation.goBack();
+                        }}
                     ></MyNavigationBar>
 
                     <View style={styles.itemContainer1}>
@@ -151,21 +162,24 @@ export default class PersonInfo extends Component {
                             <View style={styles.container3}>
                                 <Text style={styles.text1}>{this.state.personalData.user_info.nick_name}</Text>
                                 <Text style={styles.text2}>签名：{this.state.personalData.user_info.desc}</Text>
-                                <Text style={styles.text3}>粉丝：{this.state.personalData.user_info.fan_num}    关注：{this.state.personalData.user_info.follow_num}</Text>
+                                <Text
+                                    style={styles.text3}>粉丝：{this.state.personalData.user_info.fan_num} 关注：{this.state.personalData.user_info.follow_num}</Text>
                             </View>
                         </View>
                         <View style={styles.container4}>
                             <TouchableOpacity onPress={this.showNewsList}>
                                 <Text style={styles.text4}>资料</Text>
-                                {this.state.showType == 0 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
+                                {this.state.showType == 0 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (
+                                    <View></View>)}
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this.showalbum}>
                                 <Text style={styles.text4}>相册</Text>
-                                {this.state.showType == 1 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}
+                                {this.state.showType == 1 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (
+                                    <View></View>)}
                             </TouchableOpacity>
                             {/*<TouchableOpacity onPress={this.showAttentioin}>*/}
-                                {/*<Text style={styles.text4}>关注</Text>*/}
-                                {/*{this.state.showType == 2 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}*/}
+                            {/*<Text style={styles.text4}>关注</Text>*/}
+                            {/*{this.state.showType == 2 ? (<View style={gViewStyles.scrollBarBottomLine2}></View>) : (<View></View>)}*/}
                             {/*</TouchableOpacity>*/}
                         </View>
                         <View style={styles.line5}></View>
@@ -174,7 +188,7 @@ export default class PersonInfo extends Component {
                     {this.listView()}
 
                     <View style={styles.container6}>
-                        <TouchableOpacity onPress={()=>{
+                        <TouchableOpacity onPress={() => {
                             let params = {
                                 userId: this.state.personalData.user_info.id,
                             };
@@ -186,9 +200,9 @@ export default class PersonInfo extends Component {
                         </TouchableOpacity>
 
                         {
-                            this.state.personalData.user_follow == 1 ? (<TouchableOpacity onPress={()=>{
-                                let params = ('user_id=' + this.state.personalData.user_info.id + '&');
-                                let res = httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                            this.state.personalData.user_follow == null ? (<TouchableOpacity onPress={async () => {
+                                let params = ('to_user_id=' + this.state.personalData.user_info.id + '&');
+                                let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
                                 if (res.status == 0) {
                                     let personalData = this.state.personalData;
                                     personalData.user_follow = 1;
@@ -203,9 +217,24 @@ export default class PersonInfo extends Component {
                                 <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                                     <Text style={gTextStyles.text}>+ 关注</Text>
                                 </View>
-                            </TouchableOpacity>) : (<View style={[gTextStyles.textBack, {marginRight: 5}]}>
-                                <Text style={gTextStyles.text}>已关注</Text>
-                            </View>)
+                            </TouchableOpacity>) : (<TouchableOpacity onPress={async () => {
+                                let params = ('to_user_id=' + this.state.personalData.user_info.id + '&');
+                                let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                                if (res.status == 0) {
+                                    let personalData = this.state.personalData;
+                                    personalData.user_follow = null;
+                                    this.setState({
+                                        personalData: personalData,
+                                    });
+                                    WToast.show({data: '取关成功!'});
+                                } else {
+                                    alert("网络异常！请检查网络！");
+                                }
+                            }}>
+                                <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                                    <Text style={gTextStyles.text}>已关注</Text>
+                                </View>
+                            </TouchableOpacity>)
                         }
                     </View>
                 </SafeAreaView>
@@ -218,37 +247,37 @@ export default class PersonInfo extends Component {
     listView = () => {
         if (this.state.showType == 0) {
             // 资料
-            return(
+            return (
                 <FlatList
                     extraData={this.state}
                     style={styles.container}
                     data={this.state.personalData.post_list}
-                    renderItem={({item})=>(<NewsView
-                         onClickNews={()=>{
-                             let params = {
-                                 newsId: item.id,
-                             };
-                             this.props.navigation.navigate('NewsDetail', params);
-                         }}
-                         data={item}
-                     ></NewsView>)}
+                    renderItem={({item}) => (<NewsView
+                        onClickNews={() => {
+                            let params = {
+                                newsId: item.id,
+                            };
+                            this.props.navigation.navigate('NewsDetail', params);
+                        }}
+                        data={item}
+                    ></NewsView>)}
                     ListHeaderComponent={this.topView}
                 />
             );
         } else if (this.state.showType == 1) {
             // 相册
-            return(<SectionList
+            return (<SectionList
                 style={styles.sectionList1}
                 stickySectionHeadersEnabled={false}
                 ListHeaderComponent={this.topView}
                 sections={this.state.albumData}
                 renderItem={this.albumItemView}
                 renderSectionHeader={this.albumHeaderItemView}
-                renderSectionFooter={()=><View style={styles.line3}></View>}
+                renderSectionFooter={() => <View style={styles.line3}></View>}
             ></SectionList>);
         } else {
             // 关注
-            return(<FlatList
+            return (<FlatList
                 extraData={this.state}
                 data={this.state.attentionData}
                 renderItem={this.attentionItemView}
@@ -258,7 +287,7 @@ export default class PersonInfo extends Component {
     }
 
     topView = () => {
-        return(
+        return (
             <View style={gViewStyles.viewContainer2}>
 
                 {
@@ -268,7 +297,8 @@ export default class PersonInfo extends Component {
                         <Text style={styles.text5}>感情状况：单身</Text>
                         <Text style={styles.text5}>出生日期：2000-01-01</Text>
                         <Text style={styles.text5}>职业：互联网-电子工程</Text>
-                        <Text style={styles.text5}>注册地点：{this.state.personalData.user_info.province}-{this.state.personalData.user_info.city}</Text>
+                        <Text
+                            style={styles.text5}>注册地点：{this.state.personalData.user_info.province}-{this.state.personalData.user_info.city}</Text>
                     </View>) : (<View></View>)
                 }
 
@@ -277,9 +307,9 @@ export default class PersonInfo extends Component {
     }
 
     attentionItemView = ({item}) => {
-        return(
+        return (
             <View>
-                <TouchableOpacity onPress={()=>this.onClickAttention(item)}>
+                <TouchableOpacity onPress={() => this.onClickAttention(item)}>
                     <View style={styles.line}></View>
                     <View style={styles.msgContainer}>
                         <Image source={{uri: item.to_user.avatar}} style={styles.avatar}/>
@@ -297,8 +327,8 @@ export default class PersonInfo extends Component {
         );
     }
 
-    newsItemView = ({ item }) => {
-        return(
+    newsItemView = ({item}) => {
+        return (
             <View style={styles.itemContainer2}>
                 <Text style={styles.text5}>{item.created_at}</Text>
                 <View style={styles.line2}></View>
@@ -328,7 +358,7 @@ export default class PersonInfo extends Component {
                             <Image source={require('../source/pinglun1.png')} style={styles.itemIcon}/>
                             <Text>{item.comment_num}</Text>
                         </View>
-                        <TouchableOpacity onPress={()=>this.onPraise(item)}>
+                        <TouchableOpacity onPress={() => this.onPraise(item)}>
                             <View style={styles.bottomBottomSubContainer}>
                                 <Image source={require('../source/dianzanblack.png')} style={styles.itemIcon}/>
                                 <Text>{item.praise_num}</Text>
@@ -355,9 +385,9 @@ export default class PersonInfo extends Component {
     }
 
     imgItemView = ({item}) => {
-        return(
+        return (
             <View>
-                <TouchableOpacity onPress={()=>{
+                <TouchableOpacity onPress={() => {
                     let params = {
                         newsId: item.id,
                     };
@@ -370,14 +400,14 @@ export default class PersonInfo extends Component {
     }
 
     albumHeaderItemView = ({section}) => {
-        return(
+        return (
             <View>
                 <Text style={styles.text8}>{section.title}</Text>
             </View>
         );
     }
 
-    newsImgItemView({ item }) {
+    newsImgItemView({item}) {
         return (
             <View>
                 <Image source={{uri: item.src}} style={styles.newsImgs}/>
@@ -487,7 +517,7 @@ const styles = StyleSheet.create({
     },
     img2: {
         height: 30,
-        width: width/2 - 100,
+        width: width / 2 - 100,
     },
     container6: {
         padding: 10,
@@ -505,8 +535,7 @@ const styles = StyleSheet.create({
         height: 0.5,
         backgroundColor: '#F2F2F2',
     },
-    sectionList1: {
-    },
+    sectionList1: {},
     text8: {
         color: '#333333',
         fontSize: 11.5,
@@ -554,7 +583,7 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         marginLeft: 2,
         marginRight: 2,
-        width: width/2 - 5,
-        height: width/2 - 5,
+        width: width / 2 - 5,
+        height: width / 2 - 5,
     },
 });

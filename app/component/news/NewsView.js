@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {View, StyleSheet, Image, Text, Dimensions, FlatList, TouchableOpacity, ImageBackground } from "react-native";
 import httpApi from "../../tools/Api";
 import {gTextStyles} from "../../style/TextStyles";
+import {WToast} from "react-native-smart-tip/index";
 
 export default class NewsView extends Component {
 
@@ -64,9 +65,9 @@ export default class NewsView extends Component {
                         </View>
                         {this.state.data.user_follow == null ? (<TouchableOpacity onPress={async ()=>{
                             // 关注逻辑
-                            let params = ('user_id=' + this.state.data.user.id + '&');
+                            let params = ('to_user_id=' + this.state.data.user.id + '&');
                             let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
-                            if (res.status = 0) {
+                            if (res.status == 0) {
                                 let itemData = this.state.data;
                                 itemData.user_follow = 1;
                                 this.setState({
@@ -81,9 +82,26 @@ export default class NewsView extends Component {
                             <View style={[gTextStyles.textBack, {marginRight: 5}]}>
                                 <Text style={gTextStyles.text}> + 关注</Text>
                             </View>
-                        </TouchableOpacity>) : (<View style={[gTextStyles.textBack, {marginRight: 5}]}>
-                            <Text style={gTextStyles.text}>已关注</Text>
-                        </View>)}
+                        </TouchableOpacity>) : (<TouchableOpacity onPress={async ()=>{
+                            // 关注逻辑
+                            let params = ('to_user_id=' + this.state.data.user.id + '&');
+                            let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
+                            if (res.status == 0) {
+                                let itemData = this.state.data;
+                                itemData.user_follow = null;
+                                this.setState({
+                                    data: itemData,
+                                });
+                                WToast.show({data: '取关成功!'});
+                            } else {
+                                alert("网络异常！请检查网络！");
+                            }
+
+                        }}>
+                            <View style={[gTextStyles.textBack, {marginRight: 5}]}>
+                                <Text style={gTextStyles.text}>已关注</Text>
+                            </View>
+                            </TouchableOpacity>)}
                     </View>) : (<Text style={gTextStyles.timeText}>{this.state.data.created_at}</Text>)}
 
 
@@ -165,11 +183,9 @@ const styles = StyleSheet.create({
         flex: width - 100,
     },
     avatar: {
-        flex: 50,
         height: 40,
         width: 40,
-        marginLeft: 5,
-        marginRight: 5,
+        margin: 5,
         borderRadius: 20,
     },
     attention: {

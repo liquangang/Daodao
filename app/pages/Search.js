@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, View, TouchableOpacity, Image, TextInput, SafeAreaView } from "react-native";
+import { FlatList, View, TouchableOpacity, Image, TextInput, SafeAreaView, Text } from "react-native";
 import {gImageStyles} from "../style/ImageStyles";
 import {gViewStyles} from "../style/ViewStyles";
 import MyStatusBar from "../component/MyStatusBar";
@@ -32,7 +32,7 @@ export default class Search extends Component {
         let params = {
             search: text,
         };
-        let res = await httpApi.getNewsList(null);
+        let res = await httpApi.getNewsList(params);
 
         if (res.status == 0) {
 
@@ -76,6 +76,9 @@ export default class Search extends Component {
                     <FlatList
                         data={this.state.searchList}
                         renderItem={this.newsListItemView}
+                        ListFooterComponent={()=>{
+                            return(<View style={[{width: gScreen.width, alignItems: 'center'}]}><Text>到底啦！</Text></View>);
+                        }}
                     />
                 </SafeAreaView>
             </View>
