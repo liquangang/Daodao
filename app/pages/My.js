@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import {Text, View, StyleSheet, Image, ImageBackground, FlatList, Dimensions, TouchableOpacity } from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    Image,
+    ImageBackground,
+    FlatList,
+    Dimensions,
+    TouchableOpacity,
+    DeviceEventEmitter
+} from "react-native";
 import httpApi from "../tools/Api";
 import LoadingView from "../component/LoadingView";
 
@@ -23,10 +33,14 @@ export default class My extends Component {
             personalData: [],
             load: false,
         };
+
+        this.emitter = null;
     }
 
     componentDidMount() {
         this.fetchPersonalData();
+
+        this.emitter = DeviceEventEmitter.addListener('updatePersonInfo', ()=>{this.fetchPersonalData();});
     }
 
     // 请求个人数据

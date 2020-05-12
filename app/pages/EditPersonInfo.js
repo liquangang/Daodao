@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
-    Keyboard
+    Keyboard, DeviceEventEmitter
 } from "react-native";
 import MyStatusBar from '../component/MyStatusBar'
 import MyNavigationBar from '../component/MyNavigationBar'
@@ -245,7 +245,7 @@ export default class EditPersonInfo extends Component {
                         </View>
                         <View style={styles.subContainer1}>
                             <TouchableOpacity onPress={async ()=>{
-                                let params = ('avatar=' + this.state.avatar + '&');
+                                let params = ('avatar=' + this.state.avatar.uri + '&');
                                 params += ('nick_name=' + this.state.nickName + '&');
                                 params += ('sex=' + this.state.gender + '&');
                                 params += ('desc=' + this.state.personalDes + '&');
@@ -256,6 +256,7 @@ export default class EditPersonInfo extends Component {
                                 let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_info', params);
                                 if (res.status == 0) {
                                     WToast.show({data: res.msg});
+                                    DeviceEventEmitter.emit('updatePersonInfo', null);
                                     this.props.navigation.goBack();
                                 } else {
                                     alert("网络异常！请检查网络！");
