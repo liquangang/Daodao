@@ -104,7 +104,7 @@ export default class EditPersonInfo extends Component {
         return (
             <View style={gViewStyles.rootViewContainer}>
                 <MyStatusBar></MyStatusBar>
-                <SafeAreaView>
+                <SafeAreaView style={gViewStyles.rootViewContainer}>
                     <MyNavigationBar
                         title={'个人信息修改'}
                         onClickBack={()=>{this.props.navigation.goBack();}}
@@ -125,7 +125,7 @@ export default class EditPersonInfo extends Component {
                                 });
                             }}>
                                 {
-                                    this.state.avatar == null ?
+                                    this.state.avatar == '' ?
                                         (<Image source={{uri: this.state.personalData.user_info.avatar}} style={styles.avatar}/>)
                                         : (<Image source={this.state.avatar} style={styles.avatar}/>)
                                 }

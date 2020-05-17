@@ -208,12 +208,12 @@ export default class PersonInfo extends Component {
                         </TouchableOpacity>
 
                         {
-                            this.state.personalData.user_follow == null ? (<TouchableOpacity onPress={async () => {
+                            this.state.personalData.user_info.user_follow == null ? (<TouchableOpacity onPress={async () => {
                                 let params = ('to_user_id=' + this.state.personalData.user_info.id + '&');
                                 let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
                                 if (res.status == 0) {
                                     let personalData = this.state.personalData;
-                                    personalData.user_follow = 1;
+                                    personalData.user_info.user_follow = 1;
                                     this.setState({
                                         personalData: personalData,
                                     });
@@ -230,7 +230,7 @@ export default class PersonInfo extends Component {
                                 let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_follow', params);
                                 if (res.status == 0) {
                                     let personalData = this.state.personalData;
-                                    personalData.user_follow = null;
+                                    personalData.user_info.user_follow = null;
                                     this.setState({
                                         personalData: personalData,
                                     });

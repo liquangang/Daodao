@@ -26,8 +26,8 @@ export default class Verified extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            zhengImg: null,
-            fanImg: null,
+            zhengImg: '',
+            fanImg: '',
             realName: '',
         };
     }
@@ -90,14 +90,14 @@ export default class Verified extends Component {
                         </View>
                         <View style={styles.container1}>
                             <Text>身份证正面：</Text>
-                            {this.state.zhengImg == null ? (<TouchableOpacity onPress={() => this.onSelectZhengImg()}>
+                            {this.state.zhengImg == '' ? (<TouchableOpacity onPress={() => this.onSelectZhengImg()}>
                                 <Image source={require('../source/camera.jpg')} style={styles.selectImg}/>
                             </TouchableOpacity>) : (<Image source={this.state.zhengImg} style={styles.selectedImg}/>)}
 
                         </View>
                         <View style={styles.container1}>
                             <Text>身份证反面：</Text>
-                            {this.state.fanImg == null ? (<TouchableOpacity onPress={() => this.onSelectFanImg()}>
+                            {this.state.fanImg == '' ? (<TouchableOpacity onPress={() => this.onSelectFanImg()}>
                                 <Image source={require('../source/camera.jpg')} style={styles.selectImg}/>
                             </TouchableOpacity>) : (<Image source={this.state.fanImg} style={styles.selectedImg}/>)}
 
@@ -106,14 +106,14 @@ export default class Verified extends Component {
                             <TouchableOpacity onPress={async ()=>{
                                 if (this.state.realName.length > 0) {
                                     let params = ('truename=' + this.state.realName + '&');
-                                    params+=('img_zheng=' + this.state.zhengImg + '&');
-                                    params+=('img_fan=' + this.state.fanImg + '&');
+                                    params+=('img_zheng=' + this.state.zhengImg.uri + '&');
+                                    params+=('img_fan=' + this.state.fanImg.uri + '&');
                                     let res = await httpApi.httpPostWithParamsStr('http://dd.shenruxiang.com/api/v1/user_cert', params);
                                     if (res.status == 0) {
                                         WToast.show({data: res.msg});
                                         this.props.navigation.goBack();
                                     } else {
-                                        alert("网络异常！请检查网络！");
+                                        WToast.show({data: res.msg});
                                     }
                                 } else {
                                     alert('姓名格式错误！');
