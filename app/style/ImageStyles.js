@@ -29,6 +29,8 @@ export const gImageStyles = StyleSheet.create({
     },
     splashImg: {
         margin: 0,
+        height: gScreen.screen_height,
+        width: gScreen.screen_width
     },
     closeImg: {
         height: 18,

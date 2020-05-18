@@ -27,6 +27,8 @@ import {WToast} from 'react-native-smart-tip'
 import Verified from "./app/pages/Verified";
 import EditPersonInfo from "./app/pages/EditPersonInfo";
 import Feedback from "./app/pages/Feedback";
+import HelpCenter from "./app/pages/HelpCenter";
+import AboutUs from "./app/pages/AboutUs";
 
 const mainTab = createBottomTabNavigator();
 
@@ -86,6 +88,8 @@ function MainNav() {
             <mainNav.Screen name='Verified' component={Verified}/>
             <mainNav.Screen name='EditPersonInfo' component={EditPersonInfo}/>
             <mainNav.Screen name='Feedback' component={Feedback}/>
+            <mainNav.Screen name='HelpCenter' component={HelpCenter}/>
+            <mainNav.Screen name='AboutUs' component={AboutUs}/>
         </mainNav.Navigator>
     );
 }

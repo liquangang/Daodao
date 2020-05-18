@@ -84,13 +84,13 @@ export default class My extends Component {
                         } else if (item.title == '广告投放') {
 
                         } else if (item.title == '帮助中心') {
-
+                            this.props.navigation.navigate('HelpCenter', null);
                         } else if (item.title == '投诉反馈') {
                             this.props.navigation.navigate('Feedback', null);
                         } else if (item.title == '在线客服') {
 
                         } else if (item.title == '关于我们') {
-
+                            this.props.navigation.navigate('AboutUs', null);
                         } else if (item.title == '检查更新') {
 
                         } else {

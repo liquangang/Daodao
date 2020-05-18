@@ -198,4 +198,10 @@ export const gViewStyles = StyleSheet.create({
     scorllviewContainer: {
 
     },
+    wholeScreenWebView: {
+        flex: 1,
+        width: gScreen.screen_width,
+        height: gScreen.screen_height - gScreen.statusBarHeight - 44,
+        backgroundColor: 'red'
+    }
 });

@@ -11,8 +11,7 @@ export default class Splash extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [require('../source/splashAd.jpg'), require('../source/ad6.jpg'), require('../source/ad7.jpg')],
-            load: true
+            data: null,
         };
     }
 
@@ -21,28 +20,20 @@ export default class Splash extends Component {
         // setTimeout(this.onClickNext,3000);
     }
 
-    onClickImg = (data) => {
-        // if (item.href != null && item.href.length > 0) {
-        //     let params = {
-        //         url: item.href,
-        //     };
-        //     this.props.navigation.navigate('WebPage', params);
-        // }
+    onClickImg = (item) => {
+        if (item.href != null && item.href.length > 0) {
+            let params = {
+                url: item.href,
+            };
+            this.props.navigation.navigate('WebPage', params);
+        }
     }
 
     fetchADData = async() => {
-        let params = {
-            post_cate_id: 3,
-        };
-        let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/cate_adv_list", params);
-        if (res.status == 0) {
-            this.setState({
-                data: res.data.data,
-                load: true
-            });
-        } else {
-            alert("网络异常！请检查网络！");
-        }
+        let res = await httpApi.httpPost("http://dd.shenruxiang.com/api/v1/app_start_list", null);
+        this.setState({
+            data: res,
+        });
     }
 
     render() {
@@ -63,17 +54,13 @@ export default class Splash extends Component {
                             Array.from(this.state.data).map((value, index, array) => {
                                 return (
                                     <TouchableWithoutFeedback onPress={() => this.onClickImg(value)} key={index}>
-                                        {/*<Image source={{uri: value.src}} style={gImageStyles.splashImg}/>*/}
-                                        <Image source={value} style={[{height: gScreen.screen_height, width: gScreen.screen_width}]}/>
+                                        <Image source={{uri: value.src}} style={gImageStyles.splashImg}/>
+                                        {/*<Image source={value} style={[{height: gScreen.screen_height, width: gScreen.screen_width}]}/>*/}
                                     </TouchableWithoutFeedback>
                                 );
                             })
                         ) : (
-                            <TouchableWithoutFeedback onPress={() => this.onClickImg(this.state.data)}>
-                                {/*<Image source={{uri: this.state.data.src}} style={styles.img}/>*/}
-                                <Image source={require('../source/splashAd.jpg')}
-                                       style={gImageStyles.gImageStyles.splashImg}/>
-                            </TouchableWithoutFeedback>
+                            <View></View>
                         )
                     }
                 </Swiper>
