@@ -1,6 +1,7 @@
 package com.daodao;
 
 import com.facebook.react.ReactActivity;
+import com.theweflex.react.WeChatPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,4 +13,13 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "Daodao";
   }
+
+  @Override
+  protected List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(
+     ...
+      new WeChatPackage()
+    );
+  }
+
 }
